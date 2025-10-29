@@ -5,8 +5,8 @@ from uuid import UUID
 from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.constants import IST_TIMEZONE
-from app.db.database import Base
+from nucleus.core.constants import IST_TIMEZONE
+from nucleus.db.database import Base
 
 class Task(Base):
     __tablename__ = "tasks"

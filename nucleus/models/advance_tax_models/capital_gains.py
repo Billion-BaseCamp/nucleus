@@ -3,8 +3,8 @@ from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime
-from app.db.database import Base
-from app.core.constants import CapitalGainsCategory
+from nucleus.db.database import Base
+from nucleus.core.constants import CapitalGainsCategory
 
 
 class CapitalGains(Base):

@@ -7,6 +7,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from nucleus.db.database import Base
 from nucleus.core.constants import IST_TIMEZONE
 
+if TYPE_CHECKING:
+    from nucleus.models.common_models.advisor import Advisor
+
 class Notification(Base):
     __tablename__ = "notifications"
 
@@ -20,4 +23,4 @@ class Notification(Base):
         DateTime(timezone=False),
         default=lambda: datetime.now(IST_TIMEZONE).replace(tzinfo=None),
     )
-    user: Mapped["User"] = relationship(back_populates="user")
+    advisor: Mapped["Advisor"] = relationship(back_populates="notifications")

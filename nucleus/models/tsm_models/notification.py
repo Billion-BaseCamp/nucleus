@@ -20,4 +20,4 @@ class Notification(Base):
         DateTime(timezone=False),
         default=lambda: datetime.now(IST_TIMEZONE).replace(tzinfo=None),
     )
-    user: Mapped["User"] = relationship(back_populates="notifications")
+    user: Mapped["User"] = relationship(back_populates="user")

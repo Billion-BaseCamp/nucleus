@@ -4,10 +4,8 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String, Boolean, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.db.database import Base
-from app.core.constants import IST_TIMEZONE
-
-
+from nucleus.db.database import Base
+from nucleus.core.constants import IST_TIMEZONE
 
 class Notification(Base):
     __tablename__ = "notifications"

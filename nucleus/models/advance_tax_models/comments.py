@@ -1,11 +1,11 @@
 from sqlalchemy import UUID as SQLUUID
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column
-from app.db.database import Base
+from nucleus.db.database import Base
 from sqlalchemy import String, DateTime, ForeignKey
 from sqlalchemy.sql import func
 from datetime import datetime
-from app.core.constants import CommentsCategory
+from nucleus.core.constants import CommentsCategory
 from sqlalchemy import Enum
 
 

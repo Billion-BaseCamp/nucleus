@@ -16,11 +16,11 @@ class Task(Base):
     )
 
     parent_task_id: Mapped[UUID] = mapped_column(
-        ForeignKey("tasks.task_id"), nullable=True, index=True
+        ForeignKey("tasks.task_id", ondelete="CASCADE"), nullable=True, index=True
     )
 
     subtasks: Mapped[list["Task"]] = relationship(
-        "Task", back_populates="parent", cascade="all, delete-orphan"
+        "Task", back_populates="parent", cascade="all, delete-orphan",passive_deletes=True
     )
 
     parent: Mapped["Task"] = relationship(

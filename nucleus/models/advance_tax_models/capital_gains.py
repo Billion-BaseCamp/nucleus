@@ -1,4 +1,6 @@
 from sqlalchemy import String, DateTime, Float, ForeignKey, UUID as SQLUUID
+from sqlalchemy.dialects.postgresql import JSONB
+from typing import Dict, Any
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -17,11 +19,11 @@ class CapitalGains(Base):
     
     category: Mapped[CapitalGainsCategory] = mapped_column(String, nullable=False)
     ShortTermCG_15: Mapped[float] = mapped_column(Float, nullable=True)
-    ShortTermCG_20: Mapped[float] = mapped_column(Float, nullable=True)
-    ShortTermCG_At_Marginal_Rate: Mapped[float] = mapped_column(Float, nullable=True)
+    ShortTermCG_20: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"AngelBroking": 120000, "Zerodha": 20000}
+    ShortTermCG_At_Marginal_Rate: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     LongTermCG_10: Mapped[float] = mapped_column(Float, nullable=True)
-    LongTermCG_12_5: Mapped[float] = mapped_column(Float, nullable=True)
-    LongTermCG_20: Mapped[float] = mapped_column(Float, nullable=True)
+    LongTermCG_12_5: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
+    LongTermCG_20: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     NetShortTermGain20: Mapped[float] = mapped_column(Float, nullable=True)
     NetLongTermGain12_5: Mapped[float] = mapped_column(Float, nullable=True)
     NetShortTermGainNormal: Mapped[float] = mapped_column(Float, nullable=True)
@@ -37,6 +39,8 @@ class CapitalGains(Base):
     NetLongTermGain_12_5_AfterSetoff: Mapped[float] = mapped_column(Float, nullable=True)
     NetShortTermGain_20_AfterSetoff: Mapped[float] = mapped_column(Float, nullable=True)
     NetShortTermGain_Normal_AfterSetoff: Mapped[float] = mapped_column(Float, nullable=True)
+    shortTermLossCarryForward: Mapped[float] = mapped_column(Float, nullable=True)
+    longTermLossCarryForward: Mapped[float] = mapped_column(Float, nullable=True)
 
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="capital_gains")

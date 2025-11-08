@@ -7,6 +7,7 @@ from nucleus.db.database import Base
 from nucleus.core.constants import Region
 from sqlalchemy import Enum, Boolean
 
+# Rental Model
 
 class Rental(Base):
     __tablename__ = "rentals"

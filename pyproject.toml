@@ -63,6 +63,6 @@ full = [
     "greenlet==3.2.4",
 ]
 
-[tool.setuptools]
-packages = ["nucleus"]
-
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nucleus*"]

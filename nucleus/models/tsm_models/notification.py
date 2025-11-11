@@ -10,17 +10,30 @@ from nucleus.core.constants import IST_TIMEZONE
 if TYPE_CHECKING:
     from nucleus.models.common_models.advisor import Advisor
 
+
 class Notification(Base):
     __tablename__ = "notifications"
 
-    id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    assigner_user_id: Mapped[UUID]=mapped_column(UUID(as_uuid=True))
-    assignee_user_id: Mapped[UUID] = mapped_column(ForeignKey("advisors.id", ondelete="CASCADE")) 
+    id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    assigner_user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True))
+    assignee_user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="CASCADE")
+    )
+
     message: Mapped[str] = mapped_column(String, nullable=False)
-    is_read: Mapped[bool] = mapped_column(Boolean, default=False)
     title: Mapped[str] = mapped_column(String, nullable=False)
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=False),
         default=lambda: datetime.now(IST_TIMEZONE).replace(tzinfo=None),
     )
-    advisor: Mapped["Advisor"] = relationship(back_populates="notifications")
+
+    # Explicitly link to Advisor via the correct foreign key
+    advisor: Mapped["Advisor"] = relationship(
+        "Advisor",
+        back_populates="notifications",
+        foreign_keys=[assignee_user_id],
+    )

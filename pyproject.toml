@@ -64,5 +64,5 @@ full = [
 ]
 
 [tool.setuptools]
-packages = {find = {}}
+packages = ["nucleus"]
 

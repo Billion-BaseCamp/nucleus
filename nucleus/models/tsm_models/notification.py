@@ -1,14 +1,10 @@
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING
 from sqlalchemy import String, Boolean, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from nucleus.db.database import Base
 from nucleus.core.constants import IST_TIMEZONE
-
-if TYPE_CHECKING:
-    from nucleus.models.common_models.advisor import Advisor
 
 
 class Notification(Base):

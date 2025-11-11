@@ -5,13 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import date, datetime
 from nucleus.db.database import Base
-from typing import List, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from nucleus.models.common_models.login import Login
-    from nucleus.models.common_models.client import Client
-    from nucleus.models.tsm_models.notification import Notification
-
+from typing import List
 
 class Advisor(Base):
     __tablename__ = "advisors"

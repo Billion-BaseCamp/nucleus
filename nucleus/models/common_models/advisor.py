@@ -29,3 +29,4 @@ class Advisor(Base):
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
+    notifications: Mapped[List["Notification"]] = relationship("Notification", back_populates="advisor")

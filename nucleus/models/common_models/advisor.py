@@ -8,8 +8,6 @@ from typing import List
 from nucleus.db.database import Base
 
 
-
-
 class Advisor(Base):
     __tablename__ = "advisors"
 
@@ -22,14 +20,25 @@ class Advisor(Base):
     # Relationships
     logins: Mapped[List["Login"]] = relationship("Login", back_populates="advisor")
     clients: Mapped[List["Client"]] = relationship("Client", back_populates="advisor")
-    notifications: Mapped[List["Notification"]] = relationship("Notification", back_populates="advisor")
+    notifications: Mapped[List["Notification"]] = relationship(
+        "Notification", back_populates="advisor"
+    )
     assigned_tasks: Mapped[List["Task"]] = relationship(
         "Task",
         secondary="task_assignees",
         back_populates="assignees",
         passive_deletes=True,
     )
-    
+    sent_messages: Mapped[list["TaskChatMessage"]] = relationship(
+        "TaskChatMessage",
+        back_populates="sender",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now(), nullable=True
+    )

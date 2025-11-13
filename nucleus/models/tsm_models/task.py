@@ -20,6 +20,7 @@ class TaskAssignee(Base):
         ForeignKey("advisors.id", ondelete="CASCADE"), primary_key=True
     )
 
+
 class Task(Base):
     __tablename__ = "tasks"
 
@@ -32,7 +33,10 @@ class Task(Base):
     )
 
     subtasks: Mapped[list["Task"]] = relationship(
-        "Task", back_populates="parent", cascade="all, delete-orphan",passive_deletes=True
+        "Task",
+        back_populates="parent",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
 
     parent: Mapped["Task"] = relationship(
@@ -48,7 +52,7 @@ class Task(Base):
     description: Mapped[str] = mapped_column(String, nullable=True)
 
     status: Mapped[str] = mapped_column(String)
-    
+
     priority: Mapped[str] = mapped_column(String)
 
     created_date: Mapped[datetime] = mapped_column(
@@ -62,7 +66,9 @@ class Task(Base):
 
     completed_date: Mapped[datetime] = mapped_column(nullable=True)
 
-    acceptance_status: Mapped[ACCEPTANCE_STATUS] = mapped_column(Enum(ACCEPTANCE_STATUS, native_enum=False),nullable=True)
+    acceptance_status: Mapped[ACCEPTANCE_STATUS] = mapped_column(
+        Enum(ACCEPTANCE_STATUS, native_enum=False), nullable=True
+    )
 
     rejection_reason: Mapped[str] = mapped_column(String, nullable=True)
     rejection_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
@@ -89,3 +95,10 @@ class Task(Base):
     )
 
     assigned_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
+
+    chat_messages: Mapped[list["TaskChatMessage"]] = relationship(
+        "TaskChatMessage",
+        back_populates="task",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )

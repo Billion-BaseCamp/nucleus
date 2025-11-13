@@ -2,7 +2,7 @@ import uuid
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import DateTime, Enum, ForeignKey, String
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nucleus.core.constants import IST_TIMEZONE
@@ -67,7 +67,9 @@ class Task(Base):
     rejection_reason: Mapped[str] = mapped_column(String, nullable=True)
     rejection_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
 
-    is_shared: Mapped[bool] = mapped_column(default=False)
+    is_shared: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default=text("false")
+    )
 
     completion_percentage: Mapped[int] = mapped_column(default=0)
 

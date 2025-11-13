@@ -13,7 +13,7 @@ from nucleus.models.advance_tax_models.quarter import Quarter
 from nucleus.models.advance_tax_models.rental import Rental
 from nucleus.models.advance_tax_models.tax_profile import TaxProfile
 from nucleus.models.tsm_models.notification import Notification
-from nucleus.models.tsm_models.task import Task
+from nucleus.models.tsm_models.task import Task, TaskAssignee
 
 __all__ = [
     "Advisor",
@@ -30,5 +30,6 @@ __all__ = [
     "Quarter",
     "Rental",
     "Task",
+    "TaskAssignee",
     "TaxProfile",
 ]

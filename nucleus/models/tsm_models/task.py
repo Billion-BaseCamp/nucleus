@@ -2,11 +2,23 @@ import uuid
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import DateTime, Enum, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nucleus.core.constants import IST_TIMEZONE
 from nucleus.db.database import Base
+from nucleus.core.constants import ACCEPTANCE_STATUS
+
+
+class TaskAssignee(Base):
+    __tablename__ = "task_assignees"
+
+    task_id: Mapped[UUID] = mapped_column(
+        ForeignKey("tasks.task_id", ondelete="CASCADE"), primary_key=True
+    )
+    advisor_id: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="CASCADE"), primary_key=True
+    )
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -35,10 +47,6 @@ class Task(Base):
 
     description: Mapped[str] = mapped_column(String, nullable=True)
 
-    service_category: Mapped[str] = mapped_column(String, nullable=True)
-
-    difficulty_level: Mapped[str] = mapped_column(String)
-
     status: Mapped[str] = mapped_column(String)
     
     priority: Mapped[str] = mapped_column(String)
@@ -50,11 +58,16 @@ class Task(Base):
 
     start_date: Mapped[datetime] = mapped_column(nullable=True)
 
-    due_date: Mapped[date] = mapped_column(nullable=True)
+    due_date: Mapped[datetime] = mapped_column(nullable=True)
 
     completed_date: Mapped[datetime] = mapped_column(nullable=True)
 
-    share_cc: Mapped[str] = mapped_column(String, nullable=True)
+    acceptance_status: Mapped[ACCEPTANCE_STATUS] = mapped_column(Enum(ACCEPTANCE_STATUS, native_enum=False),nullable=True)
+
+    rejection_reason: Mapped[str] = mapped_column(String, nullable=True)
+    rejection_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
+
+    is_shared: Mapped[bool] = mapped_column(default=False)
 
     completion_percentage: Mapped[int] = mapped_column(default=0)
 
@@ -66,6 +79,11 @@ class Task(Base):
     )
     modified_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
 
-    assigned_to: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
+    assignees: Mapped[list["Advisor"]] = relationship(
+        "Advisor",
+        secondary="task_assignees",
+        back_populates="assigned_tasks",
+        passive_deletes=True,
+    )
 
-    assigned_by:Mapped[UUID]=mapped_column(ForeignKey("advisors.id"), nullable =True)
+    assigned_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)

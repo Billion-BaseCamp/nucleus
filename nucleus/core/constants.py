@@ -46,20 +46,19 @@ class Region(str,Enum):
     FOREIGN = "FOREIGN"
 
 
-# ENUMERATIONS
-class DIFFICULTY_LEVELS(Enum):
-    LOW = "Low"
-    MEDIUM = "Medium"
-    HIGH = "High"
-
-
 class TASK_STATUSES(Enum):
     PENDING = "Pending"
     IN_PROGRESS = "In Progress"
     COMPLETED = "Completed"
+    Pending_ON_CLIENT = "Pending on Client"
 
 
 class PRIORITY_LEVELS(Enum):
     LOW = "Low"
     MEDIUM = "Medium"
     HIGH = "High"
+
+class ACCEPTANCE_STATUS(Enum):
+    PENDING = "Pending"
+    ACCEPTED = "Accepted"
+    REJECTED = "Rejected"

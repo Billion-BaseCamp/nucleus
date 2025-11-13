@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import ARRAY, ForeignKey,Text, DateTime, UUID
+from sqlalchemy import ARRAY, ForeignKey,Text, DateTime, UUID, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from nucleus.db.database import Base
 from nucleus.core.constants import IST_TIMEZONE
@@ -21,6 +21,8 @@ class TaskChatMessage(Base):
     message: Mapped[str] = mapped_column(Text, nullable=False)
 
     read_by: Mapped[list[uuid.UUID]] = mapped_column(ARRAY(UUID), nullable=True)
+
+    file_urls: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=False),

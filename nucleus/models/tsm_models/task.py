@@ -2,7 +2,7 @@ import uuid
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, String, text
+from sqlalchemy import ARRAY, Boolean, DateTime, Enum, ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nucleus.core.constants import IST_TIMEZONE
@@ -95,6 +95,8 @@ class Task(Base):
     )
 
     assigned_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
+
+    file_uploads: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=True)
 
     chat_messages: Mapped[list["TaskChatMessage"]] = relationship(
         "TaskChatMessage",

@@ -62,3 +62,4 @@ class ACCEPTANCE_STATUS(Enum):
     PENDING = "Pending"
     ACCEPTED = "Accepted"
     REJECTED = "Rejected"
+    TRANSFERRED = "Transferred"

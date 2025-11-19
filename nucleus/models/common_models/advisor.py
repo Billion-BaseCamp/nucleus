@@ -15,7 +15,7 @@ class Advisor(Base):
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str] = mapped_column(String, nullable=False)
     date_of_birth: Mapped[date] = mapped_column(Date, nullable=True)
-    gender: Mapped[str] = mapped_column(String, nullable=False)
+    gender: Mapped[str] = mapped_column(String, nullable=True)
 
     # Relationships
     logins: Mapped[List["Login"]] = relationship("Login", back_populates="advisor")

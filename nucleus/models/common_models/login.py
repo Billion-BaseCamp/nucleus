@@ -13,7 +13,7 @@ class Login(Base):
     __tablename__ = "logins"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
-    email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String, unique=True, nullable=True)
     username: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     mobile_number: Mapped[str] = mapped_column(String, unique=True, nullable=True)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)

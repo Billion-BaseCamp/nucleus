@@ -15,7 +15,7 @@ class Login(Base):
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String, unique=True, nullable=False)
-    mobile_number: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    mobile_number: Mapped[str] = mapped_column(String, unique=True, nullable=True)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
     
     # Foreign key to client (if role is client)

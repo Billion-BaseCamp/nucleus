@@ -14,7 +14,7 @@ class Advisor(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid.uuid4, index=True)
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str] = mapped_column(String, nullable=False)
-    date_of_birth: Mapped[date] = mapped_column(Date, nullable=False)
+    date_of_birth: Mapped[date] = mapped_column(Date, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships

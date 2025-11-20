@@ -41,6 +41,7 @@ class CapitalGains(Base):
     NetShortTermGain_Normal_AfterSetoff: Mapped[float] = mapped_column(Float, nullable=True)
     shortTermLossCarryForward: Mapped[float] = mapped_column(Float, nullable=True)
     longTermLossCarryForward: Mapped[float] = mapped_column(Float, nullable=True)
+    cryptoCaptialGains: Mapped[float] = mapped_column(Float, nullable=True)
 
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="capital_gains")

@@ -29,6 +29,7 @@ class Client(Base):
     # Relationships
     logins: Mapped[List["Login"]] = relationship("Login", back_populates="client")
     advisor: Mapped["Advisor"] = relationship("Advisor", back_populates="clients")
+    financial_years: Mapped[List["FinancialYear"]] = relationship("FinancialYear", back_populates="client")
     
     
     # Financial data relationships

@@ -20,6 +20,7 @@ class CapitalGainsCategory(Enum):
 class ResidenceType(Enum):
     RES="RES"
     NRI="NRI"
+    NRO="NRO"
 
 # Other income field names
 OTHER_INCOME_FIELDS = [

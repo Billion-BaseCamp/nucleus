@@ -52,9 +52,7 @@ class Task(Base):
     description: Mapped[str] = mapped_column(String, nullable=True)
 
     status: Mapped[str] = mapped_column(String)
-
-    priority: Mapped[str] = mapped_column(String)
-
+    
     created_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=False),
         default=lambda: datetime.now(IST_TIMEZONE).replace(tzinfo=None),

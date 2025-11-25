@@ -15,7 +15,10 @@ from nucleus.models.advance_tax_models.tax_profile import TaxProfile
 from nucleus.models.tsm_models.notification import Notification
 from nucleus.models.tsm_models.chat_messages import TaskChatMessage
 from nucleus.models.tsm_models.task import Task, TaskAssignee
+<<<<<<< Updated upstream
 from nucleus.models.common_models.change_password import OtpVerification
+=======
+>>>>>>> Stashed changes
 from nucleus.models.tsm_models.files import File
 
 __all__ = [
@@ -36,6 +39,10 @@ __all__ = [
     "TaskAssignee",
     "TaskChatMessage",
     "TaxProfile",
+<<<<<<< Updated upstream
     "OtpVerification",
     "File"
+=======
+    "File",
+>>>>>>> Stashed changes
 ]

@@ -54,11 +54,6 @@ class TASK_STATUSES(Enum):
     Pending_ON_CLIENT = "Pending on Client"
 
 
-class PRIORITY_LEVELS(Enum):
-    LOW = "Low"
-    MEDIUM = "Medium"
-    HIGH = "High"
-
 class ACCEPTANCE_STATUS(Enum):
     PENDING = "Pending"
     ACCEPTED = "Accepted"

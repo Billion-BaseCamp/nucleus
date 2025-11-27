@@ -26,6 +26,8 @@ class InterestDetails(Base):
     epf_tds: Mapped[float] = mapped_column(Float, default=0.0)
     it_refund_interest: Mapped[float] = mapped_column(Float, default=0.0)
     it_refund_tds: Mapped[float] = mapped_column(Float, default=0.0)
+    foreign_interest: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
+    foreign_tds: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
     total_interest: Mapped[float] = mapped_column(Float, default=0.0)
     total_tds: Mapped[float] = mapped_column(Float, default=0.0)
     

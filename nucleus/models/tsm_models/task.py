@@ -96,6 +96,8 @@ class Task(Base):
 
     file_uploads: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=True)
 
+    client_id: Mapped[UUID] = mapped_column(ForeignKey("clients.id"), nullable=True)
+
     chat_messages: Mapped[list["TaskChatMessage"]] = relationship(
         "TaskChatMessage",
         back_populates="task",

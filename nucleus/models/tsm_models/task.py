@@ -92,7 +92,6 @@ class Task(Base):
         passive_deletes=True,
     )
 
-    client_id: Mapped[UUID] = mapped_column(ForeignKey("clients.id"), nullable=True)
 
     assigned_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
 

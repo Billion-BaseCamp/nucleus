@@ -27,6 +27,7 @@ class Login(Base):
     # Relationships
     client: Mapped["Client"] = relationship("Client", back_populates="logins")
     advisor: Mapped["Advisor"] = relationship("Advisor", back_populates="logins")
+    push_subscriptions: Mapped[list["PushSubscription"]] = relationship("PushSubscription", back_populates="login")
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

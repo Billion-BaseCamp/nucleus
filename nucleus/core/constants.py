@@ -51,7 +51,6 @@ class TASK_STATUSES(Enum):
     PENDING = "Pending"
     IN_PROGRESS = "In Progress"
     COMPLETED = "Completed"
-    PENDING_ON_CLIENT = "Pending on Client"
 
 
 class ACCEPTANCE_STATUS(Enum):

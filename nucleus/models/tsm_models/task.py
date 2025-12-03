@@ -68,6 +68,12 @@ class Task(Base):
         Enum(ACCEPTANCE_STATUS, native_enum=False), nullable=True
     )
 
+    is_paused: Mapped[bool] = mapped_column(Boolean,nullable=True)
+
+    pause_date: Mapped[datetime] = mapped_column(nullable=True)
+
+    is_pending_on_client: Mapped[bool] = mapped_column(Boolean, nullable=True)
+
     rejection_reason: Mapped[str] = mapped_column(String, nullable=True)
     rejection_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
 

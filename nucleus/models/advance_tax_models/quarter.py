@@ -19,6 +19,8 @@ class Quarter(Base):
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
     is_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     status: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
     is_json_imported: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
     
     # Relationships
@@ -31,5 +33,3 @@ class Quarter(Base):
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="quarter")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="quarter")
     
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

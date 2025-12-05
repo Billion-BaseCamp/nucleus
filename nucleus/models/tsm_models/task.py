@@ -72,6 +72,8 @@ class Task(Base):
 
     pause_date: Mapped[datetime] = mapped_column(nullable=True)
 
+    pause_reason: Mapped[str] = mapped_column(String, nullable=True)
+
     is_pending_on_client: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
     rejection_reason: Mapped[str] = mapped_column(String, nullable=True)

@@ -1,4 +1,5 @@
-from sqlalchemy import String, DateTime, Float, ForeignKey, UUID as SQLUUID
+import json
+from sqlalchemy import String, DateTime, Float, ForeignKey, UUID as SQLUUID, JSONB
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -19,6 +20,8 @@ class TaxProfile(Base):
     advance_tax_paid_Q2: Mapped[float] = mapped_column(Float, nullable=True)
     advance_tax_paid_Q3: Mapped[float] = mapped_column(Float, nullable=True)
     advance_tax_paid_Q4: Mapped[float] = mapped_column(Float, nullable=True)
+    gross_salary:Mapped[JSONB] = mapped_column(JSONB, nullable=True)
+    tds:Mapped[float] = mapped_column(Float, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

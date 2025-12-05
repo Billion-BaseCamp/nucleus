@@ -117,4 +117,23 @@ class Task(Base):
         passive_deletes=True,
     )
 
+    sessions: Mapped[list["Session"]] = relationship(
+        "Session",
+        back_populates="task",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
+
+class Session(Base):
+    __tablename__ = "sessions"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid.uuid4)
+
+    task_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.task_id", ondelete="CASCADE"), nullable=True, index=True)
+
+    session_start_time: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+
+    session_end_time: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+
+    session_duration: Mapped[int] = mapped_column(nullable=True)

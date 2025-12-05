@@ -21,7 +21,7 @@ class TaxProfile(Base):
     advance_tax_paid_Q3: Mapped[float] = mapped_column(Float, nullable=True)
     advance_tax_paid_Q4: Mapped[float] = mapped_column(Float, nullable=True)
     gross_salary:Mapped[JSONB] = mapped_column(JSONB, nullable=True)
-    tds:Mapped[float] = mapped_column(Float, nullable=True)
+    tds:Mapped[JSONB] = mapped_column(JSONB, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

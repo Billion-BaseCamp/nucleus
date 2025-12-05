@@ -91,6 +91,9 @@ class Task(Base):
         onupdate=lambda: datetime.now(IST_TIMEZONE).replace(tzinfo=None),
         nullable=True,
     )
+
+    is_resource_request: Mapped[bool] = mapped_column(Boolean, nullable=True)
+
     modified_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
 
     assignees: Mapped[list["Advisor"]] = relationship(
@@ -113,3 +116,5 @@ class Task(Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
+
+

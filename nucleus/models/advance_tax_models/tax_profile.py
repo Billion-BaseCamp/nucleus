@@ -1,5 +1,6 @@
 import json
-from sqlalchemy import String, DateTime, Float, ForeignKey, UUID as SQLUUID, JSONB
+from sqlalchemy import String, DateTime, Float, ForeignKey, UUID as SQLUUID
+from sqlalchemy.dialects.postgresql import JSONB
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func

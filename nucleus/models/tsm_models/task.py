@@ -110,6 +110,10 @@ class Task(Base):
 
     client_id: Mapped[UUID] = mapped_column(ForeignKey("clients.id"), nullable=True)
 
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=True ,index=True)
+
+    activiation_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+
     chat_messages: Mapped[list["TaskChatMessage"]] = relationship(
         "TaskChatMessage",
         back_populates="task",

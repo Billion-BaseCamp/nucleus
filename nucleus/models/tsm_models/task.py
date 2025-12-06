@@ -112,7 +112,7 @@ class Task(Base):
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=True ,index=True)
 
-    activiation_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+    activation_time: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
 
     chat_messages: Mapped[list["TaskChatMessage"]] = relationship(
         "TaskChatMessage",

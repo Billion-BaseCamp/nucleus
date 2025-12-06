@@ -141,3 +141,5 @@ class Session(Base):
     session_end_time: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
 
     session_duration: Mapped[int] = mapped_column(nullable=True)
+
+    task: Mapped["Task"] = relationship("Task", back_populates="sessions")

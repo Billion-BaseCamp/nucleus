@@ -92,7 +92,7 @@ class Task(Base):
         nullable=True,
     )
 
-    is_resource_request: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_resource_requested: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
     modified_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)
 

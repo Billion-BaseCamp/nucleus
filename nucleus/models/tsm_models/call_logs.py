@@ -1,10 +1,9 @@
 from nucleus.db.database import Base
-from sqlalchemy import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from nucleus.core.constants import IST_TIMEZONE
 import uuid
 from sqlalchemy import ForeignKey, String, Integer, DateTime
-from sqlalchemy.orm import relationship
 
 
 

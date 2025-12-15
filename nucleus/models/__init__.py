@@ -18,6 +18,7 @@ from nucleus.models.tsm_models.task import Task, TaskAssignee
 from nucleus.models.common_models.change_password import OtpVerification
 from nucleus.models.tsm_models.files import File
 from nucleus.models.tsm_models.push_subscription import PushSubscription
+from nucleus.models.tsm_models.call_logs import CallLogs
 
 __all__ = [
     "Advisor",
@@ -39,5 +40,6 @@ __all__ = [
     "TaxProfile",
     "OtpVerification",
     "File",
-    "PushSubscription"
+    "PushSubscription",
+    "CallLogs"
 ]

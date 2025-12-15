@@ -8,6 +8,15 @@ from uuid import UUID, uuid4
 from nucleus.core.constants import ResidenceType
 from sqlalchemy import Enum, Date   
 
+
+class ClientPhoneMapping(Base):
+    __tablename__ = "client_phone_mappings"
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
+    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
+    phone_number: Mapped[str] = mapped_column(String, nullable=False)
+
+
+
 class Client(Base):
     __tablename__ = "clients"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)

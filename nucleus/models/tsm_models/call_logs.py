@@ -13,6 +13,7 @@ class CallLogs(Base):
     advisor_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("advisors.id", ondelete="CASCADE"), nullable=True)
     from_number: Mapped[str] = mapped_column(String, nullable=True)
     to_number: Mapped[str] = mapped_column(String, nullable=True)
+    caller_name: Mapped[str] = mapped_column(String, nullable=True)
     call_type: Mapped[str] = mapped_column(String, nullable=True)
     client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
     call_start_time: Mapped[datetime] = mapped_column(DateTime, nullable=True)

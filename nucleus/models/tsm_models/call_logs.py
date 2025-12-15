@@ -1,11 +1,11 @@
 from nucleus.db.database import Base
-from sqlalchemy import Mapped, mapped_column
 from datetime import datetime
 from nucleus.core.constants import IST_TIMEZONE
 import uuid
-from sqlalchemy import ForeignKey, String, Integer, DateTime
-from sqlalchemy.orm import relationship
-
+from sqlalchemy import ForeignKey, String, Integer, DateTime 
+from sqlalchemy.orm import Mapped, mapped_column
+from uuid import UUID, uuid4
+from sqlalchemy import Float
 
 
 class CallLogs(Base):
@@ -17,4 +17,4 @@ class CallLogs(Base):
     call_type: Mapped[str] = mapped_column(String, nullable=True)
     client_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
     call_start_time: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    call_duration: Mapped[int] = mapped_column(Integer, nullable=True)
+    call_duration: Mapped[float] = mapped_column(Float, nullable=True)

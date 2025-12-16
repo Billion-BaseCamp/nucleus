@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, DateTime, Boolean, ForeignKey, UUID as SQLUUID
+from sqlalchemy import Integer, String, DateTime, Boolean, ForeignKey, UUID as SQLUUID, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime, date
@@ -11,6 +11,7 @@ from sqlalchemy import Enum, Date
 
 class ClientPhoneMapping(Base):
     __tablename__ = "client_phone_mappings"
+    __table_args__ = (UniqueConstraint("client_id", "phone_number", name="uix_client_phone_mapping"),)
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)

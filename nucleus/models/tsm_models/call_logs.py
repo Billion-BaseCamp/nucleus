@@ -2,7 +2,7 @@ from nucleus.db.database import Base
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 import uuid
-from sqlalchemy import ForeignKey, String, Integer, DateTime
+from sqlalchemy import ForeignKey, String, DateTime, Float
 
 
 

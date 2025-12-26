@@ -25,7 +25,7 @@ class OtherLoan(Base):
         index=True,
     )
 
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
+    client_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("client_profiles.id", ondelete="CASCADE"), nullable=False)
 
     # Stored as VARCHAR, validated via LoanCategory enum
     category: Mapped[str] = mapped_column(

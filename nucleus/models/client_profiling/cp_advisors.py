@@ -23,7 +23,7 @@ class CPAdvisor(Base):
         index=True,
     )
 
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
+    client_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("client_profiles.id", ondelete="CASCADE"), nullable=False)
 
     # Stored as VARCHAR, validated using AdvisorType enum
     advisor_type: Mapped[str] = mapped_column(

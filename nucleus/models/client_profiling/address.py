@@ -8,7 +8,7 @@ from uuid import UUID, uuid4
 class Address(Base):
     __tablename__ = "addresses"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
+    client_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("client_profiles.id", ondelete="CASCADE"), nullable=False)
     address_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     address_line1: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     address_line2: Mapped[Optional[str]] = mapped_column(String, nullable=True)
@@ -16,7 +16,7 @@ class Address(Base):
     state: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     country: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     pincode: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    client: Mapped["ClientProfile"] = relationship(
+    client_profile: Mapped["ClientProfile"] = relationship(
         "ClientProfile",
         back_populates="addresses"
     )

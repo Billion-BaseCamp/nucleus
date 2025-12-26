@@ -16,7 +16,7 @@ class Address(Base):
     state: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     country: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     pincode: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    client: Mapped["Client"] = relationship(
-        "Client",
+    client: Mapped["ClientProfile"] = relationship(
+        "ClientProfile",
         back_populates="addresses"
     )

@@ -71,3 +71,5 @@ class ClientProfile(Base):
         DateTime(timezone=True),
         onupdate=func.now()
     )
+
+    

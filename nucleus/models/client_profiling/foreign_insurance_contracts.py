@@ -1,0 +1,34 @@
+from os import name
+from nucleus.db.database import Base
+from sqlalchemy import BigInteger, String, DateTime, ForeignKey,func,Date,DECIMAL, UUID as SQLUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime, date
+from decimal import Decimal
+from typing import Optional
+from uuid import UUID, uuid4
+
+class ForeignInsuranceContracts(Base):
+    __tablename__ = "foreign_insurance_contracts"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
+
+    financial_year_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id"),nullable=True,index=True)
+    financial_year: Mapped[Optional["FinancialYear"]] = relationship("FinancialYear")
+
+    #country details
+    country_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("country_lookup.id"),nullable=True,index=True)
+    country: Mapped[Optional["CountryLookup"]] = relationship("CountryLookup", back_populates="foreign_insurance_contracts")
+
+    #institution details
+    name_of_institution: Mapped[str] = mapped_column(String, nullable=True)
+
+    address_of_institution: Mapped[str] = mapped_column(String, nullable=True)
+
+    zip_code: Mapped[str] = mapped_column(String, nullable=True)
+
+    date_of_contract: Mapped[date] = mapped_column(Date, nullable=True)
+
+    cash_value_of_contract: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
+
+    total_gross_premium_paid: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
+

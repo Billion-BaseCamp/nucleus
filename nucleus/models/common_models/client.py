@@ -17,7 +17,6 @@ class ClientPhoneMapping(Base):
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
 
 
-
 class Client(Base):
     __tablename__ = "clients"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
@@ -40,7 +39,6 @@ class Client(Base):
     logins: Mapped[List["Login"]] = relationship("Login", back_populates="client")
     advisor: Mapped["Advisor"] = relationship("Advisor", back_populates="clients")
     financial_years: Mapped[List["FinancialYear"]] = relationship("FinancialYear", back_populates="client")
-    
     
     # Financial data relationships
     interest_details: Mapped[List["InterestDetails"]] = relationship("InterestDetails", back_populates="client")

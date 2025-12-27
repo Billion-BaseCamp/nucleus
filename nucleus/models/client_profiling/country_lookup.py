@@ -34,3 +34,6 @@ class CountryLookup(Base):
 
     # Relationship to foreign equity debt interests
     foreign_equity_debt_interests: Mapped[List["ForeignEquityDebtInterests"]] = relationship("ForeignEquityDebtInterests", back_populates="country")
+
+    # Relationship to foreign signing authority accounts
+    foreign_signing_authority_accounts: Mapped[List["ForeignSigningAuthorityAccounts"]] = relationship("ForeignSigningAuthorityAccounts", back_populates="country")

@@ -43,6 +43,7 @@ from nucleus.models.client_profiling.foreign_financial_interests import ForeignF
 from nucleus.models.client_profiling.foreign_immovable_properties import ForeignImmovableProperties
 from nucleus.models.client_profiling.foreign_insurance_contracts import ForeignInsuranceContracts
 from nucleus.models.client_profiling.foreign_other_capital_assets import ForeignOtherCapitalAssets
+from nucleus.models.client_profiling.foreign_signing_authority_accounts import ForeignSigningAuthorityAccounts
 from nucleus.models.client_profiling.foreign_other_incomes import ForeignOtherIncomes
 from nucleus.models.client_profiling.goals import Goal
 from nucleus.models.client_profiling.income import income
@@ -103,6 +104,7 @@ __all__ = [
     "ForeignInsuranceContracts",
     "ForeignOtherCapitalAssets",
     "ForeignOtherIncomes",
+    "ForeignSigningAuthorityAccounts",
     "Goal",
     "income",
     "Insurance",

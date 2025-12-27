@@ -19,6 +19,12 @@ class ForeignDepositoryAccounts(Base):
     
     country: Mapped[Optional["CountryLookup"]] = relationship("CountryLookup", back_populates="foreign_depository_accounts")
 
+    name_of_institution: Mapped[str] = mapped_column(String, nullable=True)
+
+    address_of_institution: Mapped[str] = mapped_column(String, nullable=True)
+
+    zip_code_of_institution: Mapped[str] = mapped_column(String, nullable=True)
+
     account_number: Mapped[str] = mapped_column(String, nullable=True)
 
     status: Mapped[str] = mapped_column(String, nullable=True)

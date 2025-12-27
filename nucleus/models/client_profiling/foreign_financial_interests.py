@@ -41,7 +41,7 @@ class ForeignFinancialInterests(Base):
 
     income_taxable_amount: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
 
-    schedule_offered: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
+    schedule_offered: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     item_number_schedule: Mapped[str] = mapped_column(String, nullable=True)
 

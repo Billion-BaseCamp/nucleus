@@ -29,7 +29,7 @@ class ForeignSigningAuthorityAccounts(Base):
     income_accrued_taxable: Mapped[float] = mapped_column(DECIMAL(15, 2), nullable=True)
     income_accrued_in_account: Mapped[bool] = mapped_column(Boolean, nullable=True)
     amount_taxed_on_income: Mapped[float] = mapped_column(DECIMAL(15, 2), nullable=True)
-    schedule_offered: Mapped[float] = mapped_column(DECIMAL(15, 2), nullable=True)
+    schedule_offered: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     item_number_schedule: Mapped[str] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now(),onupdate=func.now())

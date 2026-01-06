@@ -1,7 +1,7 @@
 from nucleus.db.database import Base
 from sqlalchemy import BigInteger, String, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List
+from typing import List, Optional
 from uuid import UUID, uuid4
 
 
@@ -9,7 +9,7 @@ class CountryLookup(Base):
     __tablename__ = "country_lookup"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     country_name: Mapped[str] = mapped_column(String, nullable=True,index=True)
-    country_code: Mapped[str] = mapped_column(String, nullable=True,index=True)
+    country_code: Mapped[str] = mapped_column(String, nullable=True,index=True) 
     
     # Relationship to foreign depository accounts
     foreign_depository_accounts: Mapped[List["ForeignDepositoryAccounts"]] = relationship("ForeignDepositoryAccounts", back_populates="country")
@@ -37,3 +37,5 @@ class CountryLookup(Base):
 
     # Relationship to foreign signing authority accounts
     foreign_signing_authority_accounts: Mapped[List["ForeignSigningAuthorityAccounts"]] = relationship("ForeignSigningAuthorityAccounts", back_populates="country")
+    
+    

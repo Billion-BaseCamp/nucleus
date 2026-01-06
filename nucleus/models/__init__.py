@@ -37,6 +37,7 @@ from nucleus.models.client_profiling.country_lookup import CountryLookup
 from nucleus.models.client_profiling.cp_advisors import CPAdvisor
 from nucleus.models.client_profiling.employment import Employment
 from nucleus.models.client_profiling.foreign_custodial_accounts import ForeignCustodialAccounts
+from nucleus.models.client_profiling.foreign_deposit_custodial_accounts import ForeignDepositCustodialAccounts
 from nucleus.models.client_profiling.foreign_depository_accounts import ForeignDepositoryAccounts
 from nucleus.models.client_profiling.foreign_equity_debt_interests import ForeignEquityDebtInterests
 from nucleus.models.client_profiling.foreign_financial_interests import ForeignFinancialInterests
@@ -57,6 +58,8 @@ from nucleus.models.client_profiling.real_estate_plans import RealEstatePlan
 from nucleus.models.client_profiling.rsu_vesting import RSUVesting
 from nucleus.models.client_profiling.soa_master import SOAMaster
 from nucleus.models.client_profiling.tax_records import TaxRecords
+from nucleus.models.client_profiling.jointly_owned_accounts import JointlyOwnedAccounts
+from nucleus.models.client_profiling.separately_owned_accounts import SeparatelyOwnedAccounts
 
 
 __all__ = [
@@ -97,6 +100,9 @@ __all__ = [
     "CPAdvisor",
     "Employment",
     "ForeignCustodialAccounts",
+    "ForeignDepositCustodialAccounts",
+    "JointlyOwnedAccounts",
+    "SeparatelyOwnedAccounts",
     "ForeignDepositoryAccounts",
     "ForeignEquityDebtInterests",
     "ForeignFinancialInterests",

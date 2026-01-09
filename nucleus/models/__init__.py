@@ -35,6 +35,7 @@ from nucleus.models.client_profiling.children_info import ChildInfo
 from nucleus.models.client_profiling.client_profiling import ClientProfile
 from nucleus.models.client_profiling.country_lookup import CountryLookup
 from nucleus.models.client_profiling.cp_advisors import CPAdvisor
+from nucleus.models.client_profiling.assets_disclosure_documents import AssetsDisclosureDocuments
 from nucleus.models.client_profiling.employment import Employment
 from nucleus.models.client_profiling.foreign_custodial_accounts import ForeignCustodialAccounts
 from nucleus.models.client_profiling.foreign_deposit_custodial_accounts import ForeignDepositCustodialAccounts
@@ -98,6 +99,7 @@ __all__ = [
     "ClientProfile",
     "CountryLookup",
     "CPAdvisor",
+    "AssetsDisclosureDocuments",
     "Employment",
     "ForeignCustodialAccounts",
     "ForeignDepositCustodialAccounts",

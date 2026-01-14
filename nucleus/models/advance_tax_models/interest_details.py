@@ -30,6 +30,8 @@ class InterestDetails(Base):
     foreign_interest_ftc: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
     total_interest: Mapped[float] = mapped_column(Float, default=0.0)
     total_tds: Mapped[float] = mapped_column(Float, default=0.0)
+
+    
     
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="interest_details")

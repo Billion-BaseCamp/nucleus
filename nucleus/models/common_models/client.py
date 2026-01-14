@@ -31,6 +31,8 @@ class Client(Base):
     family_relationship: Mapped[str] = mapped_column(String, nullable=True)
     is_advance_tax_payer: Mapped[bool] = mapped_column(Boolean, default=True)
     residence_type: Mapped[ResidenceType] = mapped_column(Enum(ResidenceType), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)  
+    deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     
     # Foreign key to advisor
     advisor_id: Mapped[UUID] = mapped_column(SQLUUID[UUID](as_uuid=True), ForeignKey("advisors.id"), nullable=True)
@@ -46,6 +48,8 @@ class Client(Base):
     capital_gains: Mapped[List["CapitalGains"]] = relationship("CapitalGains", back_populates="client")
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="client")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="client")
+
+
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

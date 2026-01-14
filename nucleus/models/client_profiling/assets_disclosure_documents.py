@@ -31,7 +31,7 @@ class AssetsDisclosureDocuments(Base):
 
     financial_year_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("financial_years.id"),
+        ForeignKey("financial_years.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )

@@ -12,7 +12,7 @@ class ForeignDepositCustodialAccounts(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
 
-    financial_year_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id"), nullable=True, index=True)
+    financial_year_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=True, index=True)
     
     financial_year: Mapped[Optional["FinancialYear"]] = relationship("FinancialYear")
 
@@ -43,7 +43,7 @@ class ForeignDepositCustodialAccounts(Base):
     
     exchange_rate: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(15, 6), nullable=True)
     
-    exchange_rate_source: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    exchange_rate_source:    Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
     # Institution details
     name_of_financial_institution: Mapped[Optional[str]] = mapped_column(String, nullable=True)

@@ -12,7 +12,7 @@ class SeparatelyOwnedAccounts(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     
-    financial_year_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id"),nullable=True,index=True)
+    financial_year_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"),nullable=True,index=True)
     financial_year: Mapped[Optional["FinancialYear"]] = relationship("FinancialYear")
     
     country_code_name: Mapped[Optional[str]] = mapped_column(String, nullable=True,index=True)
@@ -22,7 +22,7 @@ class SeparatelyOwnedAccounts(Base):
     maximum_account_value: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(15, 2), nullable=True)
     
     maximum_account_value_unknown: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True, default=False)
-    
+        
     type_of_account: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
     name_of_financial_institution: Mapped[Optional[str]] = mapped_column(String, nullable=True)

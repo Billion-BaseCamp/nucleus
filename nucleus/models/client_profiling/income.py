@@ -12,7 +12,7 @@ class income(Base):
     __tablename__ = "incomes"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
 
-    financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id"),nullable=True,index=True)
+    financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"),nullable=True,index=True)
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
 
     income_type:Mapped[str] = mapped_column(String, nullable=True)

@@ -108,7 +108,7 @@ class Task(Base):
 
     file_uploads: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=True)
 
-    client_id: Mapped[UUID] = mapped_column(ForeignKey("clients.id"), nullable=True)
+    client_id: Mapped[UUID] = mapped_column(ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=True ,index=True)
 

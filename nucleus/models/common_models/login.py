@@ -19,7 +19,7 @@ class Login(Base):
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
     
     # Foreign key to client (if role is client)
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=True)
+    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=True)
     
     # Foreign key to advisor (if role is advisor)
     advisor_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("advisors.id"), nullable=True)

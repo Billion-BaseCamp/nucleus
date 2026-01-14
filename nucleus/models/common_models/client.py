@@ -31,7 +31,7 @@ class Client(Base):
     family_relationship: Mapped[str] = mapped_column(String, nullable=True)
     is_advance_tax_payer: Mapped[bool] = mapped_column(Boolean, default=True)
     residence_type: Mapped[ResidenceType] = mapped_column(Enum(ResidenceType), nullable=True)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)  
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=True)  
     deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     
     # Foreign key to advisor

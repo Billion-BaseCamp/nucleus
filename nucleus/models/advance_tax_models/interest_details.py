@@ -12,7 +12,7 @@ class InterestDetails(Base):
     
     # Foreign keys
     quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=False)
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
+    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
     
     fd_interest: Mapped[float] = mapped_column(Float, default=0.0)
     fd_tds: Mapped[float] = mapped_column(Float, default=0.0)

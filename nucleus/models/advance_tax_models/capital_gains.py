@@ -15,7 +15,7 @@ class CapitalGains(Base):
     
     # Foreign keys
     quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=False)
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
+    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
     
     category: Mapped[CapitalGainsCategory] = mapped_column(String, nullable=False)
     ShortTermCG_15: Mapped[float] = mapped_column(Float, nullable=True)

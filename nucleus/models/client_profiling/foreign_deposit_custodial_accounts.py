@@ -54,6 +54,8 @@ class ForeignDepositCustodialAccounts(Base):
     mailing_address: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
     city_state_country_zip: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    hash_key: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
     # Timestamps
     created_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, server_default=func.now())

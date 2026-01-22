@@ -75,7 +75,6 @@ class AssetsDisclosureDocuments(Base):
         nullable=False,
         default=False,
         server_default="FALSE",
-        nullable=True,
     )
 
     created_at: Mapped[datetime] = mapped_column(

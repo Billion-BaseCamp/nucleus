@@ -1,10 +1,9 @@
 from datetime import date
 from nucleus.db.database import Base
-from typing import Optional,Mapped
 from uuid import UUID, uuid4
 from sqlalchemy import String, Date, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID as SQLUUID
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from sqlalchemy.types import DateTime
 from datetime import datetime

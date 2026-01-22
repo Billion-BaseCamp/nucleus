@@ -1,20 +1,19 @@
 from nucleus.db.database import Base
 from sqlalchemy import (
-    BigInteger,
     String,
-    Text,
     Date,
     DateTime,
     Boolean,
     ForeignKey,
     DECIMAL,
+    Integer,
     func,
     UUID as SQLUUID,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, date
 from uuid import UUID, uuid4
-
+from nucleus.models.common_models.client import Client
 
 class RealEstate(Base):
     __tablename__ = "real_estate"
@@ -26,25 +25,15 @@ class RealEstate(Base):
         index=True,
     )
 
-    financial_year_id: Mapped[UUID] = mapped_column(
+    client_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("financial_years.id", ondelete="CASCADE"),
+        ForeignKey("clients.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
-    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+    client: Mapped["Client"] = relationship("Client", back_populates="real_estate")
 
-    usage_type: Mapped[str] = mapped_column(
-        String,
-        nullable=False,
-    )
-
-    details: Mapped[str] = mapped_column(
-        Text,
-        nullable=True,
-    )
-
-    market_value: Mapped[float] = mapped_column(
+    estimated_value: Mapped[float] = mapped_column(
         DECIMAL(15, 2),
         nullable=True,
     )
@@ -54,31 +43,69 @@ class RealEstate(Base):
         nullable=True,
     )
 
-    owners: Mapped[str] = mapped_column(
-        Text,
+    year_of_acquisition: Mapped[int] = mapped_column(
+        Integer,
         nullable=True,
     )
 
-    state_country: Mapped[str] = mapped_column(
-        String(255),
+    owners:Mapped[int] = mapped_column(
+        Integer,
         nullable=True,
     )
 
-    loan_attached: Mapped[bool] = mapped_column(
+    state:Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
+
+    country:Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
+
+    loan_closed:Mapped[bool] = mapped_column(
         Boolean,
-        nullable=False,
+        nullable=True,
     )
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        nullable=False,
-        server_default=func.now(),
+    loan_attached:Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=True,
     )
 
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        nullable=False,
-        server_default=func.now(),
-        onupdate=func.now(),    
-
+    loan_starting_date:Mapped[date] = mapped_column(
+        Date,
+        nullable=True,
     )
+
+    outStanding_loan_amount:Mapped[float] = mapped_column(
+        DECIMAL(15, 2),
+        nullable=True,
+    )
+
+    interest_rate:Mapped[float] = mapped_column(
+        DECIMAL(15, 2),
+        nullable=True,
+    )
+
+    emi_amount:Mapped[float] = mapped_column(
+        DECIMAL(15, 2),
+        nullable=True,
+    )
+
+    rent_amount:Mapped[float] = mapped_column(
+        DECIMAL(15, 2),
+        nullable=True,
+    )
+
+    property_tax_amount:Mapped[float] = mapped_column(
+        DECIMAL(15, 2),
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    
+    
+    

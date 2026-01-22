@@ -58,3 +58,38 @@ class ACCEPTANCE_STATUS(Enum):
     ACCEPTED = "Accepted"
     REJECTED = "Rejected"
     TRANSFERRED = "Transferred"
+
+
+# Marital status enum
+class MaritalStatus(Enum):
+    SINGLE = "Single"
+    MARRIED = "Married"
+    DIVORCED = "Divorced"
+    WIDOWED = "Widowed"
+
+# Yes/No/NA enum
+class YesNoNA(Enum):
+    YES = "Yes"
+    NO = "No"
+    NA = "NA"
+
+class InsuranceCategory(Enum):
+    LIFE_INSURANCE = "Life Insurance"
+    HEALTH_INSURANCE = "Health Insurance"
+    CAR_INSURANCE = "Car Insurance"
+    HOME_INSURANCE = "Home Insurance"
+    TRAVEL_INSURANCE = "Travel Insurance"
+    OTHER_INSURANCE = "Other Insurance"
+
+
+class LoanType(Enum):
+    HOME_LOAN = "Home Loan"
+    CAR_LOAN = "Car Loan"
+    PERSONAL_LOAN = "Personal Loan"
+    EDUCATION_LOAN = "Education Loan"
+    BUSINESS_LOAN = "Business Loan"
+    GOLD_LOAN = "Gold Loan"
+    OVERDRAFT_LOAN = "Overdraft Loan"
+    CREDIT_CARD_LOAN = "Credit Card Loan"
+    STUDENT_LOAN = "Student Loan"
+    OTHER_LOAN = "Other Loan"

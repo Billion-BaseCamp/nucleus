@@ -28,13 +28,8 @@ from nucleus.models.tsm_models.task import Task, TaskAssignee, Session
 
 # Client Profiling Models
 from nucleus.models.client_profiling.address import Address
-from nucleus.models.client_profiling.assets_with_maturity import AssetWithMaturity
-from nucleus.models.client_profiling.cash_flow_office import CashFlowOffice
-from nucleus.models.client_profiling.cash_flows import CashFlow
-from nucleus.models.client_profiling.children_info import ChildInfo
-from nucleus.models.client_profiling.client_profiling import ClientProfile
+from nucleus.models.client_profiling.personal_info import PersonalInformation
 from nucleus.models.client_profiling.country_lookup import CountryLookup
-from nucleus.models.client_profiling.cp_advisors import CPAdvisor
 from nucleus.models.client_profiling.assets_disclosure_documents import AssetsDisclosureDocuments
 from nucleus.models.client_profiling.employment import Employment
 from nucleus.models.client_profiling.foreign_custodial_accounts import ForeignCustodialAccounts
@@ -47,18 +42,9 @@ from nucleus.models.client_profiling.foreign_insurance_contracts import ForeignI
 from nucleus.models.client_profiling.foreign_other_capital_assets import ForeignOtherCapitalAssets
 from nucleus.models.client_profiling.foreign_signing_authority_accounts import ForeignSigningAuthorityAccounts
 from nucleus.models.client_profiling.foreign_other_incomes import ForeignOtherIncomes
-from nucleus.models.client_profiling.goals import Goal
-from nucleus.models.client_profiling.income import income
 from nucleus.models.client_profiling.insurance import Insurance
 from nucleus.models.client_profiling.loan_records import LoanRecord
-from nucleus.models.client_profiling.other_assets import OtherAsset
-from nucleus.models.client_profiling.other_loans import OtherLoan
-from nucleus.models.client_profiling.parent_assets import ParentAsset
 from nucleus.models.client_profiling.real_estate import RealEstate
-from nucleus.models.client_profiling.real_estate_plans import RealEstatePlan
-from nucleus.models.client_profiling.rsu_vesting import RSUVesting
-from nucleus.models.client_profiling.soa_master import SOAMaster
-from nucleus.models.client_profiling.tax_records import TaxRecords
 from nucleus.models.client_profiling.jointly_owned_accounts import JointlyOwnedAccounts
 from nucleus.models.client_profiling.separately_owned_accounts import SeparatelyOwnedAccounts
 
@@ -92,13 +78,8 @@ __all__ = [
     "TaskChatMessage",
     # Client Profiling Models
     "Address",
-    "AssetWithMaturity",
-    "CashFlow",
-    "CashFlowOffice",
-    "ChildInfo",
-    "ClientProfile",
+    "PersonalInformation",
     "CountryLookup",
-    "CPAdvisor",
     "AssetsDisclosureDocuments",
     "Employment",
     "ForeignCustodialAccounts",
@@ -113,16 +94,7 @@ __all__ = [
     "ForeignOtherCapitalAssets",
     "ForeignOtherIncomes",
     "ForeignSigningAuthorityAccounts",
-    "Goal",
-    "income",
     "Insurance",
     "LoanRecord",
-    "OtherAsset",
-    "OtherLoan",
-    "ParentAsset",
     "RealEstate",
-    "RealEstatePlan",
-    "RSUVesting",
-    "SOAMaster",
-    "TaxRecords",
 ]

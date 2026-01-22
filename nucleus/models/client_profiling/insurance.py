@@ -1,8 +1,6 @@
 from nucleus.db.database import Base
 from sqlalchemy import (
-    BigInteger,
     String,
-    Text,
     Date,
     DateTime,
     Boolean,
@@ -10,15 +8,16 @@ from sqlalchemy import (
     Integer,
     DECIMAL,
     func,
+    Text
 )
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime, date
 from uuid import UUID, uuid4
 from sqlalchemy import UUID as SQLUUID
-
+from sqlalchemy.orm import relationship
 
 class Insurance(Base):
-    __tablename__ = "insurance"
+    __tablename__ = "insurances"
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -27,7 +26,9 @@ class Insurance(Base):
         index=True,
     )
 
-    client_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("client_profiles.id", ondelete="CASCADE"), nullable=False)
+    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
+
+    client: Mapped["Client"] = relationship("Client", back_populates="insurances")
 
     # Stored as VARCHAR, validated via InsuranceCategory enum
     category: Mapped[str] = mapped_column(
@@ -60,11 +61,6 @@ class Insurance(Base):
         nullable=True,
     )
 
-    tenure_months: Mapped[int] = mapped_column(
-        Integer,
-        nullable=True,
-    )
-
     annuity_plan: Mapped[bool] = mapped_column(
         Boolean,
         nullable=False,
@@ -76,18 +72,23 @@ class Insurance(Base):
         nullable=True,
     )
 
-    annuity_start_date: Mapped[date] = mapped_column(
+    annuity_receivable_start_date: Mapped[date] = mapped_column(
         Date,
         nullable=True,
     )
 
-    annuity_end_date: Mapped[date] = mapped_column(
+    annuity_receivable_end_date: Mapped[date] = mapped_column(
         Date,
         nullable=True,
     )
 
     description: Mapped[str] = mapped_column(
         Text,
+        nullable=True,
+    )
+
+    members_count: Mapped[int] = mapped_column(
+        Integer,
         nullable=True,
     )
 

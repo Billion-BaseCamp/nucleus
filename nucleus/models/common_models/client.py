@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, DateTime, Boolean, ForeignKey, UUID as SQLUUID, UniqueConstraint
+from sqlalchemy import String, DateTime, Boolean, ForeignKey, UUID as SQLUUID, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime, date
@@ -48,7 +48,15 @@ class Client(Base):
     capital_gains: Mapped[List["CapitalGains"]] = relationship("CapitalGains", back_populates="client")
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="client")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="client")
-
+    
+    # Client profiling relationships
+    personal_information: Mapped["PersonalInformation"] = relationship("PersonalInformation", back_populates="client")
+    addresses: Mapped["Address"] = relationship("Address", back_populates="client")
+    employment: Mapped[List["Employment"]] = relationship("Employment", back_populates="client")
+    residencies: Mapped[List["Residency"]] = relationship("Residency", back_populates="client")
+    loans: Mapped[List["Loan"]] = relationship("Loan", back_populates="client")
+    insurances: Mapped[List["Insurance"]] = relationship("Insurance", back_populates="client")
+    real_estate: Mapped[List["RealEstate"]] = relationship("RealEstate", back_populates="client")
 
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

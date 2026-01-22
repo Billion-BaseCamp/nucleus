@@ -7,8 +7,9 @@ from typing import List, Optional
 from uuid import UUID, uuid4
 
 
-class ClientProfile(Base):
-    __tablename__ = "client_profiles"
+
+class PersonalInformation(Base):
+    __tablename__ = "personal_information"
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -25,15 +26,17 @@ class ClientProfile(Base):
         unique=True
     )
 
+    client: Mapped["Client"] = relationship("Client", back_populates="personal_information")
+
+    # marital status enum (Single, Married, Divorced, Widowed) → SINGLE, MARRIED, DIVORCED, WIDOWED
+    marital_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     # Name refinement (non-core)
     middle_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
-    # Contact (non-unique, extensible)
-    email: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    phone_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-
     # Additional identity documents
     social_security_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     passport_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     # Address & Employment
@@ -48,19 +51,21 @@ class ClientProfile(Base):
         back_populates="client_profile",
         cascade="all, delete-orphan"
     )
-
-    # Citizenship & residency (non-tax core)
-    current_citizenship: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    previous_citizenship: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    residency: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-
     # Compliance / regulatory
     power_of_attorney: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
-    pep_status: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
-    # HUF-specific (edge case → profile is correct place)
-    is_huf: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    # HUF-specific 
+    residencies: Mapped[List["Residency"]] = relationship(
+        "Residency",
+        back_populates="client",
+        cascade="all, delete-orphan"
+    )
+
+    #Yes/No/NA
+    is_huf: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     huf_pan: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     huf_dob: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(

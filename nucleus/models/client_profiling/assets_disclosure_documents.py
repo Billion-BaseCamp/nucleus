@@ -7,6 +7,7 @@ from sqlalchemy import (
     ForeignKey,
     UUID as SQLUUID,
     func,
+    Boolean,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
@@ -66,6 +67,14 @@ class AssetsDisclosureDocuments(Base):
     
     s3_key: Mapped[str] = mapped_column(
         String,
+        nullable=True,
+    )
+
+    is_reviewed: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="FALSE",
         nullable=True,
     )
 

@@ -54,6 +54,7 @@ class Client(Base):
     addresses: Mapped["Address"] = relationship("Address", back_populates="client")
     employment: Mapped[List["Employment"]] = relationship("Employment", back_populates="client")
     residencies: Mapped[List["Residency"]] = relationship("Residency", back_populates="client")
+    citizenships: Mapped[List["Citizenship"]] = relationship("Citizenship", back_populates="client")
     loans: Mapped[List["Loan"]] = relationship("Loan", back_populates="client")
     insurances: Mapped[List["Insurance"]] = relationship("Insurance", back_populates="client")
     real_estate: Mapped[List["RealEstate"]] = relationship("RealEstate", back_populates="client")

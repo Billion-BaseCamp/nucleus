@@ -9,6 +9,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import DateTime
 from datetime import datetime
 from sqlalchemy.orm import relationship
+from sqlalchemy import Boolean
 
 
 class Residency(Base):
@@ -19,17 +20,13 @@ class Residency(Base):
 
     client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
 
-    current_citizenship: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    residency:Mapped[str] = mapped_column(String(255), nullable=False)
 
-    previous_citizenship: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    residency_start_date: Mapped[date] = mapped_column(Date, nullable=False)
 
-    previous_citizenship_end_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    residency_end_date: Mapped[date] = mapped_column(Date, nullable=False)
 
-    residency_details: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-
-    residency_start_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-
-    residency_end_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default="TRUE")
 
     client: Mapped["Client"] = relationship("Client", back_populates="residencies")
 

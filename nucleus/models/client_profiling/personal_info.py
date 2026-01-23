@@ -39,27 +39,7 @@ class PersonalInformation(Base):
 
     passport_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
-    # Address & Employment
-    addresses: Mapped[List["Address"]] = relationship(
-        "Address",
-        back_populates="client_profile",
-        cascade="all, delete-orphan"
-    )
-
-    employment_records: Mapped[List["Employment"]] = relationship(
-        "Employment",
-        back_populates="client_profile",
-        cascade="all, delete-orphan"
-    )
-    # Compliance / regulatory
     power_of_attorney: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
-
-    # HUF-specific 
-    residencies: Mapped[List["Residency"]] = relationship(
-        "Residency",
-        back_populates="client",
-        cascade="all, delete-orphan"
-    )
 
     #Yes/No/NA
     is_huf: Mapped[Optional[str]] = mapped_column(String, nullable=True)

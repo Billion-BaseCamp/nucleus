@@ -19,11 +19,11 @@ class Citizenship(Base):
 
     client: Mapped["Client"] = relationship("Client", back_populates="citizenships")
 
-    citizenship :Mapped[str] = mapped_column(String(255), nullable=False)
+    citizenship :Mapped[str] = mapped_column(String(255), nullable=True)
 
-    citizenship_start_date: Mapped[date] = mapped_column(Date, nullable=False)
+    citizenship_start_date: Mapped[date] = mapped_column(Date, nullable=True)
 
-    citizenship_end_date: Mapped[date] = mapped_column(Date, nullable=False)
+    citizenship_end_date: Mapped[date] = mapped_column(Date, nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default="TRUE")
 

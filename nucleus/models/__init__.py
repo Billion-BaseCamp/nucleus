@@ -48,6 +48,8 @@ from nucleus.models.client_profiling.real_estate import RealEstate
 from nucleus.models.client_profiling.jointly_owned_accounts import JointlyOwnedAccounts
 from nucleus.models.client_profiling.separately_owned_accounts import SeparatelyOwnedAccounts
 from nucleus.models.client_profiling.residency import Residency
+from nucleus.models.client_profiling.citizenship import Citizenship
+from nucleus.models.client_profiling.address import AddressType
 
 
 __all__ = [
@@ -99,4 +101,6 @@ __all__ = [
     "LoanRecord",
     "RealEstate",
     "Residency",
+    "Citizenship",
+    "AddressType",
 ]

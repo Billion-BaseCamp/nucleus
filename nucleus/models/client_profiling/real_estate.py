@@ -9,6 +9,7 @@ from sqlalchemy import (
     Integer,
     func,
     UUID as SQLUUID,
+    Text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, date
@@ -108,6 +109,18 @@ class RealEstate(Base):
 
     property_tax_amount:Mapped[float] = mapped_column(
         DECIMAL(15, 2),
+        nullable=True,
+    )
+
+    insured:Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="false",
+    )
+
+    insured_details:Mapped[str] = mapped_column(
+        Text,
         nullable=True,
     )
 

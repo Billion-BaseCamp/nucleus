@@ -20,8 +20,12 @@ class Address(Base):
     client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
     client: Mapped["Client"] = relationship("Client", back_populates="addresses")
 
-    address_type: Mapped[AddressType] = mapped_column(Enum(AddressType), nullable=False, 
-                default=AddressType.PRIMARY, server_default=text(" 'Primary' "))
+    address_type: Mapped[AddressType] = mapped_column(
+        Enum(AddressType, native_enum=False),
+        nullable=False,
+        default=AddressType.PRIMARY,
+        server_default=text(" 'Primary' ")
+    )
 
     address_line1: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     address_line2: Mapped[Optional[str]] = mapped_column(String, nullable=True)

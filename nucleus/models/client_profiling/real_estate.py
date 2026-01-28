@@ -14,6 +14,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, date
 from uuid import UUID, uuid4
 from nucleus.models.common_models.client import Client
+from sqlalchemy import text
+from enum import Enum as PyEnum
+
 
 class RealEstate(Base):
     __tablename__ = "real_estate"
@@ -32,6 +35,11 @@ class RealEstate(Base):
         index=True,
     )
     client: Mapped["Client"] = relationship("Client", back_populates="real_estate")
+
+    property_type: Mapped[str] = mapped_column(
+        String,
+        nullable=False
+    )
 
     estimated_value: Mapped[float] = mapped_column(
         DECIMAL(15, 2),

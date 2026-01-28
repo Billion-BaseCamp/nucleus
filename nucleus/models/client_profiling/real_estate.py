@@ -38,7 +38,7 @@ class RealEstate(Base):
 
     property_type: Mapped[str] = mapped_column(
         String,
-        nullable=False
+        nullable=True
     )
 
     estimated_value: Mapped[float] = mapped_column(

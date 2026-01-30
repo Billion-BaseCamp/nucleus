@@ -101,6 +101,7 @@ celerybeat.pid
 # Migrations
 .migrations/
 
+.migrations/versions/
 # SageMath parsed files
 *.sage.py
 

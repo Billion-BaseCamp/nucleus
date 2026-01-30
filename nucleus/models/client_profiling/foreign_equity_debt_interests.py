@@ -40,3 +40,5 @@ class ForeignEquityDebtInterests(Base):
     gross_interest: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
 
     total_gross_sale_proceeds: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
+
+    comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)

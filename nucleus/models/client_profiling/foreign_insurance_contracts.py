@@ -32,3 +32,5 @@ class ForeignInsuranceContracts(Base):
 
     total_gross_premium_paid: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
 
+    comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+

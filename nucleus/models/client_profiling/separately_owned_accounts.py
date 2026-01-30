@@ -39,6 +39,8 @@ class SeparatelyOwnedAccounts(Base):
 
     hash_key: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
+    comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    
     created_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, server_default=func.now())
     
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, server_default=func.now(), onupdate=func.now())

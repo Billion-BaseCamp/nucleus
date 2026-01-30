@@ -99,7 +99,7 @@ celerybeat-schedule
 celerybeat.pid
 
 # Migrations
-.migrations/
+migrations/
 
 # SageMath parsed files
 *.sage.py

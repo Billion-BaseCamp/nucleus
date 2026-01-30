@@ -39,6 +39,8 @@ class ForeignCustodialAccounts(Base):
     closing_balance: Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
 
     gross_interest:Mapped[Decimal] = mapped_column(DECIMAL(15, 2), nullable=True)
+    
+    comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now())
 

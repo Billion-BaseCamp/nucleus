@@ -39,6 +39,8 @@ class ForeignDepositoryAccounts(Base):
 
     gross_interest:Mapped[float] = mapped_column(DECIMAL(15, 2), nullable=True)
 
+    comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     created_at:Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now())
 
     updated_at:Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now(),onupdate=func.now())

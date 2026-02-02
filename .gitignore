@@ -99,7 +99,7 @@ celerybeat-schedule
 celerybeat.pid
 
 # Migrations
-migrations/
+
 
 *.sage.py
 

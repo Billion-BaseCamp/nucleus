@@ -16,6 +16,7 @@ class CapitalGainsCategory(Enum):
     LBF = "LBF"
     NET_GAINS_AFSTOFF = "NET_GAINS_AFSTOFF"
     CAPITAL_GAINS="CAPITAL_GAINS"
+    LCF="LCF"
 
 class ResidenceType(Enum):
     RES="RES"
@@ -38,8 +39,9 @@ class CommentsCategory(Enum):
     INTEREST_DETAILS = "interest_details"
     DIVIDENDS = "dividends"
     RENTAL = "rental"
-    OTHER_INCOME = "other_income"
+    OTHER_INCOME = "other_income"   
     SUMMARY = "summary"
+    PDF_COMMENT = "pdf_comment"
 
 
 class Region(str,Enum):

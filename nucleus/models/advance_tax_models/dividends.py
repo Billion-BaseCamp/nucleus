@@ -18,7 +18,7 @@ class Dividends(Base):
     foreign_dividends: Mapped[float] = mapped_column(Float, nullable=True)
     tds: Mapped[float] = mapped_column(Float, nullable=True)
     ftc: Mapped[float] = mapped_column(Float, nullable=True)
-    
+    india_dividends_reit: Mapped[float] = mapped_column(Float, nullable=True)
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="dividends")
     client: Mapped["Client"] = relationship("Client", back_populates="dividends")

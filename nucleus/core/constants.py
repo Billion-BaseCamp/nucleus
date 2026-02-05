@@ -28,7 +28,7 @@ class ResidenceType(Enum):
 OTHER_INCOME_FIELDS = [
     "income_44ada",
     "property_sale_tds", 
-    "additional_foreign_tax_credits",
+    "additional_foreign_tax_credits",   
     "tcs_incurred",
     "tds_44ada",
     "salary_exemption",

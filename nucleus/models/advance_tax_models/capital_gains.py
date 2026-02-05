@@ -7,6 +7,11 @@ from sqlalchemy.sql import func
 from datetime import datetime
 from nucleus.db.database import Base
 from nucleus.core.constants import CapitalGainsCategory
+from typing import TypedDict
+
+class LTCG_12_5(TypedDict):
+    amount: float
+    is_exempted: bool
 
 
 class CapitalGains(Base):
@@ -22,7 +27,7 @@ class CapitalGains(Base):
     ShortTermCG_20: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"AngelBroking": 120000, "Zerodha": 20000}
     ShortTermCG_At_Marginal_Rate: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     LongTermCG_10: Mapped[float] = mapped_column(Float, nullable=True)
-    LongTermCG_12_5: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
+    LongTermCG_12_5: Mapped[Dict[str, LTCG_12_5]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     LongTermCG_20: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     NetShortTermGain20: Mapped[float] = mapped_column(Float, nullable=True)
     NetLongTermGain12_5: Mapped[float] = mapped_column(Float, nullable=True)

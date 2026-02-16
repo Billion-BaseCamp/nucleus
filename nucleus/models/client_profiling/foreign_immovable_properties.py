@@ -43,8 +43,6 @@ class ForeignImmovableProperties(Base):
     comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
     sold_this_year: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
-    
-    is_mutual_fund: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now())
 

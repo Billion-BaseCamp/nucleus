@@ -39,8 +39,6 @@ class ForeignOtherCapitalAssets(Base):
     item_number_schedule: Mapped[str] = mapped_column(String, nullable=True)
 
     comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    
-    is_mutual_fund: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now())
 

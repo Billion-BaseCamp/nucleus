@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 from nucleus.db.database import Base
 
 class cost_inflation_index(Base):
-    __tablename__ = "cii"
+    __tablename__ = "cost_inflation_indexes"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     year: Mapped[int] = mapped_column(Integer, nullable=False)
     cii: Mapped[float] = mapped_column(Float, nullable=False)

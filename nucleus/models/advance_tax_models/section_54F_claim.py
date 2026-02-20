@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Date, DateTime, Numeric, UniqueConstraint, UUID as SQLUUID
+from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -34,9 +34,8 @@ class Section54FClaim(Base):
     cost_of_property: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
     
 
-    registration_date: Mapped[date] = mapped_column(Date, nullable=True)
-    allocation_date: Mapped[date] = mapped_column(Date, nullable=True)
-    booking_date: Mapped[date] = mapped_column(Date, nullable=True)
+    date_of_acquisition: Mapped[date] = mapped_column(Date, nullable=True)
+    type_of_acquisition: Mapped[str] = mapped_column(String, nullable=True)
 
     #normal gain===> cost of property - sale value of property
     normal_gain: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)

@@ -1,12 +1,16 @@
-from sqlalchemy import String, DateTime, Boolean, ForeignKey, UUID as SQLUUID, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
-from datetime import datetime, date
-from nucleus.db.database import Base
+from __future__ import annotations
+
+from datetime import date, datetime
 from typing import List
 from uuid import UUID, uuid4
+
+from sqlalchemy import Boolean, Date, DateTime, Enum, ForeignKey, String, UniqueConstraint, UUID as SQLUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
+
 from nucleus.core.constants import ResidenceType
-from sqlalchemy import Enum, Date   
+from nucleus.db.database import Base
+  
 
 
 class ClientPhoneMapping(Base):
@@ -48,6 +52,7 @@ class Client(Base):
     capital_gains: Mapped[List["CapitalGains"]] = relationship("CapitalGains", back_populates="client")
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="client")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="client")
+    excemptions: Mapped[List["Excemption"]] = relationship("Excemption", back_populates="client", cascade="all, delete-orphan")
     
     # Client profiling relationships
     personal_information: Mapped["PersonalInformation"] = relationship("PersonalInformation", back_populates="client")

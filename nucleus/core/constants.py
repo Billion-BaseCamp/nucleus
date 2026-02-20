@@ -97,3 +97,4 @@ class LoanType(Enum):
     STUDENT_LOAN = "Student Loan"
     OTHER_LOAN = "Other Loan"
 
+

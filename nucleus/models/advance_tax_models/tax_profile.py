@@ -27,7 +27,6 @@ class TaxProfile(Base):
     tds: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)
     is_india_tax_payer: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
     is_us_tax_payer: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
-    total_taxable_income: Mapped[float] = mapped_column(Float, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

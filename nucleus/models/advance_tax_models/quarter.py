@@ -1,10 +1,15 @@
-from sqlalchemy import String, DateTime, Date ,Integer, Boolean, ForeignKey, UUID as SQLUUID
+from __future__ import annotations
+
+from datetime import date, datetime
+from typing import List
 from uuid import UUID, uuid4
+
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, String, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
-from datetime import datetime,date
+
 from nucleus.db.database import Base
-from typing import List
+
 
 
 class Quarter(Base):
@@ -32,4 +37,5 @@ class Quarter(Base):
     capital_gains: Mapped[List["CapitalGains"]] = relationship("CapitalGains", back_populates="quarter")
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="quarter")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="quarter")
-    
+    excemptions: Mapped[List["Excemption"]] = relationship("Excemption", back_populates="quarter", cascade="all, delete-orphan")
+

@@ -1,5 +1,5 @@
 from nucleus.db.database import Base
-from sqlalchemy import BigInteger, String, DateTime, ForeignKey,func,Date,DECIMAL, UUID as SQLUUID
+from sqlalchemy import BigInteger, String, DateTime, ForeignKey,func,Date,DECIMAL, UUID as SQLUUID, Boolean 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, date
 from decimal import Decimal

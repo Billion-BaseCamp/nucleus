@@ -14,7 +14,6 @@ from nucleus.db.database import Base
 class Section54FClaim(Base):
 
     __tablename__ = "section_54f_claim"
-    __table_args__ = (UniqueConstraint("client_id", "quarter_id", name="uix_section_54f_claim_client_quarter"),)
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
 

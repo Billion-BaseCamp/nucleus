@@ -36,7 +36,6 @@ class Section54FClaim(Base):
     # Ready / UC (Under Construction)
     # If Ready: date_of_registration
     # If UC: estimated_date_of_possession, payments_made_till_date, estimated_additional_payments_till_31st_july_including_cgas
-    estimated_date_of_possession: Mapped[date] = mapped_column(Date, nullable=True)  # If UC - as per agreement
     payments_made_till_date: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)  # If UC
     estimated_additional_payments_till_31st_july_including_cgas: Mapped[float] = mapped_column(
         Numeric(18,2), default=0, nullable=True

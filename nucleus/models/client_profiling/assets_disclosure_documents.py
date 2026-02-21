@@ -8,9 +8,10 @@ from sqlalchemy import (
     UUID as SQLUUID,
     func,
     Boolean,
+    Date,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 from uuid import UUID, uuid4
 
@@ -53,7 +54,15 @@ class AssetsDisclosureDocuments(Base):
         nullable=True,
     )
     
+    entity_name: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
     
+    entity_opening_date: Mapped[date] = mapped_column(
+        Date,
+        nullable=True,
+    )
 
     file_size_bytes: Mapped[int] = mapped_column(
         BigInteger,

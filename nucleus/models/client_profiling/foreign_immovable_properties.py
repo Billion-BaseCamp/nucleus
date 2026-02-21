@@ -43,6 +43,12 @@ class ForeignImmovableProperties(Base):
     comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     
     sold_this_year: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    
+    ownership_percentage: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(15, 2), nullable=True)
+    
+    property_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    
+    is_new_property: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=True,server_default=func.now())
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID
+from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -32,7 +32,17 @@ class Section54FClaim(Base):
 
     #cost of property===> agreement value + stamp duty + registration + gst+ additional costs
     cost_of_property: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
-    
+
+    # Ready / UC (Under Construction)
+    # If Ready: date_of_registration
+    # If UC: estimated_date_of_possession, payments_made_till_date, estimated_additional_payments_till_31st_july_including_cgas
+    ready_or_uc: Mapped[bool] = mapped_column(Boolean, nullable=True)  # "Ready" | "UC"
+    date_of_registration: Mapped[date] = mapped_column(Date, nullable=True)  # If Ready
+    estimated_date_of_possession: Mapped[date] = mapped_column(Date, nullable=True)  # If UC - as per agreement
+    payments_made_till_date: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)  # If UC
+    estimated_additional_payments_till_31st_july_including_cgas: Mapped[float] = mapped_column(
+        Numeric(18,2), default=0, nullable=True
+    )  # If UC
 
     date_of_acquisition: Mapped[date] = mapped_column(Date, nullable=True)
     type_of_acquisition: Mapped[str] = mapped_column(String, nullable=True)

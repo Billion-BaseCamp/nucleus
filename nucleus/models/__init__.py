@@ -110,5 +110,6 @@ __all__ = [
     "RealEstate",
     "Residency",
     "Citizenship",
+    "Employer",
     "AddressType",
 ]

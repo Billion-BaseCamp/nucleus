@@ -21,9 +21,10 @@ class FinancialYear(Base):
     is_fbar_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
     is_fatca_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
     
-    # Relationships
+    # Relationships (string-based to avoid circular imports)
     client: Mapped["Client"] = relationship("Client", back_populates="financial_years")
     quarters: Mapped[List["Quarter"]] = relationship("Quarter", back_populates="financial_year")
+    employers: Mapped[List["Employer"]] = relationship("Employer", back_populates="financial_year")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

@@ -9,7 +9,7 @@ from datetime import datetime
 class Employer(Base):
     __tablename__ = "employers"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
-    tax_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("tax_profiles.id", ondelete="CASCADE"), nullable=False)
+    tax_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("tax_profile.id", ondelete="CASCADE"), nullable=False)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
     income_under_the_head_salary: Mapped[float] = mapped_column(Float, nullable=False)
     basic_salary: Mapped[float] = mapped_column(Float, nullable=False)

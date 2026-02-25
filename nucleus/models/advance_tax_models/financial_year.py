@@ -1,4 +1,4 @@
-from sqlalchemy import String,Date, DateTime, ForeignKey, UUID as SQLUUID
+from sqlalchemy import String,Date, DateTime, ForeignKey, UUID as SQLUUID, Boolean, text
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -18,6 +18,8 @@ class FinancialYear(Base):
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
     return_date: Mapped[date] = mapped_column(Date, nullable=False)
     status: Mapped[str] = mapped_column(String, nullable=False)
+    is_fbar_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
+    is_fatca_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
     
     # Relationships
     client: Mapped["Client"] = relationship("Client", back_populates="financial_years")

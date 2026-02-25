@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID
+from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -32,7 +32,13 @@ class Section54FClaim(Base):
 
     #cost of property===> agreement value + stamp duty + registration + gst+ additional costs
     cost_of_property: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
-    
+
+    under_construction: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    date_possession_or_under_construction: Mapped[date] = mapped_column(Date, nullable=True)
+    payments_made_till_date: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True) 
+    estimated_additional_payments_till_31st_july_including_cgas: Mapped[float] = mapped_column(
+        Numeric(18,2), default=0, nullable=True
+    )  
 
     date_of_acquisition: Mapped[date] = mapped_column(Date, nullable=True)
     type_of_acquisition: Mapped[str] = mapped_column(String, nullable=True)

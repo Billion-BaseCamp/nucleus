@@ -4,8 +4,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uuid import UUID, uuid4
 from sqlalchemy.sql import func
 from datetime import datetime
+from decimal import Decimal
+from sqlalchemy.types import Numeric
 
-from nucleus.models.advance_tax_models import financial_year
 
 
 class Employer(Base):
@@ -13,10 +14,12 @@ class Employer(Base):
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("tax_profile.id", ondelete="CASCADE"), nullable=False)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
-    income_under_the_head_salary: Mapped[float] = mapped_column(Float, nullable=False)
-    basic_salary: Mapped[float] = mapped_column(Float, nullable=False)
-    employer_contribution_to_pf: Mapped[float] = mapped_column(Float, nullable=False)
-    employer_contribution_to_nps: Mapped[float] = mapped_column(Float, nullable=False)
+    income_under_the_head_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    basic_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    employer_contribution_to_pf: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    employer_contribution_to_nps: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    tds: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+
 
     # Relationships
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear", back_populates="employers")

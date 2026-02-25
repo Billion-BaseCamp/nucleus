@@ -24,7 +24,7 @@ class FinancialYear(Base):
     # Relationships
     client: Mapped["Client"] = relationship("Client", back_populates="financial_years")
     quarters: Mapped[List["Quarter"]] = relationship("Quarter", back_populates="financial_year")
-    employers: Mapped[List["Employer"]] = relationship("Employer", back_populates="tax_profile")
+    employers: Mapped[List["Employer"]] = relationship("Employer", back_populates="financial_year")
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

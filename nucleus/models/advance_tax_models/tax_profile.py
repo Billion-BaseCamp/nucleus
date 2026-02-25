@@ -32,7 +32,6 @@ class TaxProfile(Base):
     employer_contribution_to_pf: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)
     employer_contribution_to_nps: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)
 
-    employers: Mapped[List["Employer"]] = relationship("Employer", back_populates="tax_profile")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

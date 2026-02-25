@@ -12,7 +12,7 @@ from sqlalchemy.types import Numeric
 class Employer(Base):
     __tablename__ = "employers"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
-    financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("tax_profile.id", ondelete="CASCADE"), nullable=False)
+    tax_profile_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("tax_profile.id", ondelete="CASCADE"), nullable=False)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
     income_under_the_head_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
     basic_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
@@ -22,7 +22,7 @@ class Employer(Base):
 
 
     # Relationships
-    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear", back_populates="employers")
+    tax_profile: Mapped["TaxProfile"] = relationship("TaxProfile", back_populates="employers")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

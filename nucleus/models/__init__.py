@@ -8,6 +8,7 @@ from nucleus.models.common_models.change_password import OtpVerification
 
 # Advance Tax Models (import order in advance_tax_models/__init__.py for relationship resolution)
 from nucleus.models.advance_tax_models import (
+    BrokerageAccounts,
     CapitalGains,
     Comments,
     Dividends,
@@ -67,6 +68,7 @@ __all__ = [
     "Login",
     "OtpVerification",
     # Advance Tax Models
+    "BrokerageAccounts",
     "CapitalGains",
     "Comments",
     "Dividends",

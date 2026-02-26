@@ -5,6 +5,7 @@
 # 3. TaxProfile and others (no Employer dependency)
 
 from nucleus.models.advance_tax_models.capital_gains import CapitalGains
+from nucleus.models.advance_tax_models.brokerage_accounts import BrokerageAccounts
 from nucleus.models.advance_tax_models.comments import Comments
 from nucleus.models.advance_tax_models.dividends import Dividends
 from nucleus.models.advance_tax_models.documents_upload import DocumentsUpload
@@ -21,6 +22,7 @@ from nucleus.models.advance_tax_models.section_54F_assests import Section54FAsse
 from nucleus.models.advance_tax_models.tax_profile import TaxProfile
 
 __all__ = [
+    "BrokerageAccounts",
     "CapitalGains",
     "Comments",
     "Dividends",

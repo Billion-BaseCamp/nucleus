@@ -13,7 +13,7 @@ class BrokerageAccounts(Base):
     account_name: Mapped[str] = mapped_column(String, nullable=False)
     account_value: Mapped[float] = mapped_column(Float, nullable=False)
     is_exempted: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    category:Mapped[str] = mapped_column(String, nullable=False)
+    category: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 

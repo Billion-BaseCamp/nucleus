@@ -8,6 +8,7 @@ from datetime import datetime
 from nucleus.db.database import Base
 from nucleus.core.constants import CapitalGainsCategory
 from typing import TypedDict
+from typing import List
 
 class LTCG_12_5(TypedDict):
     amount: float

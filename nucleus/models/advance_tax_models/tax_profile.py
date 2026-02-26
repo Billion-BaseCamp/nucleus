@@ -10,7 +10,7 @@ from nucleus.db.database import Base
 from typing import Dict
 
 class TaxProfile(Base):
-    __tablename__ = "tax_profile"
+    __tablename__ = "   "
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     
     # Foreign keys

@@ -85,6 +85,18 @@ class AssetsDisclosureDocuments(Base):
         default=False,
         server_default="FALSE",
     )
+    
+    is_password_protected: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="FALSE",
+    )
+    
+    password: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

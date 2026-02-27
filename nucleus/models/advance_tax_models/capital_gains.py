@@ -8,6 +8,7 @@ from datetime import datetime
 from nucleus.db.database import Base
 from nucleus.core.constants import CapitalGainsCategory
 from typing import TypedDict
+from typing import List
 
 class LTCG_12_5(TypedDict):
     amount: float
@@ -21,13 +22,14 @@ class CapitalGains(Base):
     # Foreign keys
     quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=False)
     client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
+
     
     category: Mapped[CapitalGainsCategory] = mapped_column(String, nullable=False)
     ShortTermCG_15: Mapped[float] = mapped_column(Float, nullable=True)
     ShortTermCG_20: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"AngelBroking": 120000, "Zerodha": 20000}
     ShortTermCG_At_Marginal_Rate: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     LongTermCG_10: Mapped[float] = mapped_column(Float, nullable=True)
-    LongTermCG_12_5: Mapped[Dict[str, LTCG_12_5]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
+    LongTermCG_12_5: Mapped[Dict[str, LTCG_12_5]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": {key:va;ue}}
     LongTermCG_20: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)  # JSON: {"label": value}
     NetShortTermGain20: Mapped[float] = mapped_column(Float, nullable=True)
     NetLongTermGain12_5: Mapped[float] = mapped_column(Float, nullable=True)
@@ -51,6 +53,7 @@ class CapitalGains(Base):
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="capital_gains")
     client: Mapped["Client"] = relationship("Client", back_populates="capital_gains")
+    brokerage_accounts: Mapped[List["BrokerageAccounts"]] = relationship("BrokerageAccounts", back_populates="capital_gains")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

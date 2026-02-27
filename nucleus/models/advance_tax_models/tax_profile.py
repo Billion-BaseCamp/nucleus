@@ -1,6 +1,6 @@
 import json
 from typing import Dict
-from sqlalchemy import String, DateTime, Float, ForeignKey, UUID as SQLUUID, Boolean, text
+from sqlalchemy import  DateTime, Float, ForeignKey, UUID as SQLUUID
 from sqlalchemy.dialects.postgresql import JSONB
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -10,7 +10,7 @@ from nucleus.db.database import Base
 from typing import Dict
 
 class TaxProfile(Base):
-    __tablename__ = "tax_profile"
+    __tablename__ = "   "
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     
     # Foreign keys

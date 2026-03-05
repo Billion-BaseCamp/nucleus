@@ -14,10 +14,18 @@ class Employer(Base):
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
+    gross_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
     income_under_the_head_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
     basic_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
     employer_contribution_to_pf: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
     employer_contribution_to_nps: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    standard_deduction: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    professional_tax:Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)  # not more than 2500
+    employer_contribution_to_pf_percentage:Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    gratuity:Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    leave_encashment:Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    hra:Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
+    other_allowances:Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
     tds: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=False)
 
     # Relationships (string-based to avoid circular imports)
@@ -25,4 +33,23 @@ class Employer(Base):
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
+
+
+
+#
+
+
+
+
+
+#1 sum of gross salary
+#2 sum of all (gratuity+leave_encashment)
+#3 sum of all standard deduction (not more than 750000)
+#4  sum of all professional tax (not more than 3200)
+#5 income under head salary max((1-2-3-4),0))
+#6 nps deduction Min(sum of all nps,14% of all basic salary)
+#7 net salary=Max((5-6),0)
+#tds sum all of tds
+
+
 

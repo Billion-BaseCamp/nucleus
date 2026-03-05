@@ -52,3 +52,14 @@ class Section54Claim(Base):
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
+
+
+#sale date of property between march 2025 to april 2026
+
+#sale of property add=> type_of_property
+
+
+
+
+
+

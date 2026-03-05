@@ -18,3 +18,4 @@ class DocumentsUpload(Base):
     is_password_protected: Mapped[bool] = mapped_column(Boolean, default=False)
     password: Mapped[str] = mapped_column(String, nullable=True)
     field_name: Mapped[str] = mapped_column(String, nullable=True)
+    status: Mapped[str] = mapped_column(String, nullable=True)

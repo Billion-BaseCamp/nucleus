@@ -58,6 +58,12 @@ class Section54Claim(Base):
     #indexed gain===> normal gain * indexation factor
     indexed_gain: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
 
+    #normal_gain_after_surchare_and_cess 
+    normal_gain_after_surchare_and_cess: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
+
+    #indexed_gain_after_surchare_and_cess
+    indexed_gain_after_surchare_and_cess: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 

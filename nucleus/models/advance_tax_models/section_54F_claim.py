@@ -33,6 +33,9 @@ class Section54FClaim(Base):
     #cost of property===> agreement value + stamp duty + registration + gst+ additional costs
     cost_of_property: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
 
+    #is 54F eligible
+    is_54f_eligible: Mapped[bool] = mapped_column(Boolean,default=False, nullable=True)
+
     under_construction: Mapped[bool] = mapped_column(Boolean, nullable=True)
     date_possession_or_under_construction: Mapped[date] = mapped_column(Date, nullable=True)
     payments_made_till_date: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True) 

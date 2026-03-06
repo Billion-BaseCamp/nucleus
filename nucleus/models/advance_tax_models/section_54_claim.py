@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID
+from sqlalchemy import Date, DateTime, Numeric, String, UUID as SQLUUID, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 
@@ -36,6 +36,14 @@ class Section54Claim(Base):
     #sale value of property===> cost of property + additional costs-expenses on sale of property
     sale_value_of_property: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
    
+   #sale date of property between march 2025 to april 2026
+    sale_date_of_property: Mapped[date] = mapped_column(Date, nullable=True)
+
+   #type of property
+    type_of_property: Mapped[str] = mapped_column(String, nullable=True)
+
+    #is_gain_exempted
+    is_gain_exempt: Mapped[bool] = mapped_column(Boolean,default=False, nullable=True)
    #expenses on sale of property
     expenses_brokerage: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
     expenses_legal: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)

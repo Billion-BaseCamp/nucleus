@@ -23,6 +23,7 @@ class Section54FClaim(Base):
     registration: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
     gst: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
 
+
     #additional costs
     cost_of_improvement: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
     broker_commission: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)

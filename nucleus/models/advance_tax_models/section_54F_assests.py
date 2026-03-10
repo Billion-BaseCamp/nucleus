@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Numeric, String, UUID as SQLUUID
+from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -15,6 +15,8 @@ class Section54FAssets(Base):
     __tablename__ = "section_54f_assests"
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+
+    sale_date_of_asset: Mapped[date] = mapped_column(Date, nullable=True)
 
     name_of_asset: Mapped[str] = mapped_column(String, nullable=True)
     cost_of_asset: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)

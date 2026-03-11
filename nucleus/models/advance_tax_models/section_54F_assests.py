@@ -16,7 +16,6 @@ class Section54FAssets(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
 
-    sale_date_of_asset: Mapped[date] = mapped_column(Date, nullable=True)
 
     name_of_asset: Mapped[str] = mapped_column(String, nullable=True)
     cost_of_asset: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)

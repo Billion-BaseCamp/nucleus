@@ -26,5 +26,16 @@ class FinancialYear(Base):
     quarters: Mapped[List["Quarter"]] = relationship("Quarter", back_populates="financial_year")
     employers: Mapped[List["Employer"]] = relationship("Employer", back_populates="financial_year")
 
+    form_26as_part1:  Mapped[List["Form26ASPart1"]]  = relationship("Form26ASPart1",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part2:  Mapped[List["Form26ASPart2"]]  = relationship("Form26ASPart2",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part3:  Mapped[List["Form26ASPart3"]]  = relationship("Form26ASPart3",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part4:  Mapped[List["Form26ASPart4"]]  = relationship("Form26ASPart4",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part5:  Mapped[List["Form26ASPart5"]]  = relationship("Form26ASPart5",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part6:  Mapped[List["Form26ASPart6"]]  = relationship("Form26ASPart6",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part7:  Mapped[List["Form26ASPart7"]]  = relationship("Form26ASPart7",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part8:  Mapped[List["Form26ASPart8"]]  = relationship("Form26ASPart8",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part9:  Mapped[List["Form26ASPart9"]]  = relationship("Form26ASPart9",  back_populates="financial_year", cascade="all, delete-orphan")
+    form_26as_part10: Mapped[List["Form26ASPart10"]] = relationship("Form26ASPart10", back_populates="financial_year", cascade="all, delete-orphan")
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

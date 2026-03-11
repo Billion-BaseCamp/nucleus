@@ -19,6 +19,7 @@ class Section54FAssets(Base):
 
     name_of_asset: Mapped[str] = mapped_column(String, nullable=True)
     cost_of_asset: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
+    sale_date_of_asset: Mapped[date] = mapped_column(Date, nullable=True)
     sale_value_of_asset: Mapped[float] = mapped_column(Numeric(18,2), default=0, nullable=True)
 
     #capital gain on asset===> sale value of asset - cost of asset

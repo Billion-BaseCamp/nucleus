@@ -22,8 +22,8 @@ class Form26ASPart1(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[str] = mapped_column(String(255), nullable=False)
-    tan_of_deductor: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
-    section: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)           # e.g. '192', '194', '194A'
+    tan_of_deductor: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)           # e.g. '192', '194', '194A'
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)              # earliest transaction date
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)                # latest transaction date
@@ -48,8 +48,8 @@ class Form26ASPart2(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[str] = mapped_column(String(255), nullable=False)
-    tan_of_deductor: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
-    section: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    tan_of_deductor: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -75,8 +75,8 @@ class Form26ASPart3(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[str] = mapped_column(String(255), nullable=False)
-    tan_of_deductor: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
-    section: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    tan_of_deductor: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -102,8 +102,8 @@ class Form26ASPart4(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    pan_of_deductor: Mapped[Optional[str]] = mapped_column(String(10), nullable=True, index=True)
-    section: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)           # e.g. '194IA', '194IB'
+    pan_of_deductor: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
+    section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)           # e.g. '194IA', '194IB'
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -128,7 +128,7 @@ class Form26ASPart5(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_buyer: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    pan_of_buyer: Mapped[Optional[str]] = mapped_column(String(10), nullable=True, index=True)
+    pan_of_buyer: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -151,8 +151,8 @@ class Form26ASPart6(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_collector: Mapped[str] = mapped_column(String(255), nullable=False)
-    tan_of_collector: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
-    section: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)           # e.g. '206CT', '206C'
+    tan_of_collector: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)           # e.g. '206CT', '206C'
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -176,7 +176,7 @@ class Form26ASPart7(Base):
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
-    assessment_year: Mapped[Optional[str]] = mapped_column(String(9), nullable=True)
+    assessment_year: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     mode: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)              # e.g. 'ECS', 'Cheque'
     nature_of_refund: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -202,8 +202,8 @@ class Form26ASPart8(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductee: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    pan_of_deductee: Mapped[Optional[str]] = mapped_column(String(10), nullable=True, index=True)
-    section: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)           # e.g. '194IA', '194IB'
+    pan_of_deductee: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
+    section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)           # e.g. '194IA', '194IB'
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -229,7 +229,7 @@ class Form26ASPart9(Base):
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_seller: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    pan_of_seller: Mapped[Optional[str]] = mapped_column(String(10), nullable=True, index=True)
+    pan_of_seller: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
     transaction_count: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=0, server_default=text('0'))
     date_from: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_to: Mapped[Optional[date]] = mapped_column(Date, nullable=True)

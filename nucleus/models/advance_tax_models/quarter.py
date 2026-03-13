@@ -39,4 +39,5 @@ class Quarter(Base):
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="quarter")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="quarter")
     excemptions: Mapped[List["Excemption"]] = relationship("Excemption", back_populates="quarter", cascade="all, delete-orphan")
+    rule_validations: Mapped[List["RuleValidations"]] = relationship("RuleValidations", back_populates="quarter", cascade="all, delete-orphan")
 

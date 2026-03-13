@@ -59,6 +59,7 @@ from nucleus.models.client_profiling.residency import Residency
 from nucleus.models.client_profiling.citizenship import Citizenship
 from nucleus.models.client_profiling.address import AddressType
 from nucleus.models.advance_tax_models.form_26as_models import Form26ASPart1, Form26ASPart2, Form26ASPart3, Form26ASPart4, Form26ASPart5, Form26ASPart6, Form26ASPart7, Form26ASPart8, Form26ASPart9, Form26ASPart10
+from nucleus.models.advance_tax_models.rule_validations import RuleValidations
 
 
 __all__ = [
@@ -128,4 +129,5 @@ __all__ = [
     "Form26ASPart8",
     "Form26ASPart9",
     "Form26ASPart10",
+    "RuleValidations",
 ]

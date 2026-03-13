@@ -34,9 +34,8 @@ class RuleValidations(Base):
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        server_default=func.now(),
         onupdate=func.now(),
-        nullable=False
+        nullable=True
     )
 
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="rule_validations")

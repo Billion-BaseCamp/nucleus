@@ -40,6 +40,7 @@ class OtherIncome(Base):
     any_other_income: Mapped[float] = mapped_column(Float, default=0.0)
     tcs_expected: Mapped[float] = mapped_column(Float, default=0.0)
     tds_on_capital_gains: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
+    additional_tcs_expected: Mapped[float] = mapped_column(Float, default=0.0)
 
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="other_income")

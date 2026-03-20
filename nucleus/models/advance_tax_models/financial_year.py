@@ -20,6 +20,7 @@ class FinancialYear(Base):
     status: Mapped[str] = mapped_column(String, nullable=False)
     is_fbar_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
     is_fatca_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
+    is_26as_imported: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default=text('false'))
     
     # Relationships (string-based to avoid circular imports)
     client: Mapped["Client"] = relationship("Client", back_populates="financial_years")

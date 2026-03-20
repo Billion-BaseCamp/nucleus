@@ -1,6 +1,6 @@
 import json
 from typing import Dict
-from sqlalchemy import  DateTime, Float, ForeignKey, UUID as SQLUUID, Boolean, text
+from sqlalchemy import  DateTime, Float, ForeignKey, String, UUID as SQLUUID, Boolean, text
 from sqlalchemy.dialects.postgresql import JSONB
 from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -31,6 +31,8 @@ class TaxProfile(Base):
     basic_salary: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)
     employer_contribution_to_pf: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)
     employer_contribution_to_nps: Mapped[Dict[str, float]] = mapped_column(JSONB, nullable=True)
+
+    tax_regime: Mapped[str] = mapped_column(String, default="NEW", nullable=False, server_default="NEW")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

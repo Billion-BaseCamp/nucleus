@@ -62,6 +62,8 @@ from nucleus.models.client_profiling.address import AddressType
 from nucleus.models.advance_tax_models.form_26as_models import Form26ASPart1, Form26ASPart2, Form26ASPart3, Form26ASPart4, Form26ASPart5, Form26ASPart6, Form26ASPart7, Form26ASPart8, Form26ASPart9, Form26ASPart10
 from nucleus.models.advance_tax_models.rule_validations import RuleValidations
 from nucleus.models.advance_tax_models.carry_forward_losses import CarryForwardLosses
+from nucleus.models.form26_as_log_models.file_metadata import FileMetadata
+from nucleus.models.form26_as_log_models.upload_batches import UploadBatches
 
 __all__ = [
     # Common Models
@@ -134,5 +136,5 @@ __all__ = [
     "RuleValidations",
     "CarryForwardLosses",
     "FileMetadata",
-    "UploadBatch",
+    "UploadBatches",
 ]

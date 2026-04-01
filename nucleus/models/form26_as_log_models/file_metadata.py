@@ -1,5 +1,5 @@
 from nucleus.db.database import Base
-from sqlalchemy import String, DateTime, Integer, UUID as SQLUUID
+from sqlalchemy import String, DateTime, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from datetime import datetime

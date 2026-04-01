@@ -133,4 +133,6 @@ __all__ = [
     "Form26ASPart10",
     "RuleValidations",
     "CarryForwardLosses",
+    "FileMetadata",
+    "UploadBatch",
 ]

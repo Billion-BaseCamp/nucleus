@@ -9,7 +9,7 @@ class UserRole(Enum):
     ADMIN = "admin"
     CLIENT = "client"
     ADVISOR = "advisor"
-    ANALYST = "analyst"
+    ANALYST = "analyst"     
 
 class CapitalGainsCategory(Enum):
     INTRA_DAY = "INTRA_DAY"

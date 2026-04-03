@@ -2,7 +2,7 @@ import uuid
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import ARRAY, Boolean, DateTime, Enum, ForeignKey, String, text
+from sqlalchemy import ARRAY, Boolean, DateTime, Enum, ForeignKey, String, text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nucleus.core.constants import IST_TIMEZONE
@@ -129,6 +129,19 @@ class Task(Base):
         passive_deletes=True,
     )
 
+
+class PinTask(Base):
+    __tablename__ = "pin_tasks"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid.uuid4)
+
+    task_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.task_id", ondelete="CASCADE"), nullable=True, index=True)
+    advisor_id: Mapped[UUID] = mapped_column(ForeignKey("advisors.id", ondelete="CASCADE"), nullable=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+    
+    __table_args__ = (
+        UniqueConstraint("task_id", "advisor_id", name="uix_task_advisor"),
+    )
 
 class Session(Base):
     __tablename__ = "sessions"

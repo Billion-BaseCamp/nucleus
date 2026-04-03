@@ -76,7 +76,6 @@ class Task(Base):
 
     is_pending_on_client: Mapped[bool] = mapped_column(Boolean, nullable=True)
     is_pinned: Mapped[bool] = mapped_column(Boolean, nullable=True)
-    pinned_by: Mapped[list[UUID]] = mapped_column(ARRAY(UUID(as_uuid=True)), nullable=True)
 
     rejection_reason: Mapped[str] = mapped_column(String, nullable=True)
     rejection_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)

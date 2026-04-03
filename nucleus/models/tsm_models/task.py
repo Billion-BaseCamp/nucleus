@@ -75,6 +75,7 @@ class Task(Base):
     pause_reason: Mapped[str] = mapped_column(String, nullable=True)
 
     is_pending_on_client: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_pinned: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
     rejection_reason: Mapped[str] = mapped_column(String, nullable=True)
     rejection_by: Mapped[UUID] = mapped_column(ForeignKey("advisors.id"), nullable=True)

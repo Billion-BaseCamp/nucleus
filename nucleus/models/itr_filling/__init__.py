@@ -86,6 +86,12 @@ from nucleus.models.itr_filling.capital_gains import (
     ITRCGVDAEntry,
 )
 
+from nucleus.models.itr_filling.audit_logging import (
+    ITRActivityLog,
+    ITRAuthAuditEvent,
+    ITRFieldChangeSnapshot,
+)
+
 __all__ = [
     "ITRReturn",
     # Salary (Schedule S)
@@ -157,4 +163,8 @@ __all__ = [
     "ITRCGExemption54EC",
     "ITRCGBFLYear",
     "ITRCGBrokerSummary",
+    # Audit / activity logging
+    "ITRAuthAuditEvent",
+    "ITRActivityLog",
+    "ITRFieldChangeSnapshot",
 ]

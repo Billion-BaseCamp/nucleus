@@ -92,6 +92,9 @@ from nucleus.models.itr_filling.audit_logging import (
     ITRFieldChangeSnapshot,
 )
 
+from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
+from nucleus.models.itr_filling.itr_document import ITRDocument
+
 __all__ = [
     "ITRReturn",
     # Salary (Schedule S)
@@ -167,4 +170,7 @@ __all__ = [
     "ITRAuthAuditEvent",
     "ITRActivityLog",
     "ITRFieldChangeSnapshot",
+    # Document upload slots
+    "ITRDocumentSlot",
+    "ITRDocument",
 ]

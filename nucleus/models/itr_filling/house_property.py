@@ -88,6 +88,7 @@ class ITRHPProperty(Base):
     # ── Classification ──
     nature_of_property: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     type_of_property: Mapped[str] = mapped_column(String(20), nullable=False)
+    type_of_property_code: Mapped[Optional[str]] = mapped_column(String(2), nullable=True)
 
     # ── Ownership ──
     property_owner: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, default="Self")

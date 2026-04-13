@@ -189,7 +189,7 @@ class ITRDed80DPolicy(Base):
     insurance_company: Mapped[str] = mapped_column(String(125), nullable=False, default="")
     policy_no: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     premium_paid: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-
+    
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="policies_80d")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

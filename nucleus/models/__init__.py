@@ -133,6 +133,8 @@ from nucleus.models.itr_filling import (
     ITRActivityLog,
     ITRAuthAuditEvent,
     ITRFieldChangeSnapshot,
+    ITRDocumentSlot,
+    ITRDocument,
 )
 
 __all__ = [
@@ -274,4 +276,6 @@ __all__ = [
     "ITRAuthAuditEvent",
     "ITRActivityLog",
     "ITRFieldChangeSnapshot",
+    "ITRDocumentSlot",
+    "ITRDocument",
 ]

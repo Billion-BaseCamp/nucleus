@@ -155,12 +155,9 @@ class ITRSalaryComponent(Base):
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
 
     component: Mapped[str] = mapped_column(String(100), nullable=False, default="")
-    nature_code: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
 
     received: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
     exempt: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
-    taxable: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
-    exempt_section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     employer: Mapped["ITRSalaryEmployer"] = relationship(back_populates="components")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -40,7 +40,8 @@ class ITRSalarySchedule(Base):
     total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     net_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     total_deduction_us16: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    income_under_head_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    total_net_taxable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    total_tds: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="salary")
     employers: Mapped[List["ITRSalaryEmployer"]] = relationship(

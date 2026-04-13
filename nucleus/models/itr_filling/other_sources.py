@@ -53,13 +53,6 @@ class ITROSSchedule(Base):
     # ── Deductions u/s 57 ──
     deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
-    # ── Tax Exempt Income — fixed 6-row structure ──
-    exempt_interest_income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    exempt_not_chargeable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    exempt_pti_not_chargeable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    exempt_10_10d: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    exempt_10_11: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    exempt_10_12: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     # ── Computed fields (backend calc engine) ──
     computed_total_interest: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
@@ -107,6 +100,31 @@ class ITROSSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITROSOtherIncome.display_order",
     )
+
+    #one to one relationship with ITRTaxExemptIncome
+    tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+class ITRTaxExemptIncome(Base):
+    __tablename__ = "itr_tax_exempt_income"
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+   # ── Tax Exempt Income — fixed 6-row structure ──
+    exempt_interest_income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    exempt_not_chargeable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    exempt_pti_not_chargeable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    exempt_10_10d: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    exempt_10_11: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    exempt_10_12: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="tax_exempt_income")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

@@ -75,7 +75,6 @@ class ITRSalaryEmployer(Base):
         nullable=False,
         index=True,
     )
-    sort_order: Mapped[int] = mapped_column(Integer, default=0)
 
     source_employer_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -222,7 +221,6 @@ class ITRForeignSalary(Base):
         nullable=False,
         index=True,
     )
-    sort_order: Mapped[int] = mapped_column(Integer, default=0)
 
     employer_name: Mapped[str] = mapped_column(String(125), nullable=False, default="")
     taxable_salary: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
@@ -244,7 +242,6 @@ class ITROtherSalary(Base):
         nullable=False,
         index=True,
     )
-    sort_order: Mapped[int] = mapped_column(Integer, default=0)
 
     employer_name: Mapped[str] = mapped_column(String(125), nullable=False, default="")
     taxable_salary: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)

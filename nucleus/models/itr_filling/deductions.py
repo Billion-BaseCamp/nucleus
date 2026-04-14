@@ -125,6 +125,11 @@ class ITRDedSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRDed80GGCEntry.display_order",
     )
+    ded_loans: Mapped[List["ITRDedLoan"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITRDedLoan.display_order",
+    )
     ded_80e_loans: Mapped[List["ITRDed80ELoan"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
@@ -398,6 +403,50 @@ class ITRDed80DDB(Base):
     )
 
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80ddb")
+
+
+class ITRDedLoan(Base):
+    """Generic deduction loan (housing / other) — maps to existing itr_ded_loans table."""
+
+    __tablename__ = "itr_ded_loans"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    bank_or_institution_name: Mapped[str] = mapped_column(
+        String(125), nullable=False, default=""
+    )
+    loan_account_no: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    date_of_loan: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    total_loan_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    loan_outstanding_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    interest_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_loans"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRDed80ELoan(Base):

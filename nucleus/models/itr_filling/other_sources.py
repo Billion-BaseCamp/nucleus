@@ -93,6 +93,28 @@ class ITROSSchedule(Base):
 
     #one to one relationship with ITRTaxExemptIncome
     tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
+    deemed_income: Mapped["ITRDeemedIncome"] = relationship(back_populates="os_schedule")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+class ITRDeemedIncome(Base):
+    __tablename__ = "itr_deemed_income"
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    immovable_without_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    immovable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    movable_without_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    movable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    gross_rent_from_machinery: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="deemed_income")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -132,12 +154,9 @@ class ITROSIncomeLine(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    line_id: Mapped[str] = mapped_column(String(30), nullable=False)
     nature_of_income: Mapped[str] = mapped_column(String(200), nullable=False)
     code: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
-    code_description: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     reference_source: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

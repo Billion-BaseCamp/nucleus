@@ -57,8 +57,7 @@ class ITROSSchedule(Base):
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="other_sources")
     income_lines: Mapped[List["ITROSIncomeLine"]] = relationship(
         back_populates="os_schedule",
-        cascade="all, delete-orphan",
-        order_by="ITROSIncomeLine.display_order",
+        cascade="all, delete-orphan"
     )
     interest_details: Mapped[List["ITROSInterestDetail"]] = relationship(
         back_populates="os_schedule",

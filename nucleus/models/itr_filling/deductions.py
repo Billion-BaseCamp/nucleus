@@ -284,7 +284,8 @@ class ITR80DMeta(Base):
 
 
 class ITR80DPolicy(Base):
-    __tablename__ = "itr_80d_policies"
+    # Matches existing DB / older migrations (itr_ded_80d_policies).
+    __tablename__ = "itr_ded_80d_policies"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
     )
@@ -549,7 +550,7 @@ class ITRDedOtherLine(Base):
 
 
 class ITR80GGAEntry(Base):
-    __tablename__ = "itr_80gga_entries"
+    __tablename__ = "itr_ded_80gga_entries"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
     )
@@ -579,7 +580,7 @@ class ITR80GGAEntry(Base):
 class ITR80GGCEntry(Base):
     """80GGC — contributions to political parties (repeatable rows)."""
 
-    __tablename__ = "itr_80ggc_entries"
+    __tablename__ = "itr_ded_80ggc_entries"
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4

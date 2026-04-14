@@ -94,55 +94,47 @@ class ITRDedSchedule(Base):
     ded_80c_80ccd: Mapped["ITRDed_80C_80CCD"] = relationship(
         back_populates="ded_schedule"
     )
-    # one to one relationship with ITR80DMeta
-    ded_80d_meta: Mapped["ITR80DMeta"] = relationship(back_populates="ded_schedule")
+    ded_80d_meta: Mapped["ITRDed80DMeta"] = relationship(
+        back_populates="ded_schedule"
+    )
 
-    # one to many relationship with ITR80DDetail
-    ded_80d_details: Mapped[List["ITR80DDetail"]] = relationship(
+    ded_80d_details: Mapped[List["ITRDed80DDetail"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    # one to many relationship with ITR80DPolicy
-    ded_80d_policies: Mapped[List["ITR80DPolicy"]] = relationship(
+    ded_80d_policies: Mapped[List["ITRDed80DPolicy"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    # one to many relationship with ITRDed80C
     ded_80c: Mapped[List["ITRDed80C"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    # one to many relationship with ITR80GDonation
-    ded_80g_donations: Mapped[List["ITR80GDonation"]] = relationship(
+    ded_80g_donations: Mapped[List["ITRDed80GDonation"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    # one to one relationship with ITR80DD_80U
-    ded_80d_80u: Mapped["ITR80DD_80U"] = relationship(back_populates="ded_schedule")
+    ded_80d_80u: Mapped["ITRDed80DD80U"] = relationship(
+        back_populates="ded_schedule"
+    )
 
-    # one to many relationship with ITR80DDB
-    ded_80ddb: Mapped[List["ITR80DDB"]] = relationship(
+    ded_80ddb: Mapped[List["ITRDed80DDB"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    # one to many relationship with ITR80GGAEntry
-    ded_80gga_entries: Mapped[List["ITR80GGAEntry"]] = relationship(
+    ded_80gga_entries: Mapped[List["ITRDed80GGAEntry"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    # one to many — 80GGC (political party contributions)
-    ded_80ggc_entries: Mapped[List["ITR80GGCEntry"]] = relationship(
+    ded_80ggc_entries: Mapped[List["ITRDed80GGCEntry"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
-        order_by="ITR80GGCEntry.display_order",
+        order_by="ITRDed80GGCEntry.display_order",
     )
-    # one to many — 80E (interest on education loan)
-    ded_80e_loans: Mapped[List["ITR80ELoan"]] = relationship(
+    ded_80e_loans: Mapped[List["ITRDed80ELoan"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
-        order_by="ITR80ELoan.display_order",
+        order_by="ITRDed80ELoan.display_order",
     )
-    # one to many — 80EEB (interest on electric vehicle loan)
-    ded_80eeb_loans: Mapped[List["ITR80EEBLoan"]] = relationship(
+    ded_80eeb_loans: Mapped[List["ITRDed80EEBLoan"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
-        order_by="ITR80EEBLoan.display_order",
+        order_by="ITRDed80EEBLoan.display_order",
     )
-    # one to many — other Chapter VI-A lines (80GG, 80QQB, 80RRB, 80TTA, 80TTB)
     ded_other_lines: Mapped[List["ITRDedOtherLine"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
@@ -216,7 +208,7 @@ class ITRDed_80C_80CCD(Base):
     )
 
 
-class ITR80DDetail(Base):
+class ITRDed80DDetail(Base):
     __tablename__ = "itr_80d_details"
 
     id: Mapped[UUID] = mapped_column(
@@ -255,7 +247,7 @@ class ITR80DDetail(Base):
     )
 
 
-class ITR80DMeta(Base):
+class ITRDed80DMeta(Base):
     __tablename__ = "itr_80d_meta"
 
     id: Mapped[UUID] = mapped_column(
@@ -283,8 +275,7 @@ class ITR80DMeta(Base):
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_meta")
 
 
-class ITR80DPolicy(Base):
-    # Matches existing DB / older migrations (itr_ded_80d_policies).
+class ITRDed80DPolicy(Base):
     __tablename__ = "itr_ded_80d_policies"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -312,7 +303,7 @@ class ITR80DPolicy(Base):
     )
 
 
-class ITR80GDonation(Base):
+class ITRDed80GDonation(Base):
     __tablename__ = "itr_80g_donation"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -345,7 +336,7 @@ class ITR80GDonation(Base):
     )
 
 
-class ITR80DD_80U(Base):
+class ITRDed80DD80U(Base):
     __tablename__ = "itr_80d_80u"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -381,7 +372,7 @@ class ITR80DD_80U(Base):
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_80u")
 
 
-class ITR80DDB(Base):
+class ITRDed80DDB(Base):
     __tablename__ = "itr_80ddb"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -409,7 +400,7 @@ class ITR80DDB(Base):
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80ddb")
 
 
-class ITR80ELoan(Base):
+class ITRDed80ELoan(Base):
     """80E — interest on education loan (repeatable rows)."""
 
     __tablename__ = "itr_80e_loans"
@@ -454,7 +445,7 @@ class ITR80ELoan(Base):
     )
 
 
-class ITR80EEBLoan(Base):
+class ITRDed80EEBLoan(Base):
     """80EEB — interest on electric vehicle loan (repeatable rows)."""
 
     __tablename__ = "itr_80eeb_loans"
@@ -549,7 +540,7 @@ class ITRDedOtherLine(Base):
     )
 
 
-class ITR80GGAEntry(Base):
+class ITRDed80GGAEntry(Base):
     __tablename__ = "itr_ded_80gga_entries"
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -577,7 +568,7 @@ class ITR80GGAEntry(Base):
     )
 
 
-class ITR80GGCEntry(Base):
+class ITRDed80GGCEntry(Base):
     """80GGC — contributions to political parties (repeatable rows)."""
 
     __tablename__ = "itr_ded_80ggc_entries"

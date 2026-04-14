@@ -28,6 +28,10 @@ from nucleus.models.itr_filling.deductions import (
     ITR80DDetail,
     ITR80DMeta,
     ITR80DPolicy,
+    ITR80GGCEntry,
+    ITR80ELoan,
+    ITR80EEBLoan,
+    ITRDedOtherLine,
 )
 
 from nucleus.models.itr_filling.disclosures import (
@@ -127,6 +131,10 @@ __all__ = [
     "ITR80DDetail",
     "ITR80DMeta",
     "ITR80DPolicy",
+    "ITR80GGCEntry",
+    "ITR80ELoan",
+    "ITR80EEBLoan",
+    "ITRDedOtherLine",
     # Tax credits
     "ITRAdvanceTaxPayment",
     "ITRForm67Entry",

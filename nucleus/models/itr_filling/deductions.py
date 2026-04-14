@@ -18,6 +18,7 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
+    UniqueConstraint,
     UUID as SQLUUID,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -28,13 +29,14 @@ from sqlalchemy.types import Numeric
 from nucleus.db.database import Base
 
 
-
 class ITRDedSchedule(Base):
     """Deductions (Chapter VI-A) — one-to-one child of ITRReturn."""
 
     __tablename__ = "itr_ded_schedule"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
     itr_return_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_returns.id", ondelete="CASCADE"),
@@ -43,42 +45,123 @@ class ITRDedSchedule(Base):
         index=True,
     )
 
-    sec_80c_capped: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    nps_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    total_80d_80g: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    total_chapter_via: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80dMedical_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80gDonation_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80ddHandicapped_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80ddbDiseases_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80ggcPolitical_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80uDisability_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80eeducation_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_80eebVehicle_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    sec_other_total: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    sec_80c_capped: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    nps_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    total_80d_80g: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    total_chapter_via: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80dMedical_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80gDonation_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80ddHandicapped_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80ddbDiseases_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80ggcPolitical_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80uDisability_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80eeducation_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_80eebVehicle_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    sec_other_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
 
-     # ── Relationships ──
-     #one to one relationship with ITRReturn
-    itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="deductions")
-    #one to one relationship with ITRDed80C80CCD
-    ded_80c_80ccd: Mapped["ITRDed_80C_80CCD"] = relationship(back_populates="ded_schedule")
-    #one to one relationship with ITR80DMeta
+    # ── Relationships ──
+    # one to one relationship with ITRReturn
+    itr_return: Mapped["ITRReturn"] = relationship(
+        "ITRReturn", back_populates="deductions"
+    )
+    # one to one relationship with ITRDed80C80CCD
+    ded_80c_80ccd: Mapped["ITRDed_80C_80CCD"] = relationship(
+        back_populates="ded_schedule"
+    )
+    # one to one relationship with ITR80DMeta
     ded_80d_meta: Mapped["ITR80DMeta"] = relationship(back_populates="ded_schedule")
 
-    #one to many relationship with ITR80DDetail
-    ded_80d_details: Mapped[List["ITR80DDetail"]] = relationship(back_populates="ded_schedule", cascade="all, delete-orphan")
-    #one to many relationship with ITR80DPolicy
-    ded_80d_policies: Mapped[List["ITR80DPolicy"]] = relationship(back_populates="ded_schedule", cascade="all, delete-orphan")
-    #one to many relationship with ITRDed80C
-    ded_80c: Mapped[List["ITRDed80C"]] = relationship(back_populates="ded_schedule", cascade="all, delete-orphan")
+    # one to many relationship with ITR80DDetail
+    ded_80d_details: Mapped[List["ITR80DDetail"]] = relationship(
+        back_populates="ded_schedule", cascade="all, delete-orphan"
+    )
+    # one to many relationship with ITR80DPolicy
+    ded_80d_policies: Mapped[List["ITR80DPolicy"]] = relationship(
+        back_populates="ded_schedule", cascade="all, delete-orphan"
+    )
+    # one to many relationship with ITRDed80C
+    ded_80c: Mapped[List["ITRDed80C"]] = relationship(
+        back_populates="ded_schedule", cascade="all, delete-orphan"
+    )
+    # one to many relationship with ITR80GDonation
+    ded_80g_donations: Mapped[List["ITR80GDonation"]] = relationship(
+        back_populates="ded_schedule", cascade="all, delete-orphan"
+    )
+    # one to one relationship with ITR80DD_80U
+    ded_80d_80u: Mapped["ITR80DD_80U"] = relationship(back_populates="ded_schedule")
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    # one to many relationship with ITR80DDB
+    ded_80ddb: Mapped[List["ITR80DDB"]] = relationship(
+        back_populates="ded_schedule", cascade="all, delete-orphan"
+    )
+    # one to many relationship with ITR80GGAEntry
+    ded_80gga_entries: Mapped[List["ITR80GGAEntry"]] = relationship(
+        back_populates="ded_schedule", cascade="all, delete-orphan"
+    )
+    # one to many — 80GGC (political party contributions)
+    ded_80ggc_entries: Mapped[List["ITR80GGCEntry"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITR80GGCEntry.display_order",
+    )
+    # one to many — 80E (interest on education loan)
+    ded_80e_loans: Mapped[List["ITR80ELoan"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITR80ELoan.display_order",
+    )
+    # one to many — 80EEB (interest on electric vehicle loan)
+    ded_80eeb_loans: Mapped[List["ITR80EEBLoan"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITR80EEBLoan.display_order",
+    )
+    # one to many — other Chapter VI-A lines (80GG, 80QQB, 80RRB, 80TTA, 80TTB)
+    ded_other_lines: Mapped[List["ITRDedOtherLine"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITRDedOtherLine.display_order",
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRDed80C(Base):
     __tablename__ = "itr_ded_80c"
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
     ded_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
@@ -91,13 +174,20 @@ class ITRDed80C(Base):
     comments: Mapped[str | None] = mapped_column(String, nullable=True)
 
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80c")
-    
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
 
 class ITRDed_80C_80CCD(Base):
     __tablename__ = "itr_ded_80c_80ccd"
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
     ded_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
@@ -110,18 +200,28 @@ class ITRDed_80C_80CCD(Base):
     sec_80ccd1_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
     sec_80ccd2_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
     pran_number: Mapped[str | None] = mapped_column(String, nullable=True)
-    sec80ccd1b_voluntary_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    sec80ccd1b_voluntary_amount: Mapped[float] = mapped_column(
+        Numeric(12, 2), default=0
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80c_80ccd")
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80c_80ccd"
+    )
 
 
 class ITR80DDetail(Base):
     __tablename__ = "itr_80d_details"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
     ded_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
@@ -130,7 +230,7 @@ class ITR80DDetail(Base):
     )
 
     # 👇 which section
-    section: Mapped[str] = mapped_column(String)  
+    section: Mapped[str] = mapped_column(String)
     # values: "SELF_FAMILY", "PARENTS"
 
     # 👇 category
@@ -143,15 +243,24 @@ class ITR80DDetail(Base):
 
     deductible: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_details")
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80d_details"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
 
 class ITR80DMeta(Base):
     __tablename__ = "itr_80d_meta"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
 
     ded_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -164,14 +273,21 @@ class ITR80DMeta(Base):
     self_family_senior: Mapped[bool] = mapped_column(Boolean, default=False)
     parents_senior: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_meta")
 
+
 class ITR80DPolicy(Base):
     __tablename__ = "itr_80d_policies"
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
     ded_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
@@ -184,6 +300,316 @@ class ITR80DPolicy(Base):
     policy_no: Mapped[str | None] = mapped_column(String, nullable=True)
     premium_paid: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_policies")
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80d_policies"
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+
+class ITR80GDonation(Base):
+    __tablename__ = "itr_80g_donation"
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    type: Mapped[str] = mapped_column(String, nullable=False)
+    donation_name: Mapped[str] = mapped_column(String, nullable=False)
+    donation_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    donation_pan: Mapped[str | None] = mapped_column(String, nullable=True)
+    donation_city: Mapped[str | None] = mapped_column(String, nullable=True)
+    donation_state: Mapped[str | None] = mapped_column(String, nullable=True)
+    donation_pincode: Mapped[str | None] = mapped_column(String, nullable=True)
+    is_cash_donation: Mapped[bool] = mapped_column(Boolean, default=False)
+    donation_arn: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80g_donations"
+    )
+
+
+class ITR80DD_80U(Base):
+    __tablename__ = "itr_80d_80u"
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    is_servere_disability: Mapped[bool] = mapped_column(Boolean, default=False)
+    eligible_deduction: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    dependant_pan: Mapped[str | None] = mapped_column(String, nullable=True)
+    dependant_aadhar: Mapped[str | None] = mapped_column(String, nullable=True)
+    relation: Mapped[str] = mapped_column(String, nullable=False)
+    uudid_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    form10_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    form10_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+
+    is_80u_eligible: Mapped[bool] = mapped_column(Boolean, default=False)
+    sec_80u_deduction: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    sec_80u_uudid_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    sec_80u_form10_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    sec_80u_form10_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_80u")
+
+
+class ITR80DDB(Base):
+    __tablename__ = "itr_80ddb"
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    type: Mapped[str] = mapped_column(String, nullable=False)
+    diseases_details: Mapped[str] = mapped_column(String, nullable=False)
+    disease_id: Mapped[str] = mapped_column(String, nullable=False)
+    disease_expenditure: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    disease_claimed: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    disease_deduction: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80ddb")
+
+
+class ITR80ELoan(Base):
+    """80E — interest on education loan (repeatable rows)."""
+
+    __tablename__ = "itr_80e_loans"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    # "From" — lender category (e.g. B = bank; match your UI / ITR codes)
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    bank_or_institution_name: Mapped[str] = mapped_column(
+        String(125), nullable=False, default=""
+    )
+    loan_account_no: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    date_of_loan: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    total_loan_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    loan_outstanding_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    interest_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80e_loans"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+
+class ITR80EEBLoan(Base):
+    """80EEB — interest on electric vehicle loan (repeatable rows)."""
+
+    __tablename__ = "itr_80eeb_loans"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    bank_or_institution_name: Mapped[str] = mapped_column(
+        String(125), nullable=False, default=""
+    )
+    loan_account_no: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    date_of_loan: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    total_loan_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    loan_outstanding_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    vehicle_reg_no: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
+    interest_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80eeb_loans"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+
+class ITRDedOtherLine(Base):
+    """Fixed 'Other Deductions' rows: 80GG, 80QQB, 80RRB, 80TTA, 80TTB.
+
+    Seed five rows per schedule (unique section per ded_schedule_id), e.g.:
+    (1, 80GG,  House Rent Paid, ...),
+    (2, 80QQB, Royalty Income of Authors, ...),
+    (3, 80RRB, Royalty on Patents, ...),
+    (4, 80TTA, Interest on Savings A/c's (max ₹10,000), ...),
+    (5, 80TTB, Interest on Savings/Deposit A/c's (Sr. Citizen, max ₹50,000), ...).
+    Total → ITRDedSchedule.sec_other_total (sum of amounts or capped total).
+    """
+
+    __tablename__ = "itr_ded_other_lines"
+    __table_args__ = (
+        UniqueConstraint(
+            "ded_schedule_id",
+            "section",
+            name="uq_itr_ded_other_lines_schedule_section",
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    # e.g. 80GG, 80QQB, 80RRB, 80TTA, 80TTB
+    section: Mapped[str] = mapped_column(String(10), nullable=False)
+    description: Mapped[str] = mapped_column(String(300), nullable=False, default="")
+    amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    comments: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_other_lines"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+
+class ITR80GGAEntry(Base):
+    __tablename__ = "itr_80gga_entries"
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    pan: Mapped[str] = mapped_column(String, nullable=False)
+    nature_of_description: Mapped[str] = mapped_column(String, nullable=False)
+    amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    is_eligible: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80gga_entries"
+    )
+
+
+class ITR80GGCEntry(Base):
+    """80GGC — contributions to political parties (repeatable rows)."""
+
+    __tablename__ = "itr_80ggc_entries"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    particulars: Mapped[str] = mapped_column(String(125), nullable=False, default="")
+    amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    donation_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    ifs_code: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
+    txn_ref_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    paid_in_cash: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    computed_eligible_amount: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80ggc_entries"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )

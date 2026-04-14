@@ -143,7 +143,7 @@ class ITR80DDetail(Base):
 
     deductible: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="80d_details")
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_details")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -153,10 +153,12 @@ class ITR80DMeta(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
 
-    itr_return_id: Mapped[UUID] = mapped_column(
+    ded_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_returns.id"),
-        unique=True
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
     )
 
     self_family_senior: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -165,7 +167,7 @@ class ITR80DMeta(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="80d_meta")
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_meta")
 
 class ITR80DPolicy(Base):
     __tablename__ = "itr_80d_policies"
@@ -182,6 +184,6 @@ class ITR80DPolicy(Base):
     policy_no: Mapped[str | None] = mapped_column(String, nullable=True)
     premium_paid: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="80d_policies")
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_policies")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

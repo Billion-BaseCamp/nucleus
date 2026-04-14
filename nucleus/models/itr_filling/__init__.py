@@ -21,6 +21,14 @@ from nucleus.models.itr_filling.house_property import (
     ITRHPTenant,
 )
 
+from nucleus.models.itr_filling.deductions import (
+    ITRDedSchedule,
+    ITRDed80C,
+    ITRDed_80C_80CCD,
+    ITR80DDetail,
+    ITR80DMeta,
+    ITR80DPolicy,
+)
 
 from nucleus.models.itr_filling.disclosures import (
     ITRALImmovableProperty,
@@ -112,6 +120,13 @@ __all__ = [
     "ITROSOtherIncome",
     "ITROSPTIEntity",
     "ITROSSchedule",
+    # Deductions (Chapter VI-A)
+    "ITRDedSchedule",
+    "ITRDed80C",
+    "ITRDed_80C_80CCD",
+    "ITR80DDetail",
+    "ITR80DMeta",
+    "ITR80DPolicy",
     # Tax credits
     "ITRAdvanceTaxPayment",
     "ITRForm67Entry",

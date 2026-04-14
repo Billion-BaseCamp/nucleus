@@ -57,7 +57,7 @@ class ITROSSchedule(Base):
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="other_sources")
     income_lines: Mapped[List["ITROSIncomeLine"]] = relationship(
         back_populates="os_schedule",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
     )
     interest_details: Mapped[List["ITROSInterestDetail"]] = relationship(
         back_populates="os_schedule",
@@ -142,7 +142,7 @@ class ITRTaxExemptIncome(Base):
 
 
 class ITROSIncomeLine(Base):
-    """Fixed income-nature rows (22 rows: savingsInterest, fdInterest, familyPension, etc.)."""
+    """Fixed Other Income grid rows (Nature, Code, Source, Amount, TDS)."""
 
     __tablename__ = "itr_os_income_lines"
 

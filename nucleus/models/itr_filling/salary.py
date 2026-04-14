@@ -46,8 +46,7 @@ class ITRSalarySchedule(Base):
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="salary")
     employers: Mapped[List["ITRSalaryEmployer"]] = relationship(
         back_populates="salary_schedule",
-        cascade="all, delete-orphan",
-        order_by="ITRSalaryEmployer.sort_order",
+        cascade="all, delete-orphan"
     )
     foreign_salaries: Mapped[List["ITRForeignSalary"]] = relationship(
         back_populates="salary_schedule",

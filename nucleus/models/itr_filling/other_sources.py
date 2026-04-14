@@ -41,28 +41,18 @@ class ITROSSchedule(Base):
         index=True,
     )
 
-    # ── Rent from Machinery / Plant / Buildings ──
-    rent_from_machinery: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    total_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_net_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_pti_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    grand_total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_savings_interest: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_fd_interest: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_dividend_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_other_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_income_lines: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_tds: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
 
-    # ── Deemed Income u/s 56(2)(x) — fixed 4-category structure ──
-    deemed_immovable_without_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    deemed_immovable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    deemed_movable_without_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    deemed_movable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-
-    # ── Deductions u/s 57 ──
-    deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-
-
-    # ── Computed fields (backend calc engine) ──
-    computed_total_interest: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    computed_total_dividend: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    computed_total_deemed_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    computed_family_pension_deduction: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    computed_gross_os_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    computed_net_os_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-    computed_total_exempt: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
-
+    
     # ── Relationships ──
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="other_sources")
     income_lines: Mapped[List["ITROSIncomeLine"]] = relationship(

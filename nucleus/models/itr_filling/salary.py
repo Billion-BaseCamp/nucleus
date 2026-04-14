@@ -51,12 +51,10 @@ class ITRSalarySchedule(Base):
     foreign_salaries: Mapped[List["ITRForeignSalary"]] = relationship(
         back_populates="salary_schedule",
         cascade="all, delete-orphan",
-        order_by="ITRForeignSalary.sort_order",
     )
     other_salaries: Mapped[List["ITROtherSalary"]] = relationship(
         back_populates="salary_schedule",
         cascade="all, delete-orphan",
-        order_by="ITROtherSalary.sort_order",
     )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -125,8 +123,7 @@ class ITRSalaryEmployer(Base):
     )
     allowances: Mapped[List["ITRSalaryAllowance"]] = relationship(
         back_populates="employer",
-        cascade="all, delete-orphan",
-        order_by="ITRSalaryAllowance.sort_order",
+        cascade="all, delete-orphan"
     )
     perquisites: Mapped[List["ITRSalaryPerquisite"]] = relationship(
         back_populates="employer",

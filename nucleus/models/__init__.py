@@ -5,6 +5,10 @@ from nucleus.models.common_models.advisor import Advisor
 from nucleus.models.common_models.client import Client, ClientPhoneMapping
 from nucleus.models.common_models.login import Login
 from nucleus.models.common_models.change_password import OtpVerification
+from nucleus.models.common_models.documents_collector_info import (
+    DocumentCollectorInfo,
+    SubTypeComments,
+)
 
 # Advance Tax Models (import order in advance_tax_models/__init__.py for relationship resolution)
 from nucleus.models.advance_tax_models import (
@@ -144,6 +148,8 @@ __all__ = [
     "ClientPhoneMapping",
     "Login",
     "OtpVerification",
+    "DocumentCollectorInfo",
+    "SubTypeComments",
     # Advance Tax Models
     "BrokerageAccounts",
     "CapitalGains",

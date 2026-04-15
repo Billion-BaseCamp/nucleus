@@ -154,63 +154,65 @@ class ITRDedSchedule(Base):
     )
 
 
-    class ITRDed80C(Base):
-        __tablename__ = "itr_ded_80c"
-        id: Mapped[UUID] = mapped_column(
-            SQLUUID(as_uuid=True), primary_key=True, default=uuid4
-        )
-        ded_schedule_id: Mapped[UUID] = mapped_column(
-            SQLUUID(as_uuid=True),
-            ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
-            nullable=False,
-            index=True,
-        )
-        description: Mapped[str] = mapped_column(String, nullable=False)
-        doc_id_no: Mapped[str | None] = mapped_column(String, nullable=True)
-        amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
-        comments: Mapped[str | None] = mapped_column(String, nullable=True)
+class ITRDed80C(Base):
+    __tablename__ = "itr_ded_80c"
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    description: Mapped[str] = mapped_column(String, nullable=False)
+    doc_id_no: Mapped[str | None] = mapped_column(String, nullable=True)
+    amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    comments: Mapped[str | None] = mapped_column(String, nullable=True)
 
-        ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80c")
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80c")
 
-        created_at: Mapped[datetime] = mapped_column(
-            DateTime(timezone=True), server_default=func.now()
-        )
-        updated_at: Mapped[Optional[datetime]] = mapped_column(
-            DateTime(timezone=True), onupdate=func.now()
-        )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
-    class ITRDed_80C_80CCD(Base):
-        __tablename__ = "itr_ded_80c_80ccd"
-        id: Mapped[UUID] = mapped_column(
-            SQLUUID(as_uuid=True), primary_key=True, default=uuid4
-        )
-        ded_schedule_id: Mapped[UUID] = mapped_column(
-            SQLUUID(as_uuid=True),
-            ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
-            nullable=False,
-            index=True,
-        )
+class ITRDed_80C_80CCD(Base):
+    __tablename__ = "itr_ded_80c_80ccd"
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
 
-        sec_80ccc_pension_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
-        sec_80ccc_pension_comment: Mapped[str | None] = mapped_column(String, nullable=True)
-        sec_80ccd1_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
-        sec_80ccd2_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
-        pran_number: Mapped[str | None] = mapped_column(String, nullable=True)
-        sec80ccd1b_voluntary_amount: Mapped[float] = mapped_column(
-            Numeric(12, 2), default=0
-        )
+    sec_80ccc_pension_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    sec_80ccc_pension_comment: Mapped[str | None] = mapped_column(
+        String, nullable=True
+    )
+    sec_80ccd1_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    sec_80ccd2_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    pran_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    sec80ccd1b_voluntary_amount: Mapped[float] = mapped_column(
+        Numeric(12, 2), default=0
+    )
 
-        created_at: Mapped[datetime] = mapped_column(
-            DateTime(timezone=True), server_default=func.now()
-        )
-        updated_at: Mapped[Optional[datetime]] = mapped_column(
-            DateTime(timezone=True), onupdate=func.now()
-        )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
-        ded_schedule: Mapped["ITRDedSchedule"] = relationship(
-            back_populates="ded_80c_80ccd"
-        )
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80c_80ccd"
+    )
 
 
 class ITRDed80DDetail(Base):

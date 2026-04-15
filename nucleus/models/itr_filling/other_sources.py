@@ -320,6 +320,7 @@ class ITROSOtherIncome(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     income_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    source_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="other_income")

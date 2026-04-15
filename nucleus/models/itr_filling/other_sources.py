@@ -238,7 +238,6 @@ class ITROSPTIEntity(Base):
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     head_of_income: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    schema_head: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     investment_entity: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="pti_entities")

@@ -241,18 +241,6 @@ class ITROSPTIEntity(Base):
     schema_head: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     investment_entity: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
 
-    # CG-specific fields (nullable, relevant when head_of_income relates to capital gains)
-    nature_of_gains: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
-    invested_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    invested_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    cg_scheme_deposit: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    exempt_gains: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    net_taxable_gains_ltcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-
-    # OS-specific
-    expense_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-
-    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="pti_entities")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

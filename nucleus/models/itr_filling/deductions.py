@@ -8,7 +8,8 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any, List, Optional
+from typing import List, Optional
+from sqlalchemy import CheckConstraint
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
@@ -114,7 +115,7 @@ class ITRDedSchedule(Base):
         back_populates="ded_schedule"
     )
 
-    ded_80ddb: Mapped["ITRDed80DDB"] = relationship(
+    ded_80ddb: Mapped[List["ITRDed80DDB"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
     ded_80gga_entries: Mapped[List["ITRDed80GGAEntry"]] = relationship(
@@ -381,6 +382,17 @@ class ITRDed80DD80U(Base):
 
 class ITRDed80DDB(Base):
     __tablename__ = "itr_80ddb"
+    __table_args__ = (
+        CheckConstraint(
+        "type IN ('Senior Citizens', 'Others')",
+        name="check_80ddb_type_valid"
+    ),
+    UniqueConstraint(
+        "ded_schedule_id", "type",
+        name="uq_80ddb_schedule_type"
+    ),  
+    )
+
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
     )

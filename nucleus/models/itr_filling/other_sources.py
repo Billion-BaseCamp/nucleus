@@ -241,6 +241,7 @@ class ITROSPTIEntity(Base):
     schema_head: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     investment_entity: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
 
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="pti_entities")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

@@ -114,7 +114,7 @@ class ITRDedSchedule(Base):
         back_populates="ded_schedule"
     )
 
-    ded_80ddb: Mapped[List["ITRDed80DDB"]] = relationship(
+    ded_80ddb: Mapped["ITRDed80DDB"] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
     ded_80gga_entries: Mapped[List["ITRDed80GGAEntry"]] = relationship(

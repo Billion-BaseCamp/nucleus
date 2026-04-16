@@ -81,55 +81,6 @@ class ITRReturn(Base):
         uselist=False,
     )
 
-    advance_tax_payments: Mapped[List["ITRAdvanceTaxPayment"]] = relationship(
-        "ITRAdvanceTaxPayment",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRAdvanceTaxPayment.display_order",
-    )
-    tds_salary: Mapped[List["ITRTDSSalary"]] = relationship(
-        "ITRTDSSalary",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRTDSSalary.display_order",
-    )
-    tds_non_salary: Mapped[List["ITRTDSNonSalary"]] = relationship(
-        "ITRTDSNonSalary",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRTDSNonSalary.display_order",
-    )
-    tds_property: Mapped[List["ITRTDSProperty"]] = relationship(
-        "ITRTDSProperty",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRTDSProperty.display_order",
-    )
-    tcs_entries: Mapped[List["ITRTCSEntry"]] = relationship(
-        "ITRTCSEntry",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRTCSEntry.display_order",
-    )
-    form67_entries: Mapped[List["ITRForm67Entry"]] = relationship(
-        "ITRForm67Entry",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRForm67Entry.display_order",
-    )
-    form67_refunds: Mapped[List["ITRForm67Refund"]] = relationship(
-        "ITRForm67Refund",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRForm67Refund.display_order",
-    )
-    fsi_entries: Mapped[List["ITRFSIEntry"]] = relationship(
-        "ITRFSIEntry",
-        back_populates="itr_return",
-        cascade="all, delete-orphan",
-        order_by="ITRFSIEntry.display_order",
-    )
-
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 

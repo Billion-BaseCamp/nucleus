@@ -41,41 +41,34 @@ class ITRDisclosuresSchedule(Base):
         index=True,
     )
 
-    # ── Schedule AL — Movable Assets (fixed categories) ──
-    al_deposits_in_bank: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_shares_and_securities: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_insurance_policies: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_loans_and_advances_given: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_cash_in_hand: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_jewellery_bullion: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_art_paintings_sculptures: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_vehicles_yachts_boats: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_interest_in_firm_aop: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    net_movable_assets: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    investment:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    immovable:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
-    # ── Schedule AL — Liabilities ──
-    al_liability_current_fy: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    al_liability_prior_year: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    is_directorship: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_unlisted_shares: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_foreign_assets: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    # ── Flags ──
-    directorship_flag: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    unlisted_shares_flag: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    foreign_assets_flag: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-
-    # ── Internal investment tracking (not in ITR JSON) ──
-    inv_direct_equity: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    inv_mutual_funds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    inv_pms: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    inv_aif: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    inv_bonds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    inv_others: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="disclosures")
+
+    movable_assets: Mapped[List["ITRALMovableAsset"]] = relationship(
+        back_populates="disclosures_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITRALMovableAsset.display_order",
+    )
+    investments: Mapped[List["ITRALInvestment"]] = relationship(
+        back_populates="disclosures_schedule",
+        cascade="all, delete-orphan",
+    )
+
     immovable_properties: Mapped[List["ITRALImmovableProperty"]] = relationship(
         back_populates="disclosures_schedule",
         cascade="all, delete-orphan",
         order_by="ITRALImmovableProperty.display_order",
     )
-    directorships: Mapped[List["ITRDiscDirectorship"]] = relationship(
+
+    directorship: Mapped[List["ITRDiscDirectorship"]] = relationship(
         back_populates="disclosures_schedule",
         cascade="all, delete-orphan",
         order_by="ITRDiscDirectorship.display_order",
@@ -85,6 +78,7 @@ class ITRDisclosuresSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRDiscUnlistedShare.display_order",
     )
+
     fa_bank_accounts: Mapped[List["ITRFABankAccount"]] = relationship(
         back_populates="disclosures_schedule",
         cascade="all, delete-orphan",
@@ -134,6 +128,25 @@ class ITRDisclosuresSchedule(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
+class ITRALMovableAsset(Base):
+    __tablename__ = "itr_al_movable_assets"
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    disclosures_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_disclosures_schedule.id", ondelete="CASCADE"), nullable=False)
+    asset_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    fy_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    previous_year_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship("ITRDisclosuresSchedule", back_populates="movable_assets")
+
+class ITRALInvestment(Base):
+    __tablename__ = "itr_al_investments"
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    disclosures_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_disclosures_schedule.id", ondelete="CASCADE"), nullable=False)
+    investment_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    balance:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
 class ITRALImmovableProperty(Base):
     """Schedule AL immovable details (India)."""

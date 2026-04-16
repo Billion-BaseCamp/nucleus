@@ -26,51 +26,106 @@ from typing import List
 
 from nucleus.db.database import Base
 
+
 class ITRTaxCreditSchedule(Base):
     __tablename__ = "itr_tax_credit_schedule"
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    itr_return_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_returns.id", ondelete="CASCADE"), nullable=False)
-    total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    total_tds:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    total_tds_on_salary:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    total_tds_on_non_salary:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    total_tcs:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    total_form67_dtaa:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="tax_credit_schedule")
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    itr_return_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_returns.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    total_tds: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    total_tds_on_salary: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    total_tds_on_non_salary: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    total_tcs: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    total_form67_dtaa: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    itr_return: Mapped["ITRReturn"] = relationship(
+        "ITRReturn", back_populates="tax_credit_schedule"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
-    #one to many relationship with ITRAdvanceTaxPayment
-    advance_tax_payments: Mapped[List["ITRAdvanceTaxPayment"]] = relationship("ITRAdvanceTaxPayment", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRAdvanceTaxPayment
+    advance_tax_payments: Mapped[List["ITRAdvanceTaxPayment"]] = relationship(
+        "ITRAdvanceTaxPayment", back_populates="tax_credit_schedule"
+    )
 
-    #one to many relationship with ITRTDSSalary
-    tds_salary: Mapped[List["ITRTDSSalary"]] = relationship("ITRTDSSalary", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRTDSSalary
+    tds_salary: Mapped[List["ITRTDSSalary"]] = relationship(
+        "ITRTDSSalary", back_populates="tax_credit_schedule"
+    )
 
-    #one to many relationship with ITRTDSNonSalary
-    tds_non_salary: Mapped[List["ITRTDSNonSalary"]] = relationship("ITRTDSNonSalary", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRTDSNonSalary
+    tds_non_salary: Mapped[List["ITRTDSNonSalary"]] = relationship(
+        "ITRTDSNonSalary", back_populates="tax_credit_schedule"
+    )
 
-    #one to many relationship with ITRTDSProperty
-    tds_property: Mapped[List["ITRTDSProperty"]] = relationship("ITRTDSProperty", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRTDSProperty
+    tds_property: Mapped[List["ITRTDSProperty"]] = relationship(
+        "ITRTDSProperty", back_populates="tax_credit_schedule"
+    )
 
-    #one to many relationship with ITRTCSEntry
-    tcs_entries: Mapped[List["ITRTCSEntry"]] = relationship("ITRTCSEntry", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRTCSEntry
+    tcs_entries: Mapped[List["ITRTCSEntry"]] = relationship(
+        "ITRTCSEntry", back_populates="tax_credit_schedule"
+    )
 
-    #one to many relationship with ITRForm67Entry
-    form67_entries: Mapped[List["ITRForm67Entry"]] = relationship("ITRForm67Entry", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRForm67Entry
+    form67_entries: Mapped[List["ITRForm67Entry"]] = relationship(
+        "ITRForm67Entry", back_populates="tax_credit_schedule"
+    )
 
-    #one to many relationship with ITRForm67Refund
-    form67_refunds: Mapped[List["ITRForm67Refund"]] = relationship("ITRForm67Refund", back_populates="tax_credit_schedule")
+    # one to many relationship with ITRForm67Refund
+    form67_refunds: Mapped[List["ITRForm67Refund"]] = relationship(
+        "ITRForm67Refund", back_populates="tax_credit_schedule"
+    )
+
+    relief_claimed: Mapped[List["ReliefClaimed"]] = relationship(
+        "ReliefClaimed",
+        back_populates="tax_credit_schedule",
+    )
+    fsi_entries: Mapped[List["ITRFSIEntry"]] = relationship(
+        "ITRFSIEntry",
+        back_populates="tax_credit_schedule",
+    )
+
 
 class ITRAdvanceTaxPayment(Base):
     """Advance / self-assessment tax payments → Schedule IT."""
 
     __tablename__ = "itr_advance_tax_payments"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
 
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
-  
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     bank_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
@@ -80,10 +135,16 @@ class ITRAdvanceTaxPayment(Base):
     amount: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
     source: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="advance_tax_payments")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="advance_tax_payments"
+    )
 
 
 class ITRTDSSalary(Base):
@@ -91,20 +152,38 @@ class ITRTDSSalary(Base):
 
     __tablename__ = "itr_tds_salary"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     employer_name: Mapped[str] = mapped_column(String(125), nullable=False)
     tan: Mapped[str] = mapped_column(String(10), nullable=False)
-    tds_deducted: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tds_claimed: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    income_chargeable: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    tds_deducted: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tds_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    income_chargeable: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="tds_salary")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="tds_salary"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRTDSNonSalary(Base):
@@ -112,26 +191,50 @@ class ITRTDSNonSalary(Base):
 
     __tablename__ = "itr_tds_non_salary"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
-  
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     deductor_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     tan: Mapped[str] = mapped_column(String(10), nullable=False)
     section: Mapped[str] = mapped_column(String(10), nullable=False)
     head_of_income: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
-    tds_deducted: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tds_claimed: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    gross_amount: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    balance_tds_cf: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    gross_receipts_26as: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    gross_receipt_offered: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    tds_deducted: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tds_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    gross_amount: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    balance_tds_cf: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    gross_receipts_26as: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    gross_receipt_offered: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="tds_non_salary")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="tds_non_salary"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRTDSProperty(Base):
@@ -139,24 +242,46 @@ class ITRTDSProperty(Base):
 
     __tablename__ = "itr_tds_property"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     deductor_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     pan: Mapped[str] = mapped_column(String(10), nullable=False)
     section: Mapped[str] = mapped_column(String(10), nullable=False, default="194IA")
     head_of_income: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
-    tds_deducted: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tds_claimed: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    balance_tds_cf: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    gross_receipts_26as: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    gross_receipt_offered: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    tds_deducted: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tds_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    balance_tds_cf: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    gross_receipts_26as: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    gross_receipt_offered: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="tds_property")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="tds_property"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRTCSEntry(Base):
@@ -164,21 +289,41 @@ class ITRTCSEntry(Base):
 
     __tablename__ = "itr_tcs"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     collector_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     tan: Mapped[str] = mapped_column(String(10), nullable=False)
-    tcs_collected: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tcs_claimed: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    balance_tcs_cf: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    expenditure_26as: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    tcs_collected: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tcs_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    balance_tcs_cf: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    expenditure_26as: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="tcs_entries")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="tcs_entries"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRForm67Entry(Base):
@@ -186,8 +331,14 @@ class ITRForm67Entry(Base):
 
     __tablename__ = "itr_form67_entries"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
 
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
@@ -195,9 +346,15 @@ class ITRForm67Entry(Base):
     country_code: Mapped[Optional[str]] = mapped_column(String(4), nullable=True)
 
     income: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tax_paid_outside_india: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tax_payable_in_india: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    relief_claimed: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    tax_paid_outside_india: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tax_payable_in_india: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    relief_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
     taxpayer_id_no: Mapped[Optional[str]] = mapped_column(String(75), nullable=True)
     head_of_income: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
@@ -205,15 +362,27 @@ class ITRForm67Entry(Base):
     section_of_dtaa: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
 
     tax_rate: Mapped[Optional[Decimal]] = mapped_column(Numeric(8, 4), nullable=True)
-    tax_under_it_act: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tax_us_115jc: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tax_rate_outside_india: Mapped[Optional[Decimal]] = mapped_column(Numeric(8, 4), nullable=True)
+    tax_under_it_act: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tax_us_115jc: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tax_rate_outside_india: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(8, 4), nullable=True
+    )
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="form67_entries")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="form67_entries"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRForm67Refund(Base):
@@ -221,30 +390,58 @@ class ITRForm67Refund(Base):
 
     __tablename__ = "itr_form67_refunds"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     assessment_year: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
-    tax_refunded: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    tax_refunded: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="form67_refunds")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="form67_refunds"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ReliefClaimed(Base):
     __tablename__ = "relief_claimed"
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     ay_of_claim: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
-    tax_refunded: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    tax_refunded: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="relief_claimed")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="relief_claimed"
+    )
 
 
 class ITRFSIEntry(Base):
@@ -252,23 +449,43 @@ class ITRFSIEntry(Base):
 
     __tablename__ = "itr_fsi_entries"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    tax_credit_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"), nullable=False)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    tax_credit_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     country_code: Mapped[Optional[str]] = mapped_column(String(4), nullable=True)
     country_name: Mapped[str] = mapped_column(String(55), nullable=False)
     head_of_income: Mapped[str] = mapped_column(String(30), nullable=False)
 
-    income_from_outside_india: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tax_paid_outside_india: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    tax_payable_in_india: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
-    relief_available: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    income_from_outside_india: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tax_paid_outside_india: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    tax_payable_in_india: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+    relief_available: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
 
     section_of_relief: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     article_of_dtaa: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship("ITRTaxCreditSchedule", back_populates="fsi_entries")
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+        "ITRTaxCreditSchedule", back_populates="fsi_entries"
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )

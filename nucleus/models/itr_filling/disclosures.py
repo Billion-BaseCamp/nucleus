@@ -202,7 +202,7 @@ class ITRDiscDirectorship(Base):
     din: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
     shares_held: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
-    disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship(back_populates="directorships")
+    disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship(back_populates="directorship")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

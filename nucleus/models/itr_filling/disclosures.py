@@ -146,6 +146,7 @@ class ITRALInvestment(Base):
     balance:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship("ITRDisclosuresSchedule", back_populates="investments")
 
 class ITRALImmovableProperty(Base):
     """Schedule AL immovable details (India)."""

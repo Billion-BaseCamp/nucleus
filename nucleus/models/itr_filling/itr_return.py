@@ -74,6 +74,13 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
     )
 
+    tax_credit_schedule: Mapped[Optional["ITRTaxCreditSchedule"]] = relationship(
+        "ITRTaxCreditSchedule",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
+
     advance_tax_payments: Mapped[List["ITRAdvanceTaxPayment"]] = relationship(
         "ITRAdvanceTaxPayment",
         back_populates="itr_return",

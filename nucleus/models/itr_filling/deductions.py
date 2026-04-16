@@ -141,7 +141,7 @@ class ITRDedSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRDed80EEBLoan.display_order",
     )
-    ded_other_lines: Mapped[List["ITRDedOtherLine"]] = relationship(
+    ded_other_lines: Mapped["ITRDedOtherLine"] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
         order_by="ITRDedOtherLine.display_order",
@@ -571,6 +571,10 @@ class ITRDedOtherLine(Base):
             "ded_schedule_id",
             "section",
             name="uq_itr_ded_other_lines_schedule_section",
+        ),
+        CheckConstraint(
+            "section IN ('80GG', '80QQB', '80RRB', '80TTA', '80TTB')",
+            name="check_other_line_section_valid"
         ),
     )
 

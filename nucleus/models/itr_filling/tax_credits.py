@@ -25,6 +25,19 @@ from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
 
+class ITRTaxCreditSchedule(Base):
+    __tablename__ = "itr_tax_credit_schedule"
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    itr_return_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_returns.id", ondelete="CASCADE"), nullable=False)
+    total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    total_tds:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    total_tds_on_salary:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    total_tds_on_non_salary:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    total_tcs:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    total_form67_dtaa:Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="tax_credit_schedule")
+
+
 
 class ITRAdvanceTaxPayment(Base):
     """Advance / self-assessment tax payments → Schedule IT."""

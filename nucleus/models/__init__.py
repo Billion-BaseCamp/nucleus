@@ -68,6 +68,9 @@ from nucleus.models.advance_tax_models.rule_validations import RuleValidations
 from nucleus.models.advance_tax_models.carry_forward_losses import CarryForwardLosses
 from nucleus.models.form26_as_log_models.file_metadata import FileMetadata
 from nucleus.models.form26_as_log_models.upload_batches import UploadBatches
+from nucleus.models.itr_filling.disclosures import ITRALMovableAsset, ITRALInvestment
+from nucleus.models.itr_filling.tax_credits import ReliefClaimed, ITRTaxCreditSchedule
+from nucleus.models.itr_filling.other_sources import ITRDeemedIncome, ITRTaxExemptIncome
 
 # ITR filing models
 from nucleus.models.itr_filling import (
@@ -148,6 +151,12 @@ from nucleus.models.itr_filling import (
     ITRFieldChangeSnapshot,
     ITRDocumentSlot,
     ITRDocument,
+    ITRALMovableAsset,
+    ITRALInvestment,
+    ReliefClaimed,
+    ITRTaxCreditSchedule,
+    ITRDeemedIncome,
+    ITRTaxExemptIncome,
 )
 
 __all__ = [
@@ -302,4 +311,10 @@ __all__ = [
     "ITRFieldChangeSnapshot",
     "ITRDocumentSlot",
     "ITRDocument",
+    "ITRALMovableAsset",
+    "ITRALInvestment",
+    "ReliefClaimed",
+    "ITRTaxCreditSchedule",
+    "ITRDeemedIncome",
+    "ITRTaxExemptIncome",
 ]

@@ -53,6 +53,8 @@ from nucleus.models.itr_filling.disclosures import (
     ITRFAOtherAsset,
     ITRFAOtherForeignIncome,
     ITRFASigningAuthority,
+    ITRALMovableAsset,
+    ITRALInvestment,
 )
 
 from nucleus.models.itr_filling.tax_credits import (
@@ -64,6 +66,8 @@ from nucleus.models.itr_filling.tax_credits import (
     ITRTDSSalary,
     ITRTDSNonSalary,
     ITRTDSProperty,
+    ReliefClaimed,
+    ITRTaxCreditSchedule,
 )
 
 from nucleus.models.itr_filling.other_sources import (
@@ -75,6 +79,8 @@ from nucleus.models.itr_filling.other_sources import (
     ITROSOtherIncome,
     ITROSPTIEntity,
     ITROSSchedule,
+    ITRDeemedIncome,
+    ITRTaxExemptIncome,
 )
 
 from nucleus.models.itr_filling.capital_gains import (
@@ -191,4 +197,10 @@ __all__ = [
     # Document upload slots
     "ITRDocumentSlot",
     "ITRDocument",
+    "ITRALMovableAsset",
+    "ITRALInvestment",
+    "ReliefClaimed",
+    "ITRTaxCreditSchedule",
+    "ITRDeemedIncome",
+    "ITRTaxExemptIncome",
 ]

@@ -54,8 +54,7 @@ class ITRDisclosuresSchedule(Base):
 
     movable_assets: Mapped[List["ITRALMovableAsset"]] = relationship(
         back_populates="disclosures_schedule",
-        cascade="all, delete-orphan",
-        order_by="ITRALMovableAsset.display_order",
+        cascade="all, delete-orphan"
     )
     investments: Mapped[List["ITRALInvestment"]] = relationship(
         back_populates="disclosures_schedule",

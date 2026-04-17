@@ -37,6 +37,9 @@ class Client(Base):
     residence_type: Mapped[ResidenceType] = mapped_column(Enum(ResidenceType), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=True)  
     deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    it_portal_username: Mapped[str] = mapped_column(String, nullable=True)
+    it_portal_pass: Mapped[str] = mapped_column(String, nullable=True)
+
     
     # Foreign key to advisor
     advisor_id: Mapped[UUID] = mapped_column(SQLUUID[UUID](as_uuid=True), ForeignKey("advisors.id"), nullable=True)

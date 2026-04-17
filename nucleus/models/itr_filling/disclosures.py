@@ -41,13 +41,13 @@ class ITRDisclosuresSchedule(Base):
         index=True,
     )
 
-    net_movable_assets: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    investment:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    immovable:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    net_movable_assets: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    investment:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    immovable:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    is_directorship: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    is_unlisted_shares: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    is_foreign_assets: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_directorship: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
+    is_unlisted_shares: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
+    is_foreign_assets: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
 
 
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="disclosures")
@@ -131,9 +131,9 @@ class ITRALMovableAsset(Base):
     __tablename__ = "itr_al_movable_assets"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     disclosures_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_disclosures_schedule.id", ondelete="CASCADE"), nullable=False)
-    asset_type: Mapped[str] = mapped_column(String(20), nullable=False)
-    fy_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    previous_year_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    asset_type: Mapped[str] = mapped_column(String(20), nullable=True)
+    fy_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    previous_year_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
     disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship("ITRDisclosuresSchedule", back_populates="movable_assets")
@@ -142,8 +142,8 @@ class ITRALInvestment(Base):
     __tablename__ = "itr_al_investments"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     disclosures_schedule_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("itr_disclosures_schedule.id", ondelete="CASCADE"), nullable=False)
-    investment_type: Mapped[str] = mapped_column(String(20), nullable=False)
-    balance:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    investment_type: Mapped[str] = mapped_column(String(20), nullable=True)
+    balance:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
     disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship("ITRDisclosuresSchedule", back_populates="investments")
@@ -160,20 +160,20 @@ class ITRALImmovableProperty(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    description: Mapped[str] = mapped_column(String(25), nullable=False)
+    description: Mapped[str] = mapped_column(String(25), nullable=True)
     flat_door_block_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     premise_building: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     road_street_po: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    area_locality: Mapped[str] = mapped_column(String(50), nullable=False)
-    town_city_district: Mapped[str] = mapped_column(String(50), nullable=False)
-    state_code: Mapped[str] = mapped_column(String(5), nullable=False)
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False, default="91")
+    area_locality: Mapped[str] = mapped_column(String(50), nullable=True)
+    town_city_district: Mapped[str] = mapped_column(String(50), nullable=True)
+    state_code: Mapped[str] = mapped_column(String(5), nullable=True)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True, default="91")
     pin_code: Mapped[Optional[str]] = mapped_column(String(6), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    cost_of_property: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    cost_of_property: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship(back_populates="immovable_properties")
 
@@ -193,9 +193,9 @@ class ITRDiscDirectorship(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    company_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    company_name: Mapped[str] = mapped_column(String(125), nullable=True)
     company_type: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     company_pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     listed_unlisted: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
@@ -217,29 +217,29 @@ class ITRDiscUnlistedShare(Base):
     disclosures_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_disclosures_schedule.id", ondelete="CASCADE"),
-        nullable=False,
+        nullable=True,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    company_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    company_name: Mapped[str] = mapped_column(String(125), nullable=True)
     company_type: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     company_pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
 
-    opening_qty: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    opening_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    opening_qty: Mapped[int] = mapped_column(Integer, nullable=True, default=0)
+    opening_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    acquired_qty: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    acquired_qty: Mapped[int] = mapped_column(Integer, nullable=True, default=0)
     acquired_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    face_value_per_share: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
-    price_paid_fresh_issue: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
-    price_paid_existing_sh: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
+    face_value_per_share: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=True, default=0)
+    price_paid_fresh_issue: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=True, default=0)
+    price_paid_existing_sh: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=True, default=0)
 
-    transferred_qty: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    sale_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    transferred_qty: Mapped[int] = mapped_column(Integer, nullable=True, default=0)
+    sale_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    closing_qty: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    closing_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    closing_qty: Mapped[int] = mapped_column(Integer, nullable=True, default=0)
+    closing_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship(back_populates="unlisted_shares")
 
@@ -259,27 +259,27 @@ class ITRFABankAccount(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    account_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    account_type: Mapped[str] = mapped_column(String(20), nullable=True)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    institution_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    institution_name: Mapped[str] = mapped_column(String(125), nullable=True)
     institution_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
     account_number: Mapped[Optional[str]] = mapped_column(String(34), nullable=True)
     owner_status: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     date_of_opening: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
-    peak_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    closing_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    peak_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    closing_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    gross_interest_credited: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    gross_dividend_credited: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    gross_other_income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    gross_interest_credited: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    gross_dividend_credited: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    gross_other_income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     scheduling_head: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
 
@@ -301,25 +301,25 @@ class ITRFAEquityDebt(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    entity_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    entity_name: Mapped[str] = mapped_column(String(125), nullable=True)
     entity_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     nature_of_entity: Mapped[Optional[str]] = mapped_column(String(34), nullable=True)
 
     date_acquired: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
-    initial_value: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    peak_value: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    closing_value: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    total_gross_proceeds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    initial_value: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    peak_value: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    closing_value: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    total_gross_proceeds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     scheduling_head: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
 
@@ -341,18 +341,18 @@ class ITRFACashValueInsurance(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    institution_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    institution_name: Mapped[str] = mapped_column(String(125), nullable=True)
     institution_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
     date_of_contract: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    cash_value_surrender_val: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    total_gross_premium_paid: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    cash_value_surrender_val: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    total_gross_premium_paid: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     disclosures_schedule: Mapped["ITRDisclosuresSchedule"] = relationship(back_populates="fa_cash_value_insurance")
 
@@ -372,21 +372,21 @@ class ITRFAImmovableProperty(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
     property_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     ownership: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     date_acquired: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    income_from_property: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_from_property: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
-    income_taxable_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_taxable_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     schedule_offered: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     schedule_item_number: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
@@ -408,24 +408,24 @@ class ITRFAFinancialInterest(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    entity_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    entity_name: Mapped[str] = mapped_column(String(125), nullable=True)
     entity_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     nature_of_entity: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     nature_of_interest: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
 
     date_acquired: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
-    income_taxable_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_taxable_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     schedule_offered: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     schedule_item_number: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     scheduling_head: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
@@ -448,23 +448,23 @@ class ITRFASigningAuthority(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    institution_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    institution_name: Mapped[str] = mapped_column(String(125), nullable=True)
     institution_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
     account_holder_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     institution_account_number: Mapped[Optional[str]] = mapped_column(String(34), nullable=True)
 
-    peak_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    peak_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     income_accrued_taxable_flag: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
-    income_accrued_in_account: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    income_offered_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_accrued_in_account: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    income_offered_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     income_offered_schedule: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     income_offered_schedule_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
@@ -486,21 +486,21 @@ class ITRFAOtherAsset(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    nature_of_asset: Mapped[str] = mapped_column(String(100), nullable=False)
+    nature_of_asset: Mapped[str] = mapped_column(String(100), nullable=True)
     ownership: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     date_acquired: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    total_investment: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
-    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
-    income_taxable_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_taxable_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     schedule_offered: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     schedule_item_number: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     scheduling_head: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
@@ -523,13 +523,13 @@ class ITRFAForeignTrust(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    trust_name: Mapped[str] = mapped_column(String(125), nullable=False)
+    trust_name: Mapped[str] = mapped_column(String(125), nullable=True)
     trust_address: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
     relationship_nature: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
@@ -543,9 +543,9 @@ class ITRFAForeignTrust(Base):
     date_established: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
     income_taxable_flag: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
-    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
-    income_offered_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_offered_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     income_offered_schedule: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     income_offered_sch_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     scheduling_head: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
@@ -568,20 +568,20 @@ class ITRFAOtherForeignIncome(Base):
         nullable=False,
         index=True,
     )
-    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=True, default=1)
 
-    country_code: Mapped[str] = mapped_column(String(5), nullable=False)
+    country_code: Mapped[str] = mapped_column(String(5), nullable=True)
     country_name: Mapped[Optional[str]] = mapped_column(String(55), nullable=True)
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
-    name_of_person: Mapped[str] = mapped_column(String(125), nullable=False)
+    name_of_person: Mapped[str] = mapped_column(String(125), nullable=True)
     address_of_person: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
-    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_derived: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
     income_taxable_flag: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
-    income_offered_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    income_offered_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     income_offered_schedule: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     income_offered_sch_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 

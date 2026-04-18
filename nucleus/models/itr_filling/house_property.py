@@ -41,9 +41,9 @@ class ITRHPSchedule(Base):
         index=True,
     )
 
-    total_hp_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
-    # brought_forward_loss: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
-    # income_under_head_hp: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
+    total_hp_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)
+    brought_forward_loss: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)
+    income_under_head_hp: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)
 
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="house_property")
     properties: Mapped[List["ITRHPProperty"]] = relationship(

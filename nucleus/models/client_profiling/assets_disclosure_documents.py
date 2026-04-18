@@ -48,6 +48,10 @@ class AssetsDisclosureDocuments(Base):
         String,
         nullable=True,
     )
+    comments: Mapped[str] = mapped_column(
+        String,
+        nullable=True,
+    )
 
     content_type: Mapped[str] = mapped_column(
         String,

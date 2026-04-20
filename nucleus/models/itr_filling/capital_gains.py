@@ -24,6 +24,7 @@ from sqlalchemy import (
     String,
     UUID as SQLUUID,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
@@ -58,6 +59,19 @@ class ITRCGSchedule(Base):
     total_vda_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     total_capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    quarterly_breakdown: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    """Per-quarter STCG/LTCG summary extracted from broker CG statements.
+
+    Shape:
+        {
+          "equity_listed": {"Q1": {"stcg": 50000, "ltcg": 120000}, "Q2": {...}, "Q3": {...}, "Q4": {...}},
+          "debt_mf": {...},
+          "unlisted": {...}
+        }
+    V1 stores it without compute; V1.1 consumes it for Sec 234C advance-tax
+    deficit interest calculation.
+    """
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -94,6 +108,7 @@ class ITRCGSchedule(Base):
     exemptions_54f: Mapped[List["ITRCGExemption54F"]] = relationship(
         back_populates="cg_schedule",
         cascade="all, delete-orphan",
+        order_by="ITRCGExemption54F.created_at",
     )
     hp_entries: Mapped[List["ITRCGHPEntry"]] = relationship(
         back_populates="cg_schedule",
@@ -123,6 +138,11 @@ class ITRCGIndiaEQAndDebtMFBroker(Base):
     total_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_ltcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
     india_eq_and_debt_mf_transactions: Mapped[List["ITRCGIndiaEQAndDebtMFTransaction"]] = relationship(
@@ -157,6 +177,9 @@ class ITRCGIndiaEQAndDebtMFTransaction(Base):
     cost_of_acquisition: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     gain_type: Mapped[str] = mapped_column(String(20), nullable=False, default="Short")
     gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    isin: Mapped[Optional[str]] = mapped_column(String(12), nullable=True)
+    stt_paid: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    grandfathering_fmv: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 4), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
@@ -182,6 +205,11 @@ class ITRCGUSBroker(Base):
     total_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_ltcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
     us_transactions: Mapped[List["ITRCGUSTransaction"]] = relationship(
@@ -247,9 +275,15 @@ class ITRCGUnlistedTransaction(Base):
     selling_expenses: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     purchase_value_per_share: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     fmv: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    indexed_cost_of_acquisition: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     gain_type: Mapped[str] = mapped_column(String(20), nullable=False)
     gain_inr: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
@@ -293,6 +327,11 @@ class ITRCGHPEntry(Base):
     tax_on_capital_gain_without_indexation: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     tax_on_capital_gain_with_indexation: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     taxable_capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -437,6 +476,11 @@ class ITRCGExemption54F(Base):
     total_invested: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     net_taxable_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -462,10 +506,15 @@ class ITRCGVDATransaction(Base):
     cost_of_acquisition: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     consideration_received: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
-    
+
     cg_schedule: Mapped["ITRCGSchedule"] = relationship("ITRCGSchedule", back_populates="vda_transactions")
 
 
@@ -503,6 +552,11 @@ class ITRCGExemption54(Base):
     cgas_account_no: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     bank_name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     ifsc: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

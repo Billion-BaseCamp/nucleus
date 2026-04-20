@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(python -c \"from nucleus.models.itr_filling import capital_gains; print\\('ok: columns loaded'\\)\")"
+    ]
+  }
+}

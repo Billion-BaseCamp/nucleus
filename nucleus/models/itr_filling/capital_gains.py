@@ -1,8 +1,8 @@
 """
 ITR filing: Capital gains (Schedule CG) persistence.
 
-Root `itr_cg_data` is 1:1 with `itr_returns`. High-volume trade rows and
-HP CG detail trees hang off the root.
+Root `itr_cg_schedule` is 1:1 with `itr_returns`. High-volume trade rows and
+HP CG detail trees hang off the schedule.
 """
 
 from __future__ import annotations
@@ -91,6 +91,15 @@ class ITRCGSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRCGExemption54.display_order",
     )
+    exemptions_54f: Mapped[List["ITRCGExemption54F"]] = relationship(
+        back_populates="cg_schedule",
+        cascade="all, delete-orphan",
+    )
+    hp_entries: Mapped[List["ITRCGHPEntry"]] = relationship(
+        back_populates="cg_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITRCGHPEntry.display_order",
+    )
 
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="cg_schedule")
    
@@ -119,9 +128,12 @@ class ITRCGIndiaEQAndDebtMFBroker(Base):
     india_eq_and_debt_mf_transactions: Mapped[List["ITRCGIndiaEQAndDebtMFTransaction"]] = relationship(
         back_populates="cg_india_eq_broker",
         cascade="all, delete-orphan",
-        order_by="ITRCGIndiaEQTransaction.display_order",
+        order_by="ITRCGIndiaEQAndDebtMFTransaction.display_order",
     )
-    cg_schedule: Mapped["ITRCGSchedule"] = relationship("ITRCGSchedule", back_populates="india_eq_brokers")
+    cg_schedule: Mapped["ITRCGSchedule"] = relationship(
+        "ITRCGSchedule",
+        back_populates="india_eq_and_debt_mf_brokers",
+    )
 
 class ITRCGIndiaEQAndDebtMFTransaction(Base):
     __tablename__ = "itr_cg_india_eq_and_debt_mf_transactions"
@@ -129,7 +141,7 @@ class ITRCGIndiaEQAndDebtMFTransaction(Base):
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     cg_india_eq_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_india_eq.id", ondelete="CASCADE"),
+        ForeignKey("itr_cg_india_eq_and_debt_mf_brokers_data.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -148,7 +160,10 @@ class ITRCGIndiaEQAndDebtMFTransaction(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
-    cg_india_eq_and_debt_mf_broker: Mapped["ITRCGIndiaEQAndDebtMFBroker"] = relationship("ITRCGIndiaEQAndDebtMFBroker", back_populates="india_eq_and_debt_mf_transactions")
+    cg_india_eq_broker: Mapped["ITRCGIndiaEQAndDebtMFBroker"] = relationship(
+        "ITRCGIndiaEQAndDebtMFBroker",
+        back_populates="india_eq_and_debt_mf_transactions",
+    )
 
 
 class ITRCGUSBroker(Base):
@@ -182,9 +197,9 @@ class ITRCGUSTransaction(Base):
     __tablename__ = "itr_cg_us_transactions"
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    cg_data_id: Mapped[UUID] = mapped_column(
+    cg_us_broker_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_data.id", ondelete="CASCADE"),
+        ForeignKey("itr_cg_us_brokers_data.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -214,9 +229,9 @@ class ITRCGUnlistedTransaction(Base):
     __tablename__ = "itr_cg_unlisted_transactions"
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    cg_unlisted_id: Mapped[UUID] = mapped_column(
+    cg_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_unlisted.id", ondelete="CASCADE"),
+        ForeignKey("itr_cg_schedule.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -246,9 +261,9 @@ class ITRCGHPEntry(Base):
     __tablename__ = "itr_cg_hp_entries"
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    cg_unlisted_id: Mapped[UUID] = mapped_column(
+    cg_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_unlisted.id", ondelete="CASCADE"),
+        ForeignKey("itr_cg_schedule.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -304,6 +319,8 @@ class ITRCGHPEntry(Base):
         cascade="all, delete-orphan",
         order_by="ITRCGHPBuyer.display_order",
     )
+
+    cg_schedule: Mapped["ITRCGSchedule"] = relationship("ITRCGSchedule", back_populates="hp_entries")
 
 
 class ITRCGHPAcquisitionDetail(Base):
@@ -398,9 +415,9 @@ class ITRCGExemption54F(Base):
     __tablename__ = "itr_cg_exemptions_54f"
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    cg_data_id: Mapped[UUID] = mapped_column(
+    cg_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_data.id", ondelete="CASCADE"),
+        ForeignKey("itr_cg_schedule.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -424,7 +441,7 @@ class ITRCGExemption54F(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
-    cg_data: Mapped["ITRCGData"] = relationship("ITRCGData", back_populates="exemptions_54f")
+    cg_schedule: Mapped["ITRCGSchedule"] = relationship("ITRCGSchedule", back_populates="exemptions_54f")
 
 
 

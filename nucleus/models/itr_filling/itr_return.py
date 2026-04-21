@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, DateTime, String, UniqueConstraint, UUID as SQLUUID
@@ -21,9 +21,15 @@ from nucleus.db.database import Base
 class ITRReturn(Base):
     __tablename__ = "itr_returns"
 
-    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
-    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), nullable=False, index=True)
-    financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), nullable=False, index=True)
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), nullable=False, index=True
+    )
+    financial_year_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), nullable=False, index=True
+    )
     assessment_year: Mapped[str] = mapped_column(String(10), nullable=False)
     itr_form_type: Mapped[str] = mapped_column(String(10), default="ITR-2")
     regime: Mapped[str] = mapped_column(String(5), nullable=False, default="new")
@@ -80,10 +86,22 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
+    cfl_schedule: Mapped[Optional["ITRCFLSchedule"]] = relationship(
+        "ITRCFLSchedule",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
     __table_args__ = (
-        UniqueConstraint("client_id", "financial_year_id", name="uq_itr_return_client_fy"),
+        UniqueConstraint(
+            "client_id", "financial_year_id", name="uq_itr_return_client_fy"
+        ),
     )

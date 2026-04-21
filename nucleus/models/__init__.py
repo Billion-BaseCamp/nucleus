@@ -72,6 +72,15 @@ from nucleus.models.itr_filling.disclosures import ITRALMovableAsset, ITRALInves
 from nucleus.models.itr_filling.tax_credits import ReliefClaimed, ITRTaxCreditSchedule
 from nucleus.models.itr_filling.other_sources import ITRDeemedIncome, ITRTaxExemptIncome
 
+# US tax filing models (import all so Alembic autogenerate registers every table)
+from nucleus.models.us_tax_filing import (
+    ClientPriorReturn,
+    DocumentUpload,
+    Question,
+    QuestionnaireItem,
+    Submission,
+)
+
 # ITR filing models
 from nucleus.models.itr_filling import (
     ITRReturn,
@@ -321,4 +330,10 @@ __all__ = [
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
     "ITRTaxExemptIncome",
+    # US tax filing
+    "ClientPriorReturn",
+    "DocumentUpload",
+    "Question",
+    "QuestionnaireItem",
+    "Submission",
 ]

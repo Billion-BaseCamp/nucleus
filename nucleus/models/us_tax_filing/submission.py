@@ -28,6 +28,7 @@ PriorReturnPayload = Optional[dict[str, Any]]
 if TYPE_CHECKING:
     from .document_upload import DocumentUpload
     from .questionnaire_item import QuestionnaireItem
+    from .questionnaire_item_edit_audit import QuestionnaireItemEditAudit
 
 
 class Submission(Base):
@@ -104,4 +105,9 @@ class Submission(Base):
         back_populates="submission",
         cascade="all, delete-orphan",
         foreign_keys="[DocumentUpload.submission_id]",
+    )
+    item_edit_audits: Mapped[list["QuestionnaireItemEditAudit"]] = relationship(
+        "QuestionnaireItemEditAudit",
+        back_populates="submission",
+        cascade="all, delete-orphan",
     )

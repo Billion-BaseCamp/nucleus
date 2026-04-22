@@ -78,6 +78,7 @@ from nucleus.models.us_tax_filing import (
     DocumentUpload,
     Question,
     QuestionnaireItem,
+    QuestionnaireItemEditAudit,
     Submission,
 )
 
@@ -335,5 +336,6 @@ __all__ = [
     "DocumentUpload",
     "Question",
     "QuestionnaireItem",
+    "QuestionnaireItemEditAudit",
     "Submission",
 ]

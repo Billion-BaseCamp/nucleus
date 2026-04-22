@@ -14,6 +14,7 @@ from nucleus.db.database import Base
 
 if TYPE_CHECKING:
     from .document_upload import DocumentUpload
+    from .questionnaire_item_edit_audit import QuestionnaireItemEditAudit
     from .submission import Submission
 
 
@@ -61,6 +62,11 @@ class QuestionnaireItem(Base):
     )
     documents: Mapped[list["DocumentUpload"]] = relationship(
         "DocumentUpload",
+        back_populates="questionnaire_item",
+        cascade="all, delete-orphan",
+    )
+    edit_audits: Mapped[list["QuestionnaireItemEditAudit"]] = relationship(
+        "QuestionnaireItemEditAudit",
         back_populates="questionnaire_item",
         cascade="all, delete-orphan",
     )

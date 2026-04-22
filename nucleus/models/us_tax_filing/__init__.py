@@ -7,6 +7,9 @@ from nucleus.models.us_tax_filing.client_prior_return import ClientPriorReturn
 from nucleus.models.us_tax_filing.submission import Submission
 from nucleus.models.us_tax_filing.question import Question
 from nucleus.models.us_tax_filing.questionnaire_item import QuestionnaireItem
+from nucleus.models.us_tax_filing.questionnaire_item_edit_audit import (
+    QuestionnaireItemEditAudit,
+)
 from nucleus.models.us_tax_filing.document_upload import DocumentUpload
 
 __all__ = [
@@ -14,5 +17,6 @@ __all__ = [
     "Submission",
     "Question",
     "QuestionnaireItem",
+    "QuestionnaireItemEditAudit",
     "DocumentUpload",
 ]

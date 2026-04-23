@@ -52,6 +52,10 @@ class DocumentCollectorInfo(Base):
         Boolean,
         nullable=True,
     )
+    is_return_filing_applicable: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")

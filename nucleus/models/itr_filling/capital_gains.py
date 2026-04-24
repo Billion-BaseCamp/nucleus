@@ -116,6 +116,12 @@ class ITRCGSchedule(Base):
         order_by="ITRCGHPEntry.display_order",
     )
 
+    bond_entries: Mapped[List["ITRCGBondEntry"]] = relationship(
+        back_populates="cg_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITRCGBondEntry.display_order",
+    )
+
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="cg_schedule")
    
 
@@ -449,6 +455,38 @@ class ITRCGHPBuyer(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
     hp_entry: Mapped["ITRCGHPEntry"] = relationship("ITRCGHPEntry", back_populates="buyers")
+
+
+class ITRCGBondEntry(Base):
+    __tablename__ = "itr_cg_bond_entries"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    cg_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_cg_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    issuer_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    isin: Mapped[Optional[str]] = mapped_column(String(12), nullable=True)
+    date_of_purchase: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    date_of_sale: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
+    sale_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    purchase_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    indexed_cost: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    transfer_expenses: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    gain_type: Mapped[str] = mapped_column(String(20), nullable=False, default="Long")
+    stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    ltcg_20: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+    cg_schedule: Mapped["ITRCGSchedule"] = relationship("ITRCGSchedule", back_populates="bond_entries")
+
 
 class ITRCGExemption54F(Base):
     __tablename__ = "itr_cg_exemptions_54f"

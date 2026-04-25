@@ -318,6 +318,8 @@ class ITRCGHPEntry(Base):
     address: Mapped[Optional[str]] = mapped_column(String(250), nullable=True)
     state_code: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     state: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    town_district: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    country_code: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     pin_code: Mapped[Optional[str]] = mapped_column(String(6), nullable=True)
     deemed_full_value: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     net_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

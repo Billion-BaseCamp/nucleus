@@ -56,6 +56,30 @@ class DocumentCollectorInfo(Base):
         Boolean,
         nullable=True,
     )
+    is_foreign_income_applicable: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    is_foreign_salary_applicable:Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+         nullable=True,
+    )
+    is_foreign_dividend_applicable:Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    is_foreign_rental_applicable:Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    is_foreign_interest_applicable:Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    is_foreign_consultancy_applicable:Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")

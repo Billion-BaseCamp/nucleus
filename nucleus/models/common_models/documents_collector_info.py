@@ -48,6 +48,7 @@ class DocumentCollectorInfo(Base):
         nullable=True,
     )
     fa_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    fi_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     is_fcg_applicable: Mapped[Optional[bool]] = mapped_column(
         Boolean,
         nullable=True,

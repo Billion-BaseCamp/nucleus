@@ -14,6 +14,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import (
     Date,
     DateTime,
+    Enum,
     ForeignKey,
     Integer,
     String,
@@ -25,6 +26,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
+from nucleus.models.itr_filling.computation_section import ComputationSectionStatus
 
 
 class ITROSSchedule(Base):
@@ -39,6 +41,12 @@ class ITROSSchedule(Base):
         nullable=False,
         unique=True,
         index=True,
+    )
+
+    computation_status: Mapped[ComputationSectionStatus] = mapped_column(
+        Enum(ComputationSectionStatus, native_enum=False),
+        nullable=False,
+        default=ComputationSectionStatus.NOT_STARTED,
     )
 
     total_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)

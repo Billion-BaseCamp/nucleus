@@ -13,13 +13,14 @@ from decimal import Decimal
 from typing import Any, List, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, UUID as SQLUUID
+from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text, UUID as SQLUUID
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
+from nucleus.models.itr_filling.computation_section import ComputationSectionStatus
 
 
 class ITRSalarySchedule(Base):
@@ -34,6 +35,12 @@ class ITRSalarySchedule(Base):
         nullable=False,
         unique=True,
         index=True,
+    )
+
+    computation_status: Mapped[ComputationSectionStatus] = mapped_column(
+        Enum(ComputationSectionStatus, native_enum=False),
+        nullable=False,
+        default=ComputationSectionStatus.NOT_STARTED,
     )
 
     total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

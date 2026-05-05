@@ -6,7 +6,6 @@ from nucleus.models.itr_filling.audit_logging import (
     ITRAuthAuditEvent,
     ITRFieldChangeSnapshot,
 )
-from nucleus.models.itr_filling.computation_section import ComputationSectionStatus
 from nucleus.models.itr_filling.capital_gains import (
     ITRCGBondEntry,
     ITRCGExemption54,
@@ -108,7 +107,6 @@ from nucleus.models.itr_filling.tax_credits import (
 )
 
 __all__ = [
-    "ComputationSectionStatus",
     "ITRReturn",
     # Salary (Schedule S)
     "ITRForeignSalary",

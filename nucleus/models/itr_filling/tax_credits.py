@@ -15,14 +15,13 @@ from uuid import UUID, uuid4
 from sqlalchemy import (
     Date,
     DateTime,
-    Enum,
     ForeignKey,
     Integer,
     String,
     UUID as SQLUUID,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 from typing import List
 
@@ -40,10 +39,10 @@ class ITRTaxCreditSchedule(Base):
         nullable=False,
     )
 
-    computation_status: Mapped[ComputationSectionStatus] = mapped_column(
-        Enum(ComputationSectionStatus, native_enum=False),
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
         nullable=False,
-        default=ComputationSectionStatus.NOT_STARTED,
+        default="NOT_STARTED",
     )
 
     total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(

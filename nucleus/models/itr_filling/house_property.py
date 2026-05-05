@@ -15,18 +15,16 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
-    Enum,
     ForeignKey,
     Integer,
     String,
     UUID as SQLUUID,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
-from nucleus.models.itr_filling.computation_section import ComputationSectionStatus
 
 
 class ITRHPSchedule(Base):
@@ -43,10 +41,10 @@ class ITRHPSchedule(Base):
         index=True,
     )
 
-    computation_status: Mapped[ComputationSectionStatus] = mapped_column(
-        Enum(ComputationSectionStatus, native_enum=False),
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
         nullable=False,
-        default=ComputationSectionStatus.NOT_STARTED,
+        default="NOT_STARTED",
     )
 
     total_hp_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)

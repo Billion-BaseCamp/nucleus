@@ -16,7 +16,6 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
-    Enum,
     ForeignKey,
     Integer,
     String,
@@ -25,11 +24,10 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
-from nucleus.models.itr_filling.computation_section import ComputationSectionStatus
 
 
 class ITRDedSchedule(Base):
@@ -48,10 +46,10 @@ class ITRDedSchedule(Base):
         index=True,
     )
 
-    computation_status: Mapped[ComputationSectionStatus] = mapped_column(
-        Enum(ComputationSectionStatus, native_enum=False),
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
         nullable=False,
-        default=ComputationSectionStatus.NOT_STARTED,
+        default="NOT_STARTED",
     )
 
     sec_80c_capped: Mapped[Decimal] = mapped_column(

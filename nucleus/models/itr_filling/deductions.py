@@ -24,7 +24,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
@@ -44,6 +44,12 @@ class ITRDedSchedule(Base):
         nullable=False,
         unique=True,
         index=True,
+    )
+
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="NOT_STARTED",
     )
 
     sec_80c_capped: Mapped[Decimal] = mapped_column(

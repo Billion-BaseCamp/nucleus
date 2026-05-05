@@ -21,7 +21,7 @@ from sqlalchemy import (
     UUID as SQLUUID,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
@@ -39,6 +39,12 @@ class ITROSSchedule(Base):
         nullable=False,
         unique=True,
         index=True,
+    )
+
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="NOT_STARTED",
     )
 
     total_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)

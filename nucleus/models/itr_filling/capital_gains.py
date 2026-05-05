@@ -26,7 +26,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
@@ -42,6 +42,13 @@ class ITRCGSchedule(Base):
         nullable=False,
         index=True,
     )
+
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="NOT_STARTED",
+    )
+
     stcg_india_eq: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_mutual_funds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_us_foreign: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

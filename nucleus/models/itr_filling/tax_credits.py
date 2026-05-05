@@ -1,7 +1,8 @@
 """
 ITR filing layer: Tax credits (Schedule IT, TDS1/2/3, TCS, TR1, FSI).
 
-All entries hang directly off itr_returns (no intermediate schedule table).
+Root `itr_tax_credit_schedule` is 1:1 with `itr_returns`; detail rows use
+`tax_credit_schedule_id`.
 """
 
 from __future__ import annotations
@@ -20,7 +21,7 @@ from sqlalchemy import (
     UUID as SQLUUID,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 from typing import List
 
@@ -37,6 +38,13 @@ class ITRTaxCreditSchedule(Base):
         ForeignKey("itr_returns.id", ondelete="CASCADE"),
         nullable=False,
     )
+
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="NOT_STARTED",
+    )
+
     total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )

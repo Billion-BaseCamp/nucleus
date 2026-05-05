@@ -16,7 +16,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, UUID as SQLUUID
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
@@ -34,6 +34,12 @@ class ITRSalarySchedule(Base):
         nullable=False,
         unique=True,
         index=True,
+    )
+
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="NOT_STARTED",
     )
 
     total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

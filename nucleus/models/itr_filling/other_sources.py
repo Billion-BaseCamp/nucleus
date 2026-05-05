@@ -44,7 +44,7 @@ class ITROSSchedule(Base):
     computation_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        default="NOT_STARTED",
+        server_default="NOT_STARTED",
     )
 
     total_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)

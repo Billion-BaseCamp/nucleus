@@ -44,7 +44,7 @@ class ITRHPSchedule(Base):
     computation_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        default="NOT_STARTED",
+        server_default="NOT_STARTED",
     )
 
     total_hp_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)

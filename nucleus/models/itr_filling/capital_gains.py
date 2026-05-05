@@ -46,7 +46,7 @@ class ITRCGSchedule(Base):
     computation_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        default="NOT_STARTED",
+        server_default="NOT_STARTED",
     )
 
     stcg_india_eq: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

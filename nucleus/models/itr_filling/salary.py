@@ -39,7 +39,7 @@ class ITRSalarySchedule(Base):
     computation_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        default="NOT_STARTED",
+        server_default="NOT_STARTED",
     )
 
     total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

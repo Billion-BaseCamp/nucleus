@@ -42,7 +42,7 @@ class ITRTaxCreditSchedule(Base):
     computation_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        default="NOT_STARTED",
+        server_default="NOT_STARTED",
     )
 
     total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(

@@ -49,7 +49,7 @@ class ITRDedSchedule(Base):
     computation_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        default="NOT_STARTED",
+        server_default="NOT_STARTED",
     )
 
     sec_80c_capped: Mapped[Decimal] = mapped_column(

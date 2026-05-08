@@ -72,6 +72,13 @@ from nucleus.models.itr_filling.house_property import (
 from nucleus.models.itr_filling.itr_document import ITRDocument
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_return import ITRReturn
+from nucleus.models.itr_filling.itr_second_step import (
+    ITRStep2OtherInfo,
+    ITRStep2OtherInfoData,
+    ITRStep2Residency,
+    ITRStep2Salary,
+    ITRStep2SalaryDeductions,
+)
 from nucleus.models.itr_filling.other_sources import (
     ITRDeemedIncome,
     ITROSBuybackShare,
@@ -197,6 +204,12 @@ __all__ = [
     # Document upload slots
     "ITRDocumentSlot",
     "ITRDocument",
+    # Step 2 wizard
+    "ITRStep2OtherInfo",
+    "ITRStep2OtherInfoData",
+    "ITRStep2Residency",
+    "ITRStep2Salary",
+    "ITRStep2SalaryDeductions",
     "ITRALMovableAsset",
     "ITRALInvestment",
     "ReliefClaimed",

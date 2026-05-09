@@ -20,6 +20,7 @@ from sqlalchemy import (
     Text,
     UUID as SQLUUID,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
@@ -58,7 +59,28 @@ class ITROSSchedule(Base):
     total_income_lines: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
     total_tds: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
 
-    
+    dividend_quarterly_breakdown: Mapped[Optional[dict]] = mapped_column(
+        JSONB, nullable=True
+    )
+    """Per-installment-window dividend amounts for Sec 234C proviso.
+
+    Shape mirrors CBDT ``AccruOrRecOfCG.DateRange`` keys so the same compute
+    helper handles both CG and dividend deferral:
+
+        {
+          "DividendAppRate": {
+            "Upto15Of6": 0,
+            "Upto15Of9": 0,
+            "Up16Of9To15Of12": 0,
+            "Up16Of12To15Of3": 0,
+            "Up16Of3To31Of3": 0
+          }
+        }
+
+    NULL when the user hasn't entered a quarterly split — compute then falls
+    back to treating dividend as wholly accrued before Q1 (i.e. no deferral).
+    """
+
     # ── Relationships ──
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="other_sources")
     income_lines: Mapped[List["ITROSIncomeLine"]] = relationship(

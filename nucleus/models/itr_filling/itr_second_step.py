@@ -10,7 +10,15 @@ from __future__ import annotations
 from typing import Any, List, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, ForeignKey, String, Text, UUID as SQLUUID
+from sqlalchemy import (
+    UUID as SQLUUID,
+    Boolean,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -40,6 +48,7 @@ class ITRStep2Salary(Base):
     )
 
     employer_name: Mapped[str] = mapped_column(String, nullable=False, default="")
+    sequence: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     job_change_during_year: Mapped[Optional[str]] = mapped_column(
         String, nullable=True
     )
@@ -65,6 +74,96 @@ class ITRStep2Salary(Base):
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+
+
+class ITRStep2SalaryTrigger(Base):
+    __tablename__ = "itr_step2_salary_trigger"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4,
+        index=True,
+    )
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    financial_year_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("financial_years.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    trigger_id: Mapped[str] = mapped_column(String, nullable=False)
+    enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="FALSE"
+    )
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+
+    client: Mapped["Client"] = relationship("Client")
+    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            "trigger_id",
+            name="uq_itr_step2_salary_trigger",
+        ),
+    )
+
+
+class ITRStep2SalaryDeductionDetail(Base):
+    __tablename__ = "itr_step2_salary_deduction_detail"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4,
+        index=True,
+    )
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    financial_year_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("financial_years.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    deduction_id: Mapped[str] = mapped_column(String, nullable=False)
+    enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="FALSE"
+    )
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+
+    client: Mapped["Client"] = relationship("Client")
+    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            "deduction_id",
+            name="uq_itr_step2_salary_deduction_detail",
+        ),
+    )
 
 
 class ITRStep2SalaryDeductions(Base):

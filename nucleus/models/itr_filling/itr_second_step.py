@@ -40,6 +40,10 @@ class ITRStep2Salary(Base):
     )
 
     employer_name: Mapped[str] = mapped_column(String, nullable=False, default="")
+    job_change_during_year: Mapped[Optional[str]] = mapped_column(
+        String, nullable=True
+    )
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     source: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     is_current: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     f16_uploaded: Mapped[bool] = mapped_column(
@@ -128,8 +132,11 @@ class ITRStep2OtherInfo(Base):
     )
 
     section: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    question_type: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     question_code: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     answer: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    filtered_in: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     override: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"

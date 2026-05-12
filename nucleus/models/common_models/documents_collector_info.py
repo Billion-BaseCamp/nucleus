@@ -81,6 +81,20 @@ class DocumentCollectorInfo(Base):
         Boolean,
         nullable=True,
     )
+    is_salary_applicable: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    salary_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    is_other_info_applicable: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
+    other_info_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    salary_old_regime_detected: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")

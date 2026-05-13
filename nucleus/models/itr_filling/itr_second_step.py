@@ -7,8 +7,11 @@ itr_step2_other_info_data, itr_step2_residency.
 
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional
 from uuid import UUID, uuid4
+
+if TYPE_CHECKING:
+    from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 
 from sqlalchemy import (
     UUID as SQLUUID,
@@ -102,14 +105,18 @@ class ITRStep2SalaryTrigger(Base):
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    document_id: Mapped[Optional[UUID]] = mapped_column(
+    slot_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        ForeignKey("itr_document_slots.id", ondelete="SET NULL"),
         nullable=True,
     )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+    attachment_slot: Mapped[Optional["ITRDocumentSlot"]] = relationship(
+        "ITRDocumentSlot",
+        foreign_keys=[slot_id],
+    )
 
     __table_args__ = (
         UniqueConstraint(
@@ -147,14 +154,18 @@ class ITRStep2SalaryDeductionDetail(Base):
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    document_id: Mapped[Optional[UUID]] = mapped_column(
+    slot_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        ForeignKey("itr_document_slots.id", ondelete="SET NULL"),
         nullable=True,
     )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+    attachment_slot: Mapped[Optional["ITRDocumentSlot"]] = relationship(
+        "ITRDocumentSlot",
+        foreign_keys=[slot_id],
+    )
 
     __table_args__ = (
         UniqueConstraint(

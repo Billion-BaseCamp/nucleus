@@ -20,7 +20,6 @@ from sqlalchemy import (
     Text,
     UUID as SQLUUID,
 )
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
@@ -58,28 +57,6 @@ class ITROSSchedule(Base):
     total_other_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
     total_income_lines: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
     total_tds: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
-
-    dividend_quarterly_breakdown: Mapped[Optional[dict]] = mapped_column(
-        JSONB, nullable=True
-    )
-    """Per-installment-window dividend amounts for Sec 234C proviso.
-
-    Shape mirrors CBDT ``AccruOrRecOfCG.DateRange`` keys so the same compute
-    helper handles both CG and dividend deferral:
-
-        {
-          "DividendAppRate": {
-            "Upto15Of6": 0,
-            "Upto15Of9": 0,
-            "Up16Of9To15Of12": 0,
-            "Up16Of12To15Of3": 0,
-            "Up16Of3To31Of3": 0
-          }
-        }
-
-    NULL when the user hasn't entered a quarterly split — compute then falls
-    back to treating dividend as wholly accrued before Q1 (i.e. no deferral).
-    """
 
     # ── Relationships ──
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="other_sources")
@@ -240,6 +217,12 @@ class ITROSDividendDetail(Base):
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    # CBDT ``AccruOrRecOfCG.DateRange`` key — drives Sec 234C proviso
+    # deferral of dividend tax. NULL = quarter not specified (compute
+    # treats the row as accruing before Q1, i.e. no deferral).
+    # Allowed values: Upto15Of6, Upto15Of9, Up16Of9To15Of12,
+    # Up16Of12To15Of3, Up16Of3To31Of3.
+    quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dividend_details")
 

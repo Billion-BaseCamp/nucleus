@@ -489,7 +489,7 @@ class ITRCGBondEntry(Base):
     transfer_expenses: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     gain_type: Mapped[str] = mapped_column(String(20), nullable=False, default="Long")
     stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    ltcg_20: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    ltcg_125: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

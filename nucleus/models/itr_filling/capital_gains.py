@@ -529,8 +529,11 @@ class ITRCGExemption54F(Base):
         index=True,
     )
     net_sale_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     # Asset source label (e.g. "CG Bonds", "CG India Equity") — used for txn matching.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    description: Mapped[Optional[str]] = mapped_column(String(250), nullable=True)
+    date_of_transfer: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     # Groups multiple sold-asset rows under one new-house claim (one UUID per CG54FClaim).
     claim_group_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),

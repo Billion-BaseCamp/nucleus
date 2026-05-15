@@ -529,6 +529,12 @@ class ITRCGExemption54F(Base):
         index=True,
     )
     net_sale_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # Groups multiple sold-asset rows under one new-house claim (one UUID per CG54FClaim).
+    claim_group_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

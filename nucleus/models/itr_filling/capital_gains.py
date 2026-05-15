@@ -529,7 +529,7 @@ class ITRCGExemption54F(Base):
         index=True,
     )
     net_sale_consideration: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    capital_gain: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     # Asset source label (e.g. "CG Bonds", "CG India Equity") — used for txn matching.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     description: Mapped[Optional[str]] = mapped_column(String(250), nullable=True)

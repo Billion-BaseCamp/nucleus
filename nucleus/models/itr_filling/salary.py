@@ -159,6 +159,7 @@ class ITRSalaryComponent(Base):
 
     received: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
     exempt: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
+    taxable: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
 
     employer: Mapped["ITRSalaryEmployer"] = relationship(back_populates="components")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

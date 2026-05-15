@@ -597,7 +597,7 @@ class ITRCGExemption54(Base):
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     description: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     date_of_transfer: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     date_of_purchase: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     cost_of_house: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     cgas_deposit: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

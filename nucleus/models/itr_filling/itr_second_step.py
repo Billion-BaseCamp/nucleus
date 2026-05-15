@@ -7,6 +7,7 @@ itr_step2_other_info_data, itr_step2_residency.
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import TYPE_CHECKING, Any, List, Optional
 from uuid import UUID, uuid4
 
@@ -16,6 +17,7 @@ if TYPE_CHECKING:
 from sqlalchemy import (
     UUID as SQLUUID,
     Boolean,
+    DateTime,
     ForeignKey,
     Integer,
     String,
@@ -24,6 +26,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 
 from nucleus.db.database import Base
 
@@ -309,13 +312,67 @@ class ITRStep2Residency(Base):
         index=True,
     )
 
-    current_year_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    # Card 1: Last year's residency status
+    last_year_status: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # ROR | RNOR | NR
+
+    # Card 2: Days in India this FY
+    days_current_fy: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    fy_bucket: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # <60 | 60-119 | 120-181 | 182+
+
+    # Card 3: Citizenship (conditional)
+    citizenship: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # Indian | OCI-PIO | Foreign
+
+    # Card 4a: Employment scenario (conditional)
+    employment_scenario: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # inIndia | movedThisYear | movedEarlier
+
+    # Card 4b: Visit or moved back (conditional)
+    visit_or_moved: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # visiting | moved
+
+    # Card 5: Indian income above ₹15L (conditional)
+    income_above_15l: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+
+    # Card 5b: Prior 4 FY day counts (conditional)
+    prior4_days: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+
+    # Card 6: Deep test (conditional)
+    deep_test_days7: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+    deep_test_resident10: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+
+    # Computed result (e.g. written by client PUT at terminal state)
+    computed_status: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # ROR | RNOR | NR
+    computed_path: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    # Overrides & notes
     confirmed_same: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
-    override_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    days_in_india: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+    override_status: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # ROR | RNOR | NR (e.g. RM override)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        onupdate=func.now(),
+        nullable=True,
+    )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")

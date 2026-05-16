@@ -282,10 +282,6 @@ class ITRStep2OtherInfoData(Base):
     from_last_year: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
-    is_residency_detected: Mapped[Optional[bool]] = mapped_column(
-        Boolean,
-        nullable=True,
-    )
     data: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
 
     other_info: Mapped["ITRStep2OtherInfo"] = relationship(
@@ -320,6 +316,10 @@ class ITRStep2Residency(Base):
     last_year_status: Mapped[Optional[str]] = mapped_column(
         String(10), nullable=True
     )  # ROR | RNOR | NR
+    is_residency_detected: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
 
     # Card 2: Days in India this FY
     days_current_fy: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)

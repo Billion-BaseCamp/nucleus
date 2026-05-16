@@ -43,10 +43,16 @@ class ITRSalarySchedule(Base):
     )
 
     total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    net_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_deduction_us16: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_net_taxable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    new_regime_total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    new_regime_total_deduction_us16: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    new_regime_total_net_taxable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+
+    # Old regime
+    old_regime_total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    old_regime_total_deduction_us16: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    old_regime_total_net_taxable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+
+
     total_tds: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
     itr_return: Mapped["ITRReturn"] = relationship("ITRReturn", back_populates="salary")

@@ -95,6 +95,10 @@ class DocumentCollectorInfo(Base):
         Boolean,
         nullable=True,
     )
+    is_residency_detected: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")

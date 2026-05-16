@@ -316,6 +316,10 @@ class ITRStep2Residency(Base):
     last_year_status: Mapped[Optional[str]] = mapped_column(
         String(10), nullable=True
     )  # ROR | RNOR | NR
+    is_residency_detected: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
 
     # Card 2: Days in India this FY
     days_current_fy: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)

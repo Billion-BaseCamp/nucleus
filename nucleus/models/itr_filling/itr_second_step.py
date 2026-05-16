@@ -282,6 +282,10 @@ class ITRStep2OtherInfoData(Base):
     from_last_year: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
+    is_residency_detected: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
     data: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
 
     other_info: Mapped["ITRStep2OtherInfo"] = relationship(

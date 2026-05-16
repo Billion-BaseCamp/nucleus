@@ -121,12 +121,6 @@ class ITRSalaryEmployer(Base):
 
     tds_deducted: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
-    gross_salary_17_1: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_perquisites: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    income_from_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-
     salary_schedule: Mapped["ITRSalarySchedule"] = relationship(back_populates="employers")
     components: Mapped[List["ITRSalaryComponent"]] = relationship(
         back_populates="employer",

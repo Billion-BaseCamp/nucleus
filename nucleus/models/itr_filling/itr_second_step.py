@@ -58,6 +58,8 @@ class ITRStep2Salary(Base):
     job_change_during_year: Mapped[Optional[str]] = mapped_column(
         String, nullable=True
     )
+    f16_employer_from: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    f16_employer_to: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     source: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     is_current: Mapped[Optional[str]] = mapped_column(String, nullable=True)

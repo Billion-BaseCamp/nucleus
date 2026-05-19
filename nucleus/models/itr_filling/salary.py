@@ -121,11 +121,12 @@ class ITRSalaryEmployer(Base):
 
     tds_deducted: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
-    gross_salary_17_1: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_perquisites: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
-    income_from_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    # Per-employer computed totals — populated by recompute_salary_schedule()
+    computed_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    old_regime_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    old_regime_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    new_regime_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    new_regime_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
     salary_schedule: Mapped["ITRSalarySchedule"] = relationship(back_populates="employers")
     components: Mapped[List["ITRSalaryComponent"]] = relationship(
@@ -187,6 +188,10 @@ class ITRSalaryAllowance(Base):
 
     allowance_type: Mapped[str] = mapped_column(String(100), nullable=False, default="")
     exempt_section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # Which tax regime(s) may count ``exempt`` against u/s 10: old | new | both.
+    exempt_regime: Mapped[str] = mapped_column(
+        String(10), nullable=False, server_default="both"
+    )
 
     received: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
     exempt: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)

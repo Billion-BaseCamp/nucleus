@@ -318,7 +318,9 @@ class ITRStep2Residency(Base):
     )  # ROR | RNOR | NR
     is_residency_detected: Mapped[bool] = mapped_column(
         Boolean,
-        nullable=True,
+        nullable=False,
+        default=False,
+        server_default="FALSE",
     )
 
     # Card 2: Days in India this FY
@@ -359,6 +361,9 @@ class ITRStep2Residency(Base):
     computed_path: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     # Overrides & notes
+    residency_confirmed: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="FALSE"
+    )
     confirmed_same: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )

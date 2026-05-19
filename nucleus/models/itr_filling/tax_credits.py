@@ -381,6 +381,18 @@ class ITRForm67Entry(Base):
     )
     nature_of_income: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
+    # USD-side audit trail. When the advisor uses the TTBR auto-convert
+    # UX, we retain the original USD amounts + the receipt date that
+    # drove the conversion so the conversion is reproducible later.
+    # NULL when the row was entered in INR directly.
+    income_usd: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(20, 2), nullable=True
+    )
+    tax_paid_usd: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(20, 2), nullable=True
+    )
+    conversion_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+
     tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
         "ITRTaxCreditSchedule", back_populates="form67_entries"
     )

@@ -190,7 +190,7 @@ class ITRSalaryAllowance(Base):
     exempt_section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     # Which tax regime(s) may count ``exempt`` against u/s 10: old | new | both.
     exempt_regime: Mapped[str] = mapped_column(
-        String(10), nullable=False, server_default="both"
+        String(10), nullable=False, server_default="old"
     )
 
     received: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)

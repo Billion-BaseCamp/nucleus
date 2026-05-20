@@ -91,6 +91,9 @@ class ITRDedSchedule(Base):
     sec_other_total: Mapped[Decimal] = mapped_column(
         Numeric(15, 2), nullable=False, default=0
     )
+    prop_stamp_duty_80eea: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
 
     # ── Relationships ──
     # one to one relationship with ITRReturn
@@ -147,7 +150,12 @@ class ITRDedSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRDed80EEBLoan.display_order",
     )
-    ded_other_lines: Mapped["ITRDedOtherLine"] = relationship(
+    ded_80eea_loans: Mapped[List["ITRDed80EEALoan"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITRDed80EEALoan.display_order",
+    )
+    ded_other_lines: Mapped[List["ITRDedOtherLine"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
         order_by="ITRDedOtherLine.display_order",
@@ -278,6 +286,9 @@ class ITRDed80DMeta(Base):
 
     self_family_senior: Mapped[bool] = mapped_column(Boolean, default=False)
     parents_senior: Mapped[bool] = mapped_column(Boolean, default=False)
+    premium_paid_lump_sum: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -305,6 +316,7 @@ class ITRDed80DPolicy(Base):
     insurance_company: Mapped[str] = mapped_column(String, nullable=False)
     policy_no: Mapped[str | None] = mapped_column(String, nullable=True)
     premium_paid: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
+    insured_person: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
 
     ded_schedule: Mapped["ITRDedSchedule"] = relationship(
         back_populates="ded_80d_policies"
@@ -514,6 +526,50 @@ class ITRDed80ELoan(Base):
     )
 
 
+class ITRDed80EEALoan(Base):
+    """80EEA — interest on affordable housing loan (sanctioned FY 19-20 to 21-22)."""
+
+    __tablename__ = "itr_80eea_loans"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    bank_or_institution_name: Mapped[str] = mapped_column(
+        String(125), nullable=False, default=""
+    )
+    loan_account_no: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    date_of_loan: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    total_loan_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    loan_outstanding_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    interest_claimed: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(
+        back_populates="ded_80eea_loans"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
+
+
 class ITRDed80EEBLoan(Base):
     """80EEB — interest on electric vehicle loan (repeatable rows)."""
 
@@ -663,6 +719,8 @@ class ITRDed80GGCEntry(Base):
     ifs_code: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
     txn_ref_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     paid_in_cash: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    party_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    party_pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
 
     computed_eligible_amount: Mapped[Optional[Decimal]] = mapped_column(
         Numeric(15, 2), nullable=True

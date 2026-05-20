@@ -16,7 +16,7 @@ class Advisor(Base):
     last_name: Mapped[str] = mapped_column(String, nullable=False)
     date_of_birth: Mapped[date] = mapped_column(Date, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=True)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True,server_default="TRUE", nullable=True)
     deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Relationships

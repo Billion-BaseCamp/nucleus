@@ -1,4 +1,4 @@
-from sqlalchemy import String, DateTime, Date
+from sqlalchemy import Boolean, String, DateTime, Date
 import uuid
 from uuid import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -16,6 +16,8 @@ class Advisor(Base):
     last_name: Mapped[str] = mapped_column(String, nullable=False)
     date_of_birth: Mapped[date] = mapped_column(Date, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=True)
+    deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     logins: Mapped[List["Login"]] = relationship("Login", back_populates="advisor")

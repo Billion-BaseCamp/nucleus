@@ -32,6 +32,12 @@ class ITRDocument(Base):
     is_password_protected: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default="FALSE"
     )
+    updated_by: Mapped[Optional[str]] = mapped_column(String, nullable=True,default="client",server_default="client")
+    updated_by_advisor_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True), 
+        ForeignKey("advisors.id"),
+         nullable=True
+    )
     password: Mapped[str] = mapped_column(String, nullable=True)
     status: Mapped[str] = mapped_column(String, nullable=True)
 

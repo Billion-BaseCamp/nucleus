@@ -158,7 +158,7 @@ class ITRDedSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRDed80EEALoan.display_order",
     )
-    ded_other_lines: Mapped["ITRDedOtherLine"] = relationship(
+    ded_other_lines: Mapped[List["ITRDedOtherLine"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
         order_by="ITRDedOtherLine.display_order",

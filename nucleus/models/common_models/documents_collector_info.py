@@ -86,6 +86,15 @@ class DocumentCollectorInfo(Base):
         nullable=True,
     )
     salary_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    job_change_during_year: Mapped[Optional[str]] = mapped_column(
+        String, nullable=True
+    )
+    has_employment_gap: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="FALSE",
+    )
     is_other_info_applicable: Mapped[Optional[bool]] = mapped_column(
         Boolean,
         nullable=True,

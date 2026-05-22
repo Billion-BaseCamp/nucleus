@@ -78,7 +78,9 @@ from nucleus.models.itr_filling.itr_second_step import (
     ITRStep2OtherInfoData,
     ITRStep2Residency,
     ITRStep2Salary,
+    ITRStep2SalaryDeductionDetail,
     ITRStep2SalaryDeductions,
+    ITRStep2SalaryTrigger,
 )
 from nucleus.models.itr_filling.other_sources import (
     ITRDeemedIncome,
@@ -216,7 +218,9 @@ __all__ = [
     "ITRStep2OtherInfoData",
     "ITRStep2Residency",
     "ITRStep2Salary",
+    "ITRStep2SalaryDeductionDetail",
     "ITRStep2SalaryDeductions",
+    "ITRStep2SalaryTrigger",
     "ITRALMovableAsset",
     "ITRALInvestment",
     "ReliefClaimed",

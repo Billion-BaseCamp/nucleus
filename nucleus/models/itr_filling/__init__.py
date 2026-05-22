@@ -159,6 +159,7 @@ __all__ = [
     "ITRDedLoan",
     "ITRDed80EEALoan",
     "ITRDed80ELoan",
+    "ITRDed80EEALoan",
     "ITRDed80EEBLoan",
     "ITRDedOtherLine",
     # Tax credits

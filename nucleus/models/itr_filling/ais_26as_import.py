@@ -33,9 +33,9 @@ class ITRAisLine(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    part: Mapped[str] = mapped_column(String(32), nullable=False, default="")
-    info_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
-    category_code: Mapped[str] = mapped_column(String(16), nullable=False, default="")
+    part: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    info_code: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    category_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
     description: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     source_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     source_tan_or_pan: Mapped[str] = mapped_column(String(10), nullable=False, default="")
@@ -46,8 +46,8 @@ class ITRAisLine(Base):
     ais_tds_deposited: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )
-    section_key: Mapped[str] = mapped_column(String(32), nullable=False, default="")
-    section_code: Mapped[str] = mapped_column(String(16), nullable=False, default="")
+    section_key: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    section_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
     itr_schedule: Mapped[str] = mapped_column(String(8), nullable=False, default="")
     entry_type: Mapped[str] = mapped_column(String(16), nullable=False, default="INCOME")
     transaction_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
@@ -124,9 +124,9 @@ class ITRUnifiedEntry(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    info_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
-    category_code: Mapped[str] = mapped_column(String(16), nullable=False, default="")
-    section_code: Mapped[str] = mapped_column(String(16), nullable=False, default="")
+    info_code: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    category_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
+    section_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
     itr_schedule: Mapped[str] = mapped_column(String(8), nullable=False, default="")
     entry_type: Mapped[str] = mapped_column(String(16), nullable=False, default="INCOME")
     source_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)

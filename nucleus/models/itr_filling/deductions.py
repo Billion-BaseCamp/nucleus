@@ -88,16 +88,13 @@ class ITRDedSchedule(Base):
     sec_80eebVehicle_total: Mapped[Decimal] = mapped_column(
         Numeric(15, 2), nullable=False, default=0
     )
-    sec_80eeaHousing_total: Mapped[Decimal] = mapped_column(
-        Numeric(15, 2), nullable=False, default=0
+    sec_80eeaHousing_total: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True, default=0
     )
-    prop_stamp_duty_80eea: Mapped[Decimal] = mapped_column(
-        Numeric(15, 2), nullable=False, default=0
+    prop_stamp_duty_80eea: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2), nullable=True, default=0
     )
     sec_other_total: Mapped[Decimal] = mapped_column(
-        Numeric(15, 2), nullable=False, default=0
-    )
-    prop_stamp_duty_80eea: Mapped[Decimal] = mapped_column(
         Numeric(15, 2), nullable=False, default=0
     )
 

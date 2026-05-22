@@ -159,7 +159,6 @@ __all__ = [
     "ITRDed80GGAEntry",
     "ITRDed80GGCEntry",
     "ITRDedLoan",
-    "ITRDed80EEALoan",
     "ITRDed80ELoan",
     "ITRDed80EEALoan",
     "ITRDed80EEBLoan",

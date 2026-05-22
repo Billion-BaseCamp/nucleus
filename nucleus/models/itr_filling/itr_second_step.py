@@ -69,6 +69,12 @@ class ITRStep2Salary(Base):
     f16_has_12ba: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
+    f16_has_annexure: Mapped[bool] = mapped_column(
+        Boolean, nullable=True, default=False, server_default="FALSE"
+    )
+    is_partial_employment: Mapped[bool] = mapped_column(
+        Boolean, nullable=True, default=False, server_default="FALSE"
+    )
     f16_regime: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     f16_period: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_step: Mapped[Optional[str]] = mapped_column(String, nullable=True)

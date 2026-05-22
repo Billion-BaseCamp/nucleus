@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Optional
+from typing import Any, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
@@ -18,8 +18,10 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
+    Text,
     UUID as SQLUUID,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
@@ -63,6 +65,11 @@ class ITRTaxCreditSchedule(Base):
     total_form67_dtaa: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )
+    # Snapshots for two-step AIS → 26AS processing (POST /process-ais then /process-26as).
+    ais_json_snapshot: Mapped[Optional[dict[str, Any]]] = mapped_column(
+        JSONB, nullable=True
+    )
+    form_26as_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     itr_return: Mapped["ITRReturn"] = relationship(
         "ITRReturn", back_populates="tax_credit_schedule"
     )

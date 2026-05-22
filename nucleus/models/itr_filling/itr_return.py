@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, DateTime, String, UniqueConstraint, UUID as SQLUUID
@@ -85,6 +85,21 @@ class ITRReturn(Base):
         back_populates="itr_return",
         cascade="all, delete-orphan",
         uselist=False,
+    )
+    ais_lines: Mapped[List["ITRAisLine"]] = relationship(  # noqa: F821
+        "ITRAisLine",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+    )
+    form26as_lines: Mapped[List["ITRForm26asLine"]] = relationship(  # noqa: F821
+        "ITRForm26asLine",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+    )
+    unified_entries: Mapped[List["ITRUnifiedEntry"]] = relationship(  # noqa: F821
+        "ITRUnifiedEntry",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
     )
     cfl_schedule: Mapped[Optional["ITRCFLSchedule"]] = relationship(
         "ITRCFLSchedule",

@@ -101,6 +101,11 @@ from nucleus.models.itr_filling.salary import (
     ITRSalaryPerquisite,
     ITRSalarySchedule,
 )
+from nucleus.models.itr_filling.ais_26as_import import (
+    ITRAisLine,
+    ITRForm26asLine,
+    ITRUnifiedEntry,
+)
 from nucleus.models.itr_filling.tax_credits import (
     ITRAdvanceTaxPayment,
     ITRForm67Entry,
@@ -215,6 +220,9 @@ __all__ = [
     "ITRALMovableAsset",
     "ITRALInvestment",
     "ReliefClaimed",
+    "ITRAisLine",
+    "ITRForm26asLine",
+    "ITRUnifiedEntry",
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
     "ITRTaxExemptIncome",

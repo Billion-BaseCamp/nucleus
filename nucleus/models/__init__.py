@@ -174,6 +174,9 @@ from nucleus.models.itr_filling import (
     ITRALInvestment,
     ReliefClaimed,
     ITRTaxCreditSchedule,
+    ITRAisLine,
+    ITRForm26asLine,
+    ITRUnifiedEntry,
     ITRDeemedIncome,
     ITRTaxExemptIncome,
 )
@@ -343,6 +346,9 @@ __all__ = [
     "ITRALInvestment",
     "ReliefClaimed",
     "ITRTaxCreditSchedule",
+    "ITRAisLine",
+    "ITRForm26asLine",
+    "ITRUnifiedEntry",
     "ITRDeemedIncome",
     "ITRTaxExemptIncome",
     # US tax filing

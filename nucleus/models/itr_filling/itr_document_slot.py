@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import UUID as SQLUUID
@@ -37,6 +37,12 @@ class ITRDocumentSlot(Base):
     source: Mapped[str] = mapped_column(String, nullable=False)
     region: Mapped[str] = mapped_column(String, nullable=False, server_default="india")
     notes: Mapped[str] = mapped_column(String, nullable=True)
+    noted_by: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    noted_by_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advisors.id"),
+        nullable=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

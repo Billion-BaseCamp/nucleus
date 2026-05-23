@@ -158,7 +158,7 @@ class ITRDedSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITRDed80EEALoan.display_order",
     )
-    ded_other_lines: Mapped["ITRDedOtherLine"] = relationship(
+    ded_other_lines: Mapped[List["ITRDedOtherLine"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
         order_by="ITRDedOtherLine.display_order",
@@ -456,7 +456,7 @@ class ITRDedLoan(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     bank_or_institution_name: Mapped[str] = mapped_column(
         String(125), nullable=False, default=""
     )
@@ -501,7 +501,7 @@ class ITRDed80ELoan(Base):
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     # "From" — lender category (e.g. B = bank; match your UI / ITR codes)
-    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     bank_or_institution_name: Mapped[str] = mapped_column(
         String(125), nullable=False, default=""
     )
@@ -545,7 +545,7 @@ class ITRDed80EEALoan(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     bank_or_institution_name: Mapped[str] = mapped_column(
         String(125), nullable=False, default=""
     )
@@ -589,7 +589,7 @@ class ITRDed80EEBLoan(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(1), nullable=True)
+    loan_taken_from: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     bank_or_institution_name: Mapped[str] = mapped_column(
         String(125), nullable=False, default=""
     )

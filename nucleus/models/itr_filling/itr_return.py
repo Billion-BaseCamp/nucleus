@@ -1,5 +1,5 @@
 """
-Central ITR filing record — one per client per financial year.
+Central ITR filing record — one row per client per FY per version_number.
 Every schedule (salary, house property, capital gains, etc.) hangs off this.
 """
 
@@ -10,7 +10,16 @@ from decimal import Decimal
 from typing import List, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, DateTime, String, UniqueConstraint, UUID as SQLUUID
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    UniqueConstraint,
+    UUID as SQLUUID,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
@@ -30,10 +39,20 @@ class ITRReturn(Base):
     financial_year_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), nullable=False, index=True
     )
+    version_number: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    parent_itr_return_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_returns.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     assessment_year: Mapped[str] = mapped_column(String(10), nullable=False)
     itr_form_type: Mapped[str] = mapped_column(String(10), default="ITR-2")
     regime: Mapped[str] = mapped_column(String(5), nullable=False, default="new")
-    filing_status: Mapped[str] = mapped_column(String(20), default="draft")
+    filing_status: Mapped[str] = mapped_column(String(20), default="not_started")
+    filed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     residential_status: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
 
     # Tax credits — Form 67 / Schedule TR1 (TaxPaidOutsideIndFlg)
@@ -117,6 +136,10 @@ class ITRReturn(Base):
 
     __table_args__ = (
         UniqueConstraint(
-            "client_id", "financial_year_id", name="uq_itr_return_client_fy"
+            "client_id",
+            "financial_year_id",
+            "version_number",
+            name="uq_itr_return_client_fy_version",
         ),
+        Index("ix_itr_return_client_fy", "client_id", "financial_year_id"),
     )

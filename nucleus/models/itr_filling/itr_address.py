@@ -13,7 +13,7 @@ from uuid import UUID, uuid4
 if TYPE_CHECKING:
     from nucleus.models.itr_filling.itr_return import ITRReturn
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, UUID as SQLUUID
+from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -49,11 +49,12 @@ class ITRAddress(Base):
     zip_code: Mapped[Optional[str]] = mapped_column(String(8), nullable=True)
 
     country_code_mobile: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
-    mobile_no: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    # CBDT MobileNo is integer in JSON; 10-digit Indian numbers exceed int32.
+    mobile_no: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
     country_code_mobile_sec: Mapped[Optional[int]] = mapped_column(
         Integer, nullable=True
     )
-    mobile_no_sec: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    mobile_no_sec: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)
 
     email_address: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     email_address_sec: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)

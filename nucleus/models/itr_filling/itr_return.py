@@ -126,6 +126,12 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
+    address: Mapped[Optional["ITRAddress"]] = relationship(
+        "ITRAddress",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

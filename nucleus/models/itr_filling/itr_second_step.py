@@ -271,6 +271,16 @@ class ITRStep2OtherInfo(Base):
         cascade="all, delete-orphan",
     )
 
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            "section",
+            "question_code",
+            name="uq_itr_step2_other_info_client_fy_section_qcode",
+        ),
+    )
+
 
 class ITRStep2OtherInfoData(Base):
     __tablename__ = "itr_step2_other_info_data"

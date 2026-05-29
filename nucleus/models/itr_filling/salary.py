@@ -198,6 +198,7 @@ class ITRSalaryAllowance(Base):
     taxable: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
 
     calc_inputs: Mapped[Optional[dict[str, Any]]] = mapped_column(JSONB, nullable=True)
+    remark: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     employer: Mapped["ITRSalaryEmployer"] = relationship(back_populates="allowances")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

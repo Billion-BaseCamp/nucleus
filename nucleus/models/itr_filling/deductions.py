@@ -94,6 +94,12 @@ class ITRDedSchedule(Base):
     prop_stamp_duty_80eea: Mapped[Optional[Decimal]] = mapped_column(
         Numeric(15, 2), nullable=True, default=0
     )
+    # Sec 80CCH — Agniveer Corpus Fund (Agnipath). Allowed in BOTH regimes;
+    # stored separately from ``sec_other_total`` because the new regime
+    # disallows every other "other" section (80CCC/80EE/80GG/80TTA/...).
+    sec_80cch_total: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default="0"
+    )
     sec_other_total: Mapped[Decimal] = mapped_column(
         Numeric(15, 2), nullable=False, default=0
     )

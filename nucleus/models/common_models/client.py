@@ -25,6 +25,7 @@ class Client(Base):
     __tablename__ = "clients"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     first_name: Mapped[str] = mapped_column(String, nullable=False)
+    middle_name: Mapped[str] = mapped_column(String, nullable=True)
     last_name: Mapped[str] = mapped_column(String, nullable=False)
     adhar_number: Mapped[str] = mapped_column(String, nullable=True)
     pan_number: Mapped[str] = mapped_column(String, nullable=True)

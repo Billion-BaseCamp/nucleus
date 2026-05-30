@@ -1,7 +1,7 @@
 """
-ITR filing address for Part A (PersonalInfo.Address).
+ITR filing address for Part A (PersonalInfo.Address / AlternateAddress).
 
-One row per ITR return — separate from client profiling ``addresses``.
+Primary and optional Secondary rows per ITR return — separate from client profiling ``addresses``.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from uuid import UUID, uuid4
 if TYPE_CHECKING:
     from nucleus.models.itr_filling.itr_return import ITRReturn
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, UUID as SQLUUID
+from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, UniqueConstraint, UUID as SQLUUID, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -21,9 +21,16 @@ from nucleus.db.database import Base
 
 
 class ITRAddress(Base):
-    """CBDT Part A address persisted per ITR return (1:1)."""
+    """CBDT Part A address persisted per ITR return (Primary + optional Secondary)."""
 
     __tablename__ = "itr_address"
+    __table_args__ = (
+        UniqueConstraint(
+            "itr_return_id",
+            "address_type",
+            name="uix_itr_address_return_type",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -32,8 +39,13 @@ class ITRAddress(Base):
         SQLUUID(as_uuid=True),
         ForeignKey("itr_returns.id", ondelete="CASCADE"),
         nullable=False,
-        unique=True,
         index=True,
+    )
+    address_type: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="Primary",
+        server_default=text("'Primary'"),
     )
 
     residence_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
@@ -70,5 +82,5 @@ class ITRAddress(Base):
     )
 
     itr_return: Mapped["ITRReturn"] = relationship(
-        "ITRReturn", back_populates="address", uselist=False
+        "ITRReturn", back_populates="addresses"
     )

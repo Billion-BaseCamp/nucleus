@@ -126,11 +126,10 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
-    address: Mapped[Optional["ITRAddress"]] = relationship(
+    addresses: Mapped[list["ITRAddress"]] = relationship(
         "ITRAddress",
         back_populates="itr_return",
         cascade="all, delete-orphan",
-        uselist=False,
     )
     refund_bank_accounts: Mapped[List["ITRRefundBankAccount"]] = relationship(
         "ITRRefundBankAccount",

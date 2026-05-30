@@ -85,6 +85,7 @@ from nucleus.models.us_tax_filing import (
 # ITR filing models
 from nucleus.models.itr_filling import (
     ITRAddress,
+    ITRRefundBankAccount,
     ITRReturn,
     ITRForeignSalary,
     ITROtherSalary,
@@ -261,6 +262,7 @@ __all__ = [
     # ITR filing
     "ITRReturn",
     "ITRAddress",
+    "ITRRefundBankAccount",
     "ITRForeignSalary",
     "ITROtherSalary",
     "ITRSalaryAllowance",

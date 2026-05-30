@@ -132,6 +132,12 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
+    refund_bank_accounts: Mapped[List["ITRRefundBankAccount"]] = relationship(
+        "ITRRefundBankAccount",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        order_by="ITRRefundBankAccount.display_order",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

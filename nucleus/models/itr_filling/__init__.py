@@ -73,6 +73,7 @@ from nucleus.models.itr_filling.house_property import (
 from nucleus.models.itr_filling.itr_document import ITRDocument
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_address import ITRAddress
+from nucleus.models.itr_filling.itr_refund_bank import ITRRefundBankAccount
 from nucleus.models.itr_filling.itr_return import ITRReturn
 from nucleus.models.itr_filling.itr_second_step import (
     ITRStep2OtherInfo,
@@ -125,6 +126,7 @@ from nucleus.models.itr_filling.tax_credits import (
 __all__ = [
     "ITRReturn",
     "ITRAddress",
+    "ITRRefundBankAccount",
     # Salary (Schedule S)
     "ITRForeignSalary",
     "ITROtherSalary",

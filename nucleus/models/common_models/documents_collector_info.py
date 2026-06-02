@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import UUID as SQLUUID
 from sqlalchemy import Boolean, DateTime, ForeignKey, String
+from sqlalchemy.types import Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -94,6 +96,11 @@ class DocumentCollectorInfo(Base):
         nullable=True,
         default=False,
         server_default="FALSE",
+    )
+    ll_pan: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    per_month_rent: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(18, 2),
+        nullable=True,
     )
     is_other_info_applicable: Mapped[Optional[bool]] = mapped_column(
         Boolean,

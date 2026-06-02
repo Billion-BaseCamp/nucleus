@@ -70,7 +70,7 @@ from nucleus.models.itr_filling.house_property import (
     ITRHPSchedule,
     ITRHPTenant,
 )
-from nucleus.models.itr_filling.itr_document import ITRDocument
+from nucleus.models.itr_filling.itr_document import ITRDocument, ITRDocumentReview
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_address import ITRAddress
 from nucleus.models.itr_filling.itr_refund_bank import ITRRefundBankAccount
@@ -217,6 +217,7 @@ __all__ = [
     # Document upload slots
     "ITRDocumentSlot",
     "ITRDocument",
+    "ITRDocumentReview",
     # Step 2 wizard
     "ITRStep2OtherInfo",
     "ITRStep2OtherInfoData",

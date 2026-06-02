@@ -52,3 +52,33 @@ class ITRDocument(Base):
     slot: Mapped["ITRDocumentSlot"] = relationship(
         "ITRDocumentSlot", back_populates="documents"
     )
+
+
+class ITRDocumentReview(Base):
+    """User review of a processed source document (approve ingest or upload correction)."""
+
+    __tablename__ = "itr_document_review"
+
+    document_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    itr_return_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_returns.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    review_status: Mapped[str] = mapped_column(String(32), nullable=False)
+    reviewed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    reviewed_by: Mapped[str] = mapped_column(String(32), nullable=False)
+    reviewed_by_advisor_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advisors.id"),
+        nullable=True,
+    )

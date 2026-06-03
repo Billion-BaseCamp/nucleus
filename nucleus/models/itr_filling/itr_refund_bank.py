@@ -40,12 +40,12 @@ class ITRRefundBankAccount(Base):
 
     ifsc_code: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
     bank_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
-    bank_account_no: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    bank_account_no: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     account_type: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     use_for_refund: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     swift_code: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
-    iban: Mapped[Optional[str]] = mapped_column(String(34), nullable=True)
+    iban: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     country_code: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(

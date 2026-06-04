@@ -92,6 +92,7 @@ from nucleus.models.itr_filling.other_sources import (
     ITROSIncomeLine,
     ITROSInterestDetail,
     ITROSOtherIncome,
+    ITROSSpecialRate,
     ITROSPTIEntity,
     ITROSSchedule,
     ITRTaxExemptIncome,
@@ -148,6 +149,7 @@ __all__ = [
     "ITROSIncomeLine",
     "ITROSInterestDetail",
     "ITROSOtherIncome",
+    "ITROSSpecialRate",
     "ITROSPTIEntity",
     "ITROSSchedule",
     # Deductions (Chapter VI-A)

@@ -94,6 +94,11 @@ class ITROSSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITROSOtherIncome.display_order",
     )
+    special_rates: Mapped[List["ITROSSpecialRate"]] = relationship(
+        back_populates="os_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITROSSpecialRate.display_order",
+    )
 
     #one to one relationship with ITRTaxExemptIncome
     tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
@@ -312,6 +317,28 @@ class ITROSClubbingEntry(Base):
     remark: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="clubbing_entries")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSSpecialRate(Base):
+    """NRI OS income at statutory special rates (UI capture; not wired to ITR export yet)."""
+
+    __tablename__ = "itr_os_special_rate"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    section_code: Mapped[str] = mapped_column(String(20), nullable=False)
+    income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="special_rates")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

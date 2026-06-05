@@ -560,6 +560,7 @@ class ITRCGVDATransaction(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
+    crypto_name: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     date_of_acquisition: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_of_transfer: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     cost_of_acquisition: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

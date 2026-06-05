@@ -12,6 +12,7 @@ from typing import List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
+    Boolean,
     Date,
     DateTime,
     ForeignKey,
@@ -337,6 +338,12 @@ class ITROSSpecialRate(Base):
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     section_code: Mapped[str] = mapped_column(String(20), nullable=False)
     income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # Sec 111 only — PF accumulated in the assessment year.
+    pf_accumulated_in_ay: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    # Pass-through income u/s 115U / 115UA / 115UB.
+    pass_through_income: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    # Sec 234C proviso quarter slot (CBDT DateRange key).
+    quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="special_rates")
 

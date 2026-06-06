@@ -151,6 +151,8 @@ class ITRCGIndiaEQAndDebtMFBroker(Base):
     total_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_ltcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # PMS expenses for custom (non-listed) brokers — capture-only, no tax effect.
+    pms_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         nullable=True,

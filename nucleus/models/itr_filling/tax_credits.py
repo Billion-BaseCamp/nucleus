@@ -199,6 +199,8 @@ class ITRTDSSalary(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRTDSNonSalary(Base):
@@ -250,6 +252,8 @@ class ITRTDSNonSalary(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRTDSProperty(Base):
@@ -297,6 +301,8 @@ class ITRTDSProperty(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRTCSEntry(Base):
@@ -339,6 +345,8 @@ class ITRTCSEntry(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRForm67Entry(Base):

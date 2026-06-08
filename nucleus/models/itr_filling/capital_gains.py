@@ -50,11 +50,13 @@ class ITRCGSchedule(Base):
     )
 
     stcg_india_eq: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    stcg_fno: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_mutual_funds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_us_foreign: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_unlisted: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     total_stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     ltcg_india_eq: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    ltcg_fno: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     ltcg_mutual_funds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     ltcg_us_foreign: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     ltcg_unlisted: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

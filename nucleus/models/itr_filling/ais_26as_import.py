@@ -36,9 +36,6 @@ class ITRAisLine(Base):
     part: Mapped[str] = mapped_column(String(64), nullable=False, default="")
     info_code: Mapped[str] = mapped_column(String(128), nullable=False, default="")
     category_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
-    part: Mapped[str] = mapped_column(String(32), nullable=False, default="")
-    info_code: Mapped[str] = mapped_column(String(128), nullable=False, default="")
-    category_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
     description: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     source_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     source_tan_or_pan: Mapped[str] = mapped_column(String(10), nullable=False, default="")
@@ -152,6 +149,9 @@ class ITRUnifiedEntry(Base):
     tcs_credit: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
     source_document: Mapped[str] = mapped_column(String(8), nullable=False, default="")
     flags: Mapped[Optional[list[Any]]] = mapped_column(JSONB, nullable=True)
+    reconciliation_status: Mapped[Optional[str]] = mapped_column(
+        String(32), nullable=True, index=True
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

@@ -201,7 +201,7 @@ class ITRTDSSalary(Base):
         DateTime(timezone=True), onupdate=func.now()
     )
     source: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
-    is_edited: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_edited: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 

@@ -485,6 +485,12 @@ class ITRCGBondEntry(Base):
         index=True,
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    instrument_type: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="LISTED",
+        server_default="LISTED",
+    )
 
     issuer_name: Mapped[str] = mapped_column(String(200), nullable=False)
     isin: Mapped[Optional[str]] = mapped_column(String(12), nullable=True)

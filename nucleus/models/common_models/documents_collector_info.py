@@ -107,6 +107,10 @@ class DocumentCollectorInfo(Base):
         nullable=True,
     )
     other_info_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    is_80c_applicable: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
     salary_old_regime_detected: Mapped[Optional[bool]] = mapped_column(
         Boolean,
         nullable=True,

@@ -98,7 +98,7 @@ class DocumentCollectorInfo(Base):
         server_default="FALSE",
     )
     ll_pan: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    per_month_rent: Mapped[Optional[Decimal]] = mapped_column(
+    annual_rent: Mapped[Optional[Decimal]] = mapped_column(
         Numeric(18, 2),
         nullable=True,
     )
@@ -107,6 +107,10 @@ class DocumentCollectorInfo(Base):
         nullable=True,
     )
     other_info_status: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    is_80c_applicable: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+    )
     salary_old_regime_detected: Mapped[Optional[bool]] = mapped_column(
         Boolean,
         nullable=True,

@@ -8,6 +8,7 @@ from nucleus.models.itr_filling.audit_logging import (
 )
 from nucleus.models.itr_filling.capital_gains import (
     ITRCGBondEntry,
+    ITRCGOtherAssetEntry,
     ITRCGExemption54,
     ITRCGExemption54F,
     ITRCGHPAcquisitionDetail,
@@ -75,6 +76,8 @@ from nucleus.models.itr_filling.itr_document import ITRDocument, ITRDocumentRevi
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_address import ITRAddress
 from nucleus.models.itr_filling.itr_refund_bank import ITRRefundBankAccount
+from nucleus.models.itr_filling.itr_filing_validation_job import ITRFilingValidationJob
+from nucleus.models.itr_filling.itr_filing_export_job import ITRFilingExportJob
 from nucleus.models.itr_filling.itr_return import ITRReturn
 from nucleus.models.itr_filling.itr_second_step import (
     ITRStep2OtherInfo,
@@ -127,6 +130,8 @@ from nucleus.models.itr_filling.tax_credits import (
 
 __all__ = [
     "ITRReturn",
+    "ITRFilingValidationJob",
+    "ITRFilingExportJob",
     "ITRAddress",
     "ITRRefundBankAccount",
     # Salary (Schedule S)
@@ -201,6 +206,7 @@ __all__ = [
     "ITRCGUSTransaction",
     "ITRCGUnlistedTransaction",
     "ITRCGBondEntry",
+    "ITRCGOtherAssetEntry",
     "ITRCGHPEntry",
     "ITRCGHPAcquisitionDetail",
     "ITRCGHPImprovement",

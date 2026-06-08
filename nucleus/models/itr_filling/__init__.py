@@ -70,6 +70,7 @@ from nucleus.models.itr_filling.house_property import (
     ITRHPSchedule,
     ITRHPTenant,
 )
+from nucleus.models.itr_filling.client_comment_read import ITRClientCommentRead
 from nucleus.models.itr_filling.itr_document import ITRDocument, ITRDocumentReview
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_address import ITRAddress
@@ -216,6 +217,8 @@ __all__ = [
     "ITRAuthAuditEvent",
     "ITRActivityLog",
     "ITRFieldChangeSnapshot",
+    # Client comments read state
+    "ITRClientCommentRead",
     # Document upload slots
     "ITRDocumentSlot",
     "ITRDocument",

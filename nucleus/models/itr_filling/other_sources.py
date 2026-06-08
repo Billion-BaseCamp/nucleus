@@ -12,6 +12,7 @@ from typing import List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
+    Boolean,
     Date,
     DateTime,
     ForeignKey,
@@ -94,6 +95,11 @@ class ITROSSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITROSOtherIncome.display_order",
     )
+    special_rates: Mapped[List["ITROSSpecialRate"]] = relationship(
+        back_populates="os_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITROSSpecialRate.display_order",
+    )
 
     #one to one relationship with ITRTaxExemptIncome
     tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
@@ -117,6 +123,13 @@ class ITRDeemedIncome(Base):
     movable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     gross_rent_from_machinery: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # Itemized Sec 57 deductions — deduction_us57 stays the persisted total.
+    # Nullable: pre-itemization rows exist; NULL is treated as 0 by consumers.
+    us57_commission_paid: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)        # Sec 57(i)
+    us57_interest_expense: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)       # Sec 57(i) interest on borrowed capital
+    us57_bank_charges: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # Sec 57(iii) bank / service charges
+    us57_professional_fees: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57(iii) professional / legal fees
+    us57_aif_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # AIF (Investment Fund PTI) expenses
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="deemed_income")
 
@@ -312,6 +325,34 @@ class ITROSClubbingEntry(Base):
     remark: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="clubbing_entries")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSSpecialRate(Base):
+    """NRI OS income at statutory special rates (UI capture; not wired to ITR export yet)."""
+
+    __tablename__ = "itr_os_special_rate"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    section_code: Mapped[str] = mapped_column(String(20), nullable=False)
+    income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # Sec 111 only — PF accumulated in the assessment year.
+    pf_accumulated_in_ay: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    # Pass-through income u/s 115U / 115UA / 115UB.
+    pass_through_income: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+    # Sec 234C proviso quarter slot (CBDT DateRange key).
+    quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="special_rates")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

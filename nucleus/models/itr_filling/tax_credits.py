@@ -408,6 +408,17 @@ class ITRForm67Entry(Base):
     )
     conversion_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
+    # "Claim DTAA" source link — when set, this row was derived from a
+    # foreign-income source entry and its ``income`` is server-synced on
+    # re-claim. NULL = manually entered row.
+    # source_type: OS_FOREIGN_DIVIDEND | CG_US_BROKER | HP_PROPERTY
+    # (FOREIGN_SALARY planned). source_row_id: the source entity's UUID
+    # (os_schedule_id for the aggregate dividend claim).
+    source_type: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    source_row_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True), nullable=True, index=True
+    )
+
     tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
         "ITRTaxCreditSchedule", back_populates="form67_entries"
     )

@@ -98,7 +98,7 @@ class DocumentCollectorInfo(Base):
         server_default="FALSE",
     )
     ll_pan: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    per_month_rent: Mapped[Optional[Decimal]] = mapped_column(
+    annual_rent: Mapped[Optional[Decimal]] = mapped_column(
         Numeric(18, 2),
         nullable=True,
     )

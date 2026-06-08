@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, String, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy import UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -53,6 +53,8 @@ class ITRClientCommentRead(Base):
         DateTime(timezone=True),
         nullable=True,
     )
+    source_content_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    rm_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     __table_args__ = (
         UniqueConstraint(

@@ -13,6 +13,7 @@ from typing import Any, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
+    Boolean,
     Date,
     DateTime,
     ForeignKey,
@@ -20,6 +21,7 @@ from sqlalchemy import (
     String,
     Text,
     UUID as SQLUUID,
+    false,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -199,6 +201,11 @@ class ITRTDSSalary(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    is_edited: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=false()
+    )
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRTDSNonSalary(Base):
@@ -250,6 +257,11 @@ class ITRTDSNonSalary(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    is_edited: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=false()
+    )
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRTDSProperty(Base):
@@ -297,6 +309,11 @@ class ITRTDSProperty(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    is_edited: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=false()
+    )
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRTCSEntry(Base):
@@ -339,6 +356,11 @@ class ITRTCSEntry(Base):
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
+    source: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    is_edited: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=false()
+    )
+    remarks: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 class ITRForm67Entry(Base):

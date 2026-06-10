@@ -177,7 +177,7 @@ class ITRTDSSalary(Base):
         ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
         nullable=False,
     )
-    employer_id: Mapped[Optional[UUID]] = mapped_column(
+    salary_employer_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_salary_employers.id", ondelete="SET NULL"),
         nullable=True,
@@ -200,10 +200,10 @@ class ITRTDSSalary(Base):
     tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
         "ITRTaxCreditSchedule", back_populates="tds_salary"
     )
-    employer: Mapped[Optional["ITRSalaryEmployer"]] = relationship(
+    salary_employer: Mapped[Optional["ITRSalaryEmployer"]] = relationship(
         "ITRSalaryEmployer",
         back_populates="tds_salary_entries",
-        foreign_keys=[employer_id],
+        foreign_keys=[salary_employer_id],
     )
 
     created_at: Mapped[datetime] = mapped_column(

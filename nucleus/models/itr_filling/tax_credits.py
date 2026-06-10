@@ -177,6 +177,12 @@ class ITRTDSSalary(Base):
         ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
         nullable=False,
     )
+    employer_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_salary_employers.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     employer_name: Mapped[str] = mapped_column(String(125), nullable=False)
@@ -193,6 +199,11 @@ class ITRTDSSalary(Base):
 
     tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
         "ITRTaxCreditSchedule", back_populates="tds_salary"
+    )
+    employer: Mapped[Optional["ITRSalaryEmployer"]] = relationship(
+        "ITRSalaryEmployer",
+        back_populates="tds_salary_entries",
+        foreign_keys=[employer_id],
     )
 
     created_at: Mapped[datetime] = mapped_column(

@@ -143,6 +143,11 @@ class ITRSalaryEmployer(Base):
         cascade="all, delete-orphan",
         order_by="ITRSalaryPerquisite.sort_order",
     )
+    tds_salary_entries: Mapped[List["ITRTDSSalary"]] = relationship(
+        "ITRTDSSalary",
+        back_populates="employer",
+        foreign_keys="ITRTDSSalary.employer_id",
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

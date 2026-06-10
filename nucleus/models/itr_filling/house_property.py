@@ -197,7 +197,12 @@ class ITRHPLoan(Base):
     sanction_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     total_loan_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     closing_balance: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    interest_payable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    interest_preconstruction: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2),
+        nullable=True,
+        default=0,
+        server_default="0",
+    )
     interest_paid: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     principal_repaid: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 

@@ -179,6 +179,34 @@ class ITROSIncomeLine(Base):
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="income_lines")
+    details: Mapped[List["ITROSIncomeLineDetail"]] = relationship(
+        back_populates="income_line",
+        cascade="all, delete-orphan",
+        order_by="ITROSIncomeLineDetail.display_order",
+    )
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSIncomeLineDetail(Base):
+    """Breakdown rows under a fixed Other Income line (description + amount)."""
+
+    __tablename__ = "itr_os_income_line_details"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    income_line_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_income_lines.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    description: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    income_line: Mapped["ITROSIncomeLine"] = relationship(back_populates="details")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

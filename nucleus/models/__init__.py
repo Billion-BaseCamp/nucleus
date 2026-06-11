@@ -1,5 +1,8 @@
 # Import all models here for Alembic autogenerate to detect them
 
+# Reference / master data
+from nucleus.models.reference.amfi_mf import AmfiMasterMeta, AmfiMfIsin
+
 # Common Models
 from nucleus.models.common_models.advisor import Advisor
 from nucleus.models.common_models.client import Client, ClientPhoneMapping
@@ -193,6 +196,9 @@ from nucleus.models.itr_filling import (
 )
 
 __all__ = [
+    # Reference / master data
+    "AmfiMasterMeta",
+    "AmfiMfIsin",
     # Common Models
     "Advisor",
     "Client",

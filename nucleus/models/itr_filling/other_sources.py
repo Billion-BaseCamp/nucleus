@@ -264,6 +264,10 @@ class ITROSDividendDetail(Base):
     # Allowed values: Upto15Of6, Upto15Of9, Up16Of9To15Of12,
     # Up16Of12To15Of3, Up16Of3To31Of3.
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # Foreign dividend rows only: qualified vs ordinary (US / treaty context).
+    income_dividend_type: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dividend_details")
 

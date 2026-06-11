@@ -13,7 +13,7 @@ from decimal import Decimal
 from typing import Any, List, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, UUID as SQLUUID
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, UUID as SQLUUID
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func, text
@@ -174,6 +174,13 @@ class ITRSalaryComponent(Base):
     taxable: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
     exempt_section: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
+    source_type: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default="USER"
+    )
+    is_modified: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
+
     employer: Mapped["ITRSalaryEmployer"] = relationship(back_populates="components")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
@@ -206,6 +213,13 @@ class ITRSalaryAllowance(Base):
     calc_inputs: Mapped[Optional[dict[str, Any]]] = mapped_column(JSONB, nullable=True)
     remark: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    source_type: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default="USER"
+    )
+    is_modified: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
+
     employer: Mapped["ITRSalaryEmployer"] = relationship(back_populates="allowances")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
@@ -228,6 +242,13 @@ class ITRSalaryPerquisite(Base):
     nature_code: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
 
     value: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
+
+    source_type: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default="USER"
+    )
+    is_modified: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
 
     employer: Mapped["ITRSalaryEmployer"] = relationship(back_populates="perquisites")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -122,6 +122,8 @@ class ITRDeemedIncome(Base):
     movable_without_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     movable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     gross_rent_from_machinery: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    machinery_rent_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57 — expenses against machinery rent
+    machinery_rent_depreciation: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)  # Sec 57 — depreciation on plant / machinery
     deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     # Itemized Sec 57 deductions — deduction_us57 stays the persisted total.
     # Nullable: pre-itemization rows exist; NULL is treated as 0 by consumers.
@@ -130,6 +132,7 @@ class ITRDeemedIncome(Base):
     us57_bank_charges: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # Sec 57(iii) bank / service charges
     us57_professional_fees: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57(iii) professional / legal fees
     us57_aif_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # AIF (Investment Fund PTI) expenses
+    us57_other_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)       # Sec 57 — other allowable expenses
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="deemed_income")
 

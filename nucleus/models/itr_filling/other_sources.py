@@ -321,6 +321,7 @@ class ITROSBuybackShare(Base):
     date_of_buyback: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_of_acquisition: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    sale_price_per_unit: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 4), nullable=True, default=0)
     total_sale_price: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     acquisition_cost_per_unit: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     total_acquisition_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

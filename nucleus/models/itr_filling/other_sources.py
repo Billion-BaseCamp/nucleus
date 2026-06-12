@@ -122,6 +122,8 @@ class ITRDeemedIncome(Base):
     movable_without_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     movable_inadequate_cons: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     gross_rent_from_machinery: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    machinery_rent_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57 — expenses against machinery rent
+    machinery_rent_depreciation: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)  # Sec 57 — depreciation on plant / machinery
     deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     # Itemized Sec 57 deductions — deduction_us57 stays the persisted total.
     # Nullable: pre-itemization rows exist; NULL is treated as 0 by consumers.
@@ -130,6 +132,7 @@ class ITRDeemedIncome(Base):
     us57_bank_charges: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # Sec 57(iii) bank / service charges
     us57_professional_fees: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57(iii) professional / legal fees
     us57_aif_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # AIF (Investment Fund PTI) expenses
+    us57_other_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)       # Sec 57 — other allowable expenses
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="deemed_income")
 
@@ -179,6 +182,34 @@ class ITROSIncomeLine(Base):
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="income_lines")
+    details: Mapped[List["ITROSIncomeLineDetail"]] = relationship(
+        back_populates="income_line",
+        cascade="all, delete-orphan",
+        order_by="ITROSIncomeLineDetail.display_order",
+    )
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSIncomeLineDetail(Base):
+    """Breakdown rows under a fixed Other Income line (description + amount)."""
+
+    __tablename__ = "itr_os_income_line_details"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    income_line_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_income_lines.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    description: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    income_line: Mapped["ITROSIncomeLine"] = relationship(back_populates="details")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -236,6 +267,10 @@ class ITROSDividendDetail(Base):
     # Allowed values: Upto15Of6, Upto15Of9, Up16Of9To15Of12,
     # Up16Of12To15Of3, Up16Of3To31Of3.
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # Foreign dividend rows only: qualified vs ordinary (US / treaty context).
+    income_dividend_type: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dividend_details")
 
@@ -290,6 +325,7 @@ class ITROSBuybackShare(Base):
     date_of_buyback: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_of_acquisition: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    sale_price_per_unit: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 4), nullable=True, default=0)
     total_sale_price: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     acquisition_cost_per_unit: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     total_acquisition_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)

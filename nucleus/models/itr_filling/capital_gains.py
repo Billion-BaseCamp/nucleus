@@ -357,6 +357,13 @@ class ITRCGHPEntry(Base):
         nullable=True,
         index=True,
     )
+    hp_schedule_property_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_hp_properties.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    sold_property_occupancy: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

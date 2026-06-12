@@ -160,3 +160,57 @@ class ITRUnifiedEntry(Base):
     itr_return: Mapped["ITRReturn"] = relationship(  # noqa: F821
         "ITRReturn", back_populates="unified_entries"
     )
+
+
+class ITRAisSftTransaction(Base):
+    """AIS Part B2 SFT L1 transaction — one sale, off-market credit, or purchase row."""
+
+    __tablename__ = "itr_ais_sft_transactions"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    itr_return_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_returns.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    # SALE = market sale / off-market credit; PURCHASE = SFT-17/18(Pur)
+    transaction_kind: Mapped[str] = mapped_column(String(16), nullable=False, index=True)
+    tsn_id: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
+
+    info_code: Mapped[str] = mapped_column(String(128), nullable=False, default="")
+    category_code: Mapped[str] = mapped_column(String(32), nullable=False, default="")
+    source_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    source_id: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    amount: Mapped[Decimal] = mapped_column(Numeric(20, 2), nullable=False, default=0)
+    display_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+
+    # Sale / off-market credit (nullable for purchases)
+    asset_type: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    transaction_date: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    security_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    nature_of_transfer: Mapped[Optional[str]] = mapped_column(String(128), nullable=True)
+    holding_period: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    quantity: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    counterparty: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+
+    # Purchase (nullable for sales)
+    quarter: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    client_id: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    amc_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    holder_flag: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    sales_value: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(20, 2), nullable=True
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    itr_return: Mapped["ITRReturn"] = relationship(  # noqa: F821
+        "ITRReturn", back_populates="ais_sft_transactions"
+    )

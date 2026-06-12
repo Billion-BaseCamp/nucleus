@@ -120,6 +120,11 @@ class ITRReturn(Base):
         back_populates="itr_return",
         cascade="all, delete-orphan",
     )
+    ais_sft_transactions: Mapped[List["ITRAisSftTransaction"]] = relationship(  # noqa: F821
+        "ITRAisSftTransaction",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+    )
     cfl_schedule: Mapped[Optional["ITRCFLSchedule"]] = relationship(
         "ITRCFLSchedule",
         back_populates="itr_return",

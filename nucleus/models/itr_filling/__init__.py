@@ -112,6 +112,7 @@ from nucleus.models.itr_filling.salary import (
 )
 from nucleus.models.itr_filling.ais_26as_import import (
     ITRAisLine,
+    ITRAisSftTransaction,
     ITRForm26asLine,
     ITRUnifiedEntry,
 )
@@ -241,6 +242,7 @@ __all__ = [
     "ITRALInvestment",
     "ReliefClaimed",
     "ITRAisLine",
+    "ITRAisSftTransaction",
     "ITRForm26asLine",
     "ITRUnifiedEntry",
     "ITRTaxCreditSchedule",

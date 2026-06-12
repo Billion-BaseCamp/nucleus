@@ -271,6 +271,8 @@ class ITROSDividendDetail(Base):
     income_dividend_type: Mapped[Optional[str]] = mapped_column(
         String(20), nullable=True
     )
+    # Foreign dividend rows only: foreign tax credit (Form 67 / DTAA context).
+    ftc: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dividend_details")
 

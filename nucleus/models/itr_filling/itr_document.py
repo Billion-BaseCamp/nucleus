@@ -42,7 +42,7 @@ class ITRDocument(Base):
     password: Mapped[str] = mapped_column(String, nullable=True)
     status: Mapped[str] = mapped_column(String, nullable=True)
     advisor_comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-add
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

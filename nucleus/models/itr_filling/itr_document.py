@@ -42,15 +42,7 @@ class ITRDocument(Base):
     password: Mapped[str] = mapped_column(String, nullable=True)
     status: Mapped[str] = mapped_column(String, nullable=True)
     advisor_comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-
-    # Soft-delete scoped to the tax portal (RM-initiated).
-    rm_deleted_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    rm_deleted_by_advisor_id: Mapped[Optional[UUID]] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("advisors.id"), nullable=True
-    )
-
+add
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

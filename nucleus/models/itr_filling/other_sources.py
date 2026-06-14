@@ -430,8 +430,14 @@ class ITROSDtaaIncome(Base):
     it_act_rate_pct: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2), nullable=True, default=0)
     dtaa_rate_pct: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2), nullable=True, default=0)
     income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)
-    country_code: Mapped[Optional[str]] = mapped_column(String(2), nullable=True)
+    # CBDT numeric ISD country code (1–4 digits, e.g. 91=India, 971=UAE, 1264).
+    # The CountryName for the filing JSON is resolved from this code.
+    country_code: Mapped[Optional[str]] = mapped_column(String(4), nullable=True)
     article_of_dtaa: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # Tax Residency Certificate obtained (Sec 90(4)) — drives CBDT
+    # TaxRescertifiedFlag. NULL is treated as 'Y' (claiming a treaty rate
+    # presupposes a TRC) until the preparer answers in the UI.
+    is_trc_obtained: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True, default=True)
     # Pass-through income u/s 115U / 115UA / 115UB.
     is_pass_through: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True, default=False)
     # Sec 234C proviso quarter slot (CBDT DateRange key).

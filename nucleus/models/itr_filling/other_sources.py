@@ -100,6 +100,11 @@ class ITROSSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITROSSpecialRate.display_order",
     )
+    dtaa_income_rows: Mapped[List["ITROSDtaaIncome"]] = relationship(
+        back_populates="os_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITROSDtaaIncome.display_order",
+    )
 
     #one to one relationship with ITRTaxExemptIncome
     tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
@@ -261,6 +266,11 @@ class ITROSDividendDetail(Base):
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    # Foreign dividends only — qualified vs ordinary (US tax classification).
+    income_dividend_type: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # Foreign dividends only — foreign tax credit (Sec 90/91 relief) auto-filled
+    # from the linked Form 67 row when the preparer clicks "Claim DTAA".
+    ftc: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
     # CBDT ``AccruOrRecOfCG.DateRange`` key — drives Sec 234C proviso
     # deferral of dividend tax. NULL = quarter not specified (compute
     # treats the row as accruing before Q1, i.e. no deferral).
@@ -391,6 +401,43 @@ class ITROSSpecialRate(Base):
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="special_rates")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSDtaaIncome(Base):
+    """DTAA-rate income for Non-residents (Sec 90(2) beneficial rate).
+
+    Income taxed at the applicable rate = lower of (I.T. Act rate, DTAA rate),
+    with NO surcharge and NO cess (the treaty rate is the ceiling on Indian tax).
+    ``applicable_rate`` and ``tax`` are computed in the engine, not persisted.
+    """
+
+    __tablename__ = "itr_os_dtaa_income"
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, default=1)
+    nature_of_income: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, default="")
+    # "Section of I.T. Act" dropdown code (see app.config.dtaa_income).
+    section_of_it_act: Mapped[Optional[str]] = mapped_column(String(40), nullable=True)
+    it_act_rate_pct: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2), nullable=True, default=0)
+    dtaa_rate_pct: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2), nullable=True, default=0)
+    income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    country_code: Mapped[Optional[str]] = mapped_column(String(2), nullable=True)
+    article_of_dtaa: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # Pass-through income u/s 115U / 115UA / 115UB.
+    is_pass_through: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True, default=False)
+    # Sec 234C proviso quarter slot (CBDT DateRange key).
+    quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dtaa_income_rows")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

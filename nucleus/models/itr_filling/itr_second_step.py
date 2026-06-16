@@ -79,6 +79,7 @@ class ITRStep2Salary(Base):
     f16_period: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_step: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_12ba: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    cascade_annexure: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_itcs: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_slip: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)

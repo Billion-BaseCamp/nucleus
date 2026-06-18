@@ -268,7 +268,7 @@ class ITRAisSftTransaction(Base):
     upload_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ais_26as_uploads.id", ondelete="CASCADE"),
-        nullable=False,
+        nullable=True,
         index=True,
     )
     itr_return_id: Mapped[UUID] = mapped_column(

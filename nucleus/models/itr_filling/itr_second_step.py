@@ -8,6 +8,7 @@ itr_step2_other_info_data, itr_step2_residency.
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING, Any, List, Optional
 from uuid import UUID, uuid4
 
@@ -20,6 +21,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -83,6 +85,11 @@ class ITRStep2Salary(Base):
     cascade_itcs: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_slip: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    amount_80c: Mapped[Optional[Decimal]] = mapped_column(
+        "80c_amount",
+        Numeric(18, 2),
+        nullable=True,
+    )
     fnf_uploaded: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )

@@ -7,7 +7,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING, Any, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String
 from sqlalchemy import UUID as SQLUUID
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -40,8 +40,6 @@ class ITRAis26asUpload(Base):
     financial_year: Mapped[Optional[str]] = mapped_column(String(9), nullable=True)
     assessment_year: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="uploaded")
-    raw_json: Mapped[Optional[dict[str, Any]]] = mapped_column(JSONB, nullable=True)
-    raw_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     summary: Mapped[Optional[dict[str, Any]]] = mapped_column(JSONB, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(

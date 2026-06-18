@@ -88,6 +88,7 @@ from nucleus.models.us_tax_filing import (
 # ITR filing models
 from nucleus.models.itr_filling import (
     ITRAddress,
+    ITRDocumentProcessingLog,
     ITRRefundBankAccount,
     ITRReturn,
     ITRFilingValidationJob,

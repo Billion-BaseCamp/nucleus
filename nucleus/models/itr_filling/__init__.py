@@ -72,7 +72,11 @@ from nucleus.models.itr_filling.house_property import (
     ITRHPTenant,
 )
 from nucleus.models.itr_filling.client_comment_read import ITRClientCommentRead
-from nucleus.models.itr_filling.itr_document import ITRDocument, ITRDocumentReview
+from nucleus.models.itr_filling.itr_document import (
+    ITRDocument,
+    ITRDocumentProcessingLog,
+    ITRDocumentReview,
+)
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_address import ITRAddress
 from nucleus.models.itr_filling.itr_refund_bank import ITRRefundBankAccount

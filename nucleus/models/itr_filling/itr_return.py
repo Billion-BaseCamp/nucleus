@@ -105,18 +105,25 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
-    ais_lines: Mapped[List["ITRAisLine"]] = relationship(  # noqa: F821
-        "ITRAisLine",
+    ais_26as_uploads: Mapped[List["ITRAis26asUpload"]] = relationship(  # noqa: F821
+        "ITRAis26asUpload",
         back_populates="itr_return",
         cascade="all, delete-orphan",
     )
-    form26as_lines: Mapped[List["ITRForm26asLine"]] = relationship(  # noqa: F821
-        "ITRForm26asLine",
+    ais_entries: Mapped[List["ITRAisEntry"]] = relationship(  # noqa: F821
+        "ITRAisEntry",
         back_populates="itr_return",
         cascade="all, delete-orphan",
     )
-    unified_entries: Mapped[List["ITRUnifiedEntry"]] = relationship(  # noqa: F821
-        "ITRUnifiedEntry",
+    form26as_entries: Mapped[List["ITR26asEntry"]] = relationship(  # noqa: F821
+        "ITR26asEntry",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+    )
+    ais_26as_reconciliations: Mapped[
+        List["ITRAis26asReconciliation"]
+    ] = relationship(  # noqa: F821
+        "ITRAis26asReconciliation",
         back_populates="itr_return",
         cascade="all, delete-orphan",
     )

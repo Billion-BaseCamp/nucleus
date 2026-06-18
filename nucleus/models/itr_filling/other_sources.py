@@ -185,6 +185,7 @@ class ITROSIncomeLine(Base):
     reference_source: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="income_lines")
     details: Mapped[List["ITROSIncomeLineDetail"]] = relationship(

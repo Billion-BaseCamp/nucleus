@@ -88,6 +88,7 @@ from nucleus.models.us_tax_filing import (
 # ITR filing models
 from nucleus.models.itr_filling import (
     ITRAddress,
+    ITRDocumentProcessingLog,
     ITRRefundBankAccount,
     ITRReturn,
     ITRFilingValidationJob,
@@ -153,6 +154,7 @@ from nucleus.models.itr_filling import (
     ITRFAOtherForeignIncome,
     ITRFASigningAuthority,
     ITRCGBondEntry,
+    ITRCGDtaaIncome,
     ITRCGOtherAssetEntry,
     ITRCGExemption54,
     ITRCGExemption54F,
@@ -348,6 +350,7 @@ __all__ = [
     "ITRCGUSTransaction",
     "ITRCGUnlistedTransaction",
     "ITRCGBondEntry",
+    "ITRCGDtaaIncome",
     "ITRCGOtherAssetEntry",
     "ITRCGHPEntry",
     "ITRCGHPAcquisitionDetail",

@@ -121,6 +121,11 @@ class ITRSalaryEmployer(Base):
 
     tds_deducted: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
+    # NR/RNOR: foreign-source salary included in Form 16 gross — reduced from taxable.
+    foreign_source_salary_in_form16: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(18, 2), nullable=True, default=0
+    )
+
     # Per-employer computed totals — populated by recompute_salary_schedule()
     computed_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     old_regime_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
@@ -278,6 +283,11 @@ class ITRForeignSalary(Base):
     total_deductions: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2),nullable=True, default=0)
     net_taxable_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2),nullable=True, default=0)
     tax_available_for_credit: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2),nullable=True, default=0)
+    gross_foreign_taxes_paid: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(18, 2), nullable=True, default=0
+    )
+    refund_claimed: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), nullable=True, default=0)
+    net_foreign_taxes: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), nullable=True, default=0)
 
     salary_schedule: Mapped["ITRSalarySchedule"] = relationship(back_populates="foreign_salaries")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

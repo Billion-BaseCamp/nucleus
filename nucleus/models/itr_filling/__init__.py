@@ -8,6 +8,7 @@ from nucleus.models.itr_filling.audit_logging import (
 )
 from nucleus.models.itr_filling.capital_gains import (
     ITRCGBondEntry,
+    ITRCGDtaaIncome,
     ITRCGOtherAssetEntry,
     ITRCGExemption54,
     ITRCGExemption54F,
@@ -215,6 +216,7 @@ __all__ = [
     "ITRCGUSTransaction",
     "ITRCGUnlistedTransaction",
     "ITRCGBondEntry",
+    "ITRCGDtaaIncome",
     "ITRCGOtherAssetEntry",
     "ITRCGHPEntry",
     "ITRCGHPAcquisitionDetail",

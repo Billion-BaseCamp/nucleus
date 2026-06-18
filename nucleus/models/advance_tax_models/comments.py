@@ -14,6 +14,8 @@ class Comments(Base):
     __tablename__ = "comments"
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     comment: Mapped[str] = mapped_column(String, nullable=False)
+    advisor_note: Mapped[str | None] = mapped_column(String, nullable=True)
+    client_note: Mapped[str | None] = mapped_column(String, nullable=True)
     quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=False)
     category: Mapped[CommentsCategory] = mapped_column(Enum(CommentsCategory), nullable=False)
     created_by: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), nullable=False)

@@ -83,10 +83,10 @@ class ITRAisEntry(Base):
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    upload_id: Mapped[UUID] = mapped_column(
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ais_26as_uploads.id", ondelete="CASCADE"),
-        nullable=False,
+        nullable=True,
         index=True,
     )
     itr_return_id: Mapped[UUID] = mapped_column(
@@ -314,7 +314,7 @@ class ITRAisSftTransaction(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    upload: Mapped["ITRAis26asUpload"] = relationship(
+    upload: Mapped[Optional["ITRAis26asUpload"]] = relationship(
         "ITRAis26asUpload", back_populates="ais_sft_transactions"
     )
     itr_return: Mapped["ITRReturn"] = relationship(  # noqa: F821

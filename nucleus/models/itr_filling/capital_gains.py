@@ -196,7 +196,7 @@ class ITRCGIndiaEQAndDebtMFTransaction(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    stock_scheme: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    stock_scheme: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
     quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     date_of_purchase: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     date_of_transfer: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -262,7 +262,7 @@ class ITRCGUSTransaction(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    stock_name: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    stock_name: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     date_of_purchase: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -294,7 +294,7 @@ class ITRCGUnlistedTransaction(Base):
     )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
-    stock_name: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    stock_name: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
     quantity: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     date_of_sale: Mapped[Optional[date]] = mapped_column(Date, nullable=True)

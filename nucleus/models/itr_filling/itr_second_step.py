@@ -128,6 +128,13 @@ class ITRStep2SalaryTrigger(Base):
     enabled: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
+    is_AIS_rent_paid: Mapped[bool] = mapped_column(
+        "is_ais_rent_paid",
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="FALSE",
+    )
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     slot_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),

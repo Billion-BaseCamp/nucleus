@@ -533,6 +533,12 @@ class ITRCGBondEntry(Base):
     gain_type: Mapped[str] = mapped_column(String(20), nullable=False, default="Long")
     stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     ltcg_125: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -570,6 +576,12 @@ class ITRCGOtherAssetEntry(Base):
     gain_type: Mapped[str] = mapped_column(String(20), nullable=False, default="Short")
     stcg: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     ltcg_125: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

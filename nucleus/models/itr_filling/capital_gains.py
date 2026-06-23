@@ -194,6 +194,12 @@ class ITRCGIndiaEQAndDebtMFTransaction(Base):
         nullable=False,
         index=True,
     )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     stock_scheme: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
@@ -260,6 +266,12 @@ class ITRCGUSTransaction(Base):
         nullable=False,
         index=True,
     )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 
     stock_name: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
@@ -310,6 +322,7 @@ class ITRCGUnlistedTransaction(Base):
     gain_inr: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )
@@ -360,6 +373,7 @@ class ITRCGHPEntry(Base):
     taxable_capital_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )
@@ -591,6 +605,7 @@ class ITRCGExemption54F(Base):
     net_taxable_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )
@@ -634,6 +649,7 @@ class ITRCGVDATransaction(Base):
     income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )
@@ -679,6 +695,7 @@ class ITRCGExemption54(Base):
     ifsc: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="CASCADE"),
         nullable=True,
         index=True,
     )

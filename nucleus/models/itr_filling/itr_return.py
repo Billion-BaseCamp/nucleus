@@ -61,6 +61,7 @@ class ITRReturn(Base):
     total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     tax_payable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     refund_due: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    is_huf:Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     salary: Mapped[Optional["ITRSalarySchedule"]] = relationship(
         "ITRSalarySchedule",

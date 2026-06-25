@@ -410,6 +410,16 @@ class ITRStep2Residency(Base):
     )  # ROR | RNOR | NR (e.g. RM override)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    # Non-Resident only (Schedule Part A-GEN → JurisdictionResPrevYr): CBDT
+    # country code of the jurisdiction of residence in the previous year, and
+    # the taxpayer identification number (TIN) in that jurisdiction.
+    nr_jurisdiction_residence: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # CBDT country code, e.g. "61" (Australia)
+    nr_tax_identification_no: Mapped[Optional[str]] = mapped_column(
+        String(75), nullable=True
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

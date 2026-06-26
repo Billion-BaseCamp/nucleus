@@ -48,6 +48,13 @@ class PersonalInformation(Base):
 
     huf_dob: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
 
+    # Karta (HUF manager) — the individual who signs & verifies the HUF return.
+    # CBDT requires Verification.AssesseeVerPAN to be a person PAN (4th char "P"),
+    # i.e. the karta's individual PAN, distinct from the HUF's own PAN.
+    karta_pan: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    karta_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now()

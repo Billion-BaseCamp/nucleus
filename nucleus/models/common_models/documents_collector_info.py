@@ -103,6 +103,12 @@ class DocumentCollectorInfo(Base):
         default=False,
         server_default="FALSE",
     )
+    is_ais_reconcile_imported: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="FALSE",
+    )
     has_employment_gap: Mapped[bool] = mapped_column(
         Boolean,
         nullable=True,

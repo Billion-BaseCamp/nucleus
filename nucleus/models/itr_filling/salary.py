@@ -120,6 +120,12 @@ class ITRSalaryEmployer(Base):
     ios_reported_by_employer: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
     tds_deducted: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
 
     # NR/RNOR: foreign-source salary included in Form 16 gross — reduced from taxable.
     foreign_source_salary_in_form16: Mapped[Optional[Decimal]] = mapped_column(
@@ -182,6 +188,12 @@ class ITRSalaryComponent(Base):
     source_type: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default="USER"
     )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     is_modified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
@@ -221,6 +233,12 @@ class ITRSalaryAllowance(Base):
     source_type: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default="USER"
     )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     is_modified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
@@ -250,6 +268,12 @@ class ITRSalaryPerquisite(Base):
 
     source_type: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default="USER"
+    )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
     )
     is_modified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")

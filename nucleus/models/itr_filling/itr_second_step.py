@@ -433,3 +433,102 @@ class ITRStep2Residency(Base):
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+
+
+class ITRStep2Citizenship(Base):
+    __tablename__ = "itr_step2_citizenship"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4,
+        index=True,
+    )
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    financial_year_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("financial_years.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    # Ordered list of citizenships, e.g. [{code, name, type, is_primary}].
+    citizenships: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+
+    residence_country_code: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )
+    residence_country_name: Mapped[Optional[str]] = mapped_column(
+        String(75), nullable=True
+    )
+
+    india_has_us_green_card: Mapped[Optional[bool]] = mapped_column(
+        Boolean, nullable=True
+    )
+    india_has_foreign_pr: Mapped[Optional[bool]] = mapped_column(
+        Boolean, nullable=True
+    )
+    india_pr_country_code: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )
+    india_pr_country_name: Mapped[Optional[str]] = mapped_column(
+        String(75), nullable=True
+    )
+
+    us_status: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # visa | gc | other
+    us_visa_type: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    us_visa_primary_client_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    other_country_status: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # visa | pr | other
+    oci_pio: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+
+    step: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=1, server_default="1"
+    )
+    completed: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="FALSE"
+    )
+    completed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        onupdate=func.now(),
+        nullable=True,
+    )
+
+    client: Mapped["Client"] = relationship("Client", foreign_keys=[client_id])
+    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+    us_visa_primary_client: Mapped[Optional["Client"]] = relationship(
+        "Client",
+        foreign_keys=[us_visa_primary_client_id],
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            name="uq_itr_step2_citizenship_client_fy",
+        ),
+    )

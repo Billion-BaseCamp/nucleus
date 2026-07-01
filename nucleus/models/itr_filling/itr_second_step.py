@@ -479,11 +479,13 @@ class ITRStep2Citizenship(Base):
     india_pr_country_name: Mapped[Optional[str]] = mapped_column(
         String(75), nullable=True
     )
+    # e.g. [{code, name}, ...] — multiple PR countries for Indian citizens living in India.
+    india_pr_countries: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
 
     us_status: Mapped[Optional[str]] = mapped_column(
         String(20), nullable=True
     )  # visa | gc | other
-    us_visa_type: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    us_visa_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     us_visa_primary_client_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("clients.id", ondelete="SET NULL"),

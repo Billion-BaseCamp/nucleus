@@ -132,6 +132,13 @@ class ITRSalaryEmployer(Base):
         Numeric(18, 2), nullable=True, default=0
     )
 
+    # Form 16 gross↔breakup sanity check (advisory, populated at ingest). Shape:
+    # {"salary": {status, breakup_sum, part_b_total, difference}, "perquisite": {...}}
+    # where status ∈ matched | mismatch | no_breakup | no_total. Never gates filing.
+    breakup_reconciliation: Mapped[Optional[dict[str, Any]]] = mapped_column(
+        JSONB, nullable=True
+    )
+
     # Per-employer computed totals — populated by recompute_salary_schedule()
     computed_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     old_regime_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

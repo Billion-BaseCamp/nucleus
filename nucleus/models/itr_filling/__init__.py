@@ -8,6 +8,7 @@ from nucleus.models.itr_filling.audit_logging import (
 )
 from nucleus.models.itr_filling.capital_gains import (
     ITRCGBondEntry,
+    ITRCGDtaaIncome,
     ITRCGOtherAssetEntry,
     ITRCGExemption54,
     ITRCGExemption54F,
@@ -72,7 +73,11 @@ from nucleus.models.itr_filling.house_property import (
     ITRHPTenant,
 )
 from nucleus.models.itr_filling.client_comment_read import ITRClientCommentRead
-from nucleus.models.itr_filling.itr_document import ITRDocument, ITRDocumentReview
+from nucleus.models.itr_filling.itr_document import (
+    ITRDocument,
+    ITRDocumentProcessingLog,
+    ITRDocumentReview,
+)
 from nucleus.models.itr_filling.itr_document_slot import ITRDocumentSlot
 from nucleus.models.itr_filling.itr_address import ITRAddress
 from nucleus.models.itr_filling.itr_refund_bank import ITRRefundBankAccount
@@ -80,6 +85,7 @@ from nucleus.models.itr_filling.itr_filing_validation_job import ITRFilingValida
 from nucleus.models.itr_filling.itr_filing_export_job import ITRFilingExportJob
 from nucleus.models.itr_filling.itr_return import ITRReturn
 from nucleus.models.itr_filling.itr_second_step import (
+    ITRStep2Citizenship,
     ITRStep2OtherInfo,
     ITRStep2OtherInfoData,
     ITRStep2Residency,
@@ -113,10 +119,11 @@ from nucleus.models.itr_filling.salary import (
     ITRSalarySchedule,
 )
 from nucleus.models.itr_filling.ais_26as_import import (
-    ITRAisLine,
+    ITR26asEntry,
+    ITRAis26asReconciliation,
+    ITRAis26asUpload,
+    ITRAisEntry,
     ITRAisSftTransaction,
-    ITRForm26asLine,
-    ITRUnifiedEntry,
 )
 from nucleus.models.itr_filling.tax_credits import (
     ITRAdvanceTaxPayment,
@@ -211,6 +218,7 @@ __all__ = [
     "ITRCGUSTransaction",
     "ITRCGUnlistedTransaction",
     "ITRCGBondEntry",
+    "ITRCGDtaaIncome",
     "ITRCGOtherAssetEntry",
     "ITRCGHPEntry",
     "ITRCGHPAcquisitionDetail",
@@ -235,6 +243,7 @@ __all__ = [
     "ITRDocument",
     "ITRDocumentReview",
     # Step 2 wizard
+    "ITRStep2Citizenship",
     "ITRStep2OtherInfo",
     "ITRStep2OtherInfoData",
     "ITRStep2Residency",
@@ -245,10 +254,11 @@ __all__ = [
     "ITRALMovableAsset",
     "ITRALInvestment",
     "ReliefClaimed",
-    "ITRAisLine",
+    "ITRAis26asUpload",
+    "ITRAisEntry",
+    "ITR26asEntry",
+    "ITRAis26asReconciliation",
     "ITRAisSftTransaction",
-    "ITRForm26asLine",
-    "ITRUnifiedEntry",
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
     "ITRTaxExemptIncome",

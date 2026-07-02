@@ -91,6 +91,30 @@ class DocumentCollectorInfo(Base):
     job_change_during_year: Mapped[Optional[str]] = mapped_column(
         String, nullable=True
     )
+    is_ais_imported: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="FALSE",
+    )
+    is_json_imported: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="FALSE",
+    )
+    is_ais_reconcile_imported: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="FALSE",
+    )
+    is_26as_imported: Mapped[Optional[bool]] = mapped_column(
+        Boolean,
+        nullable=True,
+        default=False,
+        server_default="FALSE",
+    )
     has_employment_gap: Mapped[bool] = mapped_column(
         Boolean,
         nullable=True,

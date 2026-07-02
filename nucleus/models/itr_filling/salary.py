@@ -120,6 +120,24 @@ class ITRSalaryEmployer(Base):
     ios_reported_by_employer: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
 
     tds_deducted: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    # NR/RNOR: foreign-source salary included in Form 16 gross — reduced from taxable.
+    foreign_source_salary_in_form16: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(18, 2), nullable=True, default=0
+    )
+
+    # Form 16 gross↔breakup sanity check (advisory, populated at ingest). Shape:
+    # {"salary": {status, breakup_sum, part_b_total, difference}, "perquisite": {...}}
+    # where status ∈ matched | mismatch | no_breakup | no_total. Never gates filing.
+    breakup_reconciliation: Mapped[Optional[dict[str, Any]]] = mapped_column(
+        JSONB, nullable=True
+    )
 
     # Per-employer computed totals — populated by recompute_salary_schedule()
     computed_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
@@ -177,6 +195,12 @@ class ITRSalaryComponent(Base):
     source_type: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default="USER"
     )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     is_modified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
@@ -216,6 +240,12 @@ class ITRSalaryAllowance(Base):
     source_type: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default="USER"
     )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     is_modified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
     )
@@ -245,6 +275,12 @@ class ITRSalaryPerquisite(Base):
 
     source_type: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default="USER"
+    )
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
     )
     is_modified: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default=text("false")
@@ -278,6 +314,11 @@ class ITRForeignSalary(Base):
     total_deductions: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2),nullable=True, default=0)
     net_taxable_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2),nullable=True, default=0)
     tax_available_for_credit: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2),nullable=True, default=0)
+    gross_foreign_taxes_paid: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(18, 2), nullable=True, default=0
+    )
+    refund_claimed: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), nullable=True, default=0)
+    net_foreign_taxes: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), nullable=True, default=0)
 
     salary_schedule: Mapped["ITRSalarySchedule"] = relationship(back_populates="foreign_salaries")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

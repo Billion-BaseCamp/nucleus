@@ -8,6 +8,7 @@ itr_step2_other_info_data, itr_step2_residency.
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING, Any, List, Optional
 from uuid import UUID, uuid4
 
@@ -20,6 +21,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -79,9 +81,15 @@ class ITRStep2Salary(Base):
     f16_period: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_step: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_12ba: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    cascade_annexure: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_itcs: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_slip: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     cascade_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    amount_80c: Mapped[Optional[Decimal]] = mapped_column(
+        "80c_amount",
+        Numeric(18, 2),
+        nullable=True,
+    )
     fnf_uploaded: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
     )
@@ -119,6 +127,13 @@ class ITRStep2SalaryTrigger(Base):
     trigger_id: Mapped[str] = mapped_column(String, nullable=False)
     enabled: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="FALSE"
+    )
+    is_AIS_rent_paid: Mapped[bool] = mapped_column(
+        "is_ais_rent_paid",
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="FALSE",
     )
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     slot_id: Mapped[Optional[UUID]] = mapped_column(
@@ -395,6 +410,16 @@ class ITRStep2Residency(Base):
     )  # ROR | RNOR | NR (e.g. RM override)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    # Non-Resident only (Schedule Part A-GEN → JurisdictionResPrevYr): CBDT
+    # country code of the jurisdiction of residence in the previous year, and
+    # the taxpayer identification number (TIN) in that jurisdiction.
+    nr_jurisdiction_residence: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )  # CBDT country code, e.g. "61" (Australia)
+    nr_tax_identification_no: Mapped[Optional[str]] = mapped_column(
+        String(75), nullable=True
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -408,3 +433,104 @@ class ITRStep2Residency(Base):
 
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+
+
+class ITRStep2Citizenship(Base):
+    __tablename__ = "itr_step2_citizenship"
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4,
+        index=True,
+    )
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    financial_year_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("financial_years.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    # Ordered list of citizenships, e.g. [{code, name, type, is_primary}].
+    citizenships: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+
+    residence_country_code: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )
+    residence_country_name: Mapped[Optional[str]] = mapped_column(
+        String(75), nullable=True
+    )
+
+    india_has_us_green_card: Mapped[Optional[bool]] = mapped_column(
+        Boolean, nullable=True
+    )
+    india_has_foreign_pr: Mapped[Optional[bool]] = mapped_column(
+        Boolean, nullable=True
+    )
+    india_pr_country_code: Mapped[Optional[str]] = mapped_column(
+        String(10), nullable=True
+    )
+    india_pr_country_name: Mapped[Optional[str]] = mapped_column(
+        String(75), nullable=True
+    )
+    # e.g. [{code, name}, ...] — multiple PR countries for Indian citizens living in India.
+    india_pr_countries: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+
+    us_status: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # visa | gc | other
+    us_visa_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    us_visa_primary_client_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    other_country_status: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )  # visa | pr | other
+    oci_pio: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+
+    step: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=1, server_default="1"
+    )
+    completed: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="FALSE"
+    )
+    completed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        onupdate=func.now(),
+        nullable=True,
+    )
+
+    client: Mapped["Client"] = relationship("Client", foreign_keys=[client_id])
+    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
+    us_visa_primary_client: Mapped[Optional["Client"]] = relationship(
+        "Client",
+        foreign_keys=[us_visa_primary_client_id],
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            name="uq_itr_step2_citizenship_client_fy",
+        ),
+    )

@@ -497,8 +497,8 @@ class ITRCGHPBuyer(Base):
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     aadhaar: Mapped[Optional[str]] = mapped_column(String(12), nullable=True)
 
-    share_percentage: Mapped[Decimal] = mapped_column(Numeric(5, 2), nullable=False, default=0)
-    amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    share_percentage: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2), nullable=True, default=0)
+    amount: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

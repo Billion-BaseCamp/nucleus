@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, text
 from sqlalchemy import UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -21,6 +21,21 @@ class ITRAisJsonArchive(Base):
     """One stored AIS JSON export for a client (raw file in S3)."""
 
     __tablename__ = "itr_ais_json_archives"
+    __table_args__ = (
+        Index(
+            "uq_itr_ais_json_archives_client_itr",
+            "client_id",
+            "itr_return_id",
+            unique=True,
+            postgresql_where=text("itr_return_id IS NOT NULL"),
+        ),
+        Index(
+            "uq_itr_ais_json_archives_client_unlinked",
+            "client_id",
+            unique=True,
+            postgresql_where=text("itr_return_id IS NULL"),
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4

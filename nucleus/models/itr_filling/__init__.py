@@ -118,6 +118,7 @@ from nucleus.models.itr_filling.salary import (
     ITRSalaryPerquisite,
     ITRSalarySchedule,
 )
+from nucleus.models.itr_filling.ais_json_archive import ITRAisJsonArchive
 from nucleus.models.itr_filling.ais_26as_import import (
     ITR26asEntry,
     ITRAis26asReconciliation,
@@ -254,6 +255,7 @@ __all__ = [
     "ITRALMovableAsset",
     "ITRALInvestment",
     "ReliefClaimed",
+    "ITRAisJsonArchive",
     "ITRAis26asUpload",
     "ITRAisEntry",
     "ITR26asEntry",

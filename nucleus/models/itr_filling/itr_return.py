@@ -150,6 +150,10 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         order_by="ITRRefundBankAccount.display_order",
     )
+    ais_json_archives: Mapped[List["ITRAisJsonArchive"]] = relationship(  # noqa: F821
+        "ITRAisJsonArchive",
+        back_populates="itr_return",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

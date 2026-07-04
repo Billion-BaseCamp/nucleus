@@ -278,12 +278,14 @@ class ITROSDividendDetail(Base):
     # Allowed values: Upto15Of6, Upto15Of9, Up16Of9To15Of12,
     # Up16Of12To15Of3, Up16Of3To31Of3.
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
-    # Foreign dividend rows only: qualified vs ordinary (US / treaty context).
-    income_dividend_type: Mapped[Optional[str]] = mapped_column(
-        String(20), nullable=True
+    # Foreign dividends only — average USD→INR rate the preparer used to
+    # convert the dividend (prefilled with the FY average TTBR, editable).
+    exchange_rate_avg: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 6), nullable=True
     )
-    # Foreign dividend rows only: foreign tax credit (Form 67 / DTAA context).
-    ftc: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
+    # Foreign dividends only — dividend amount in foreign currency (USD).
+    # ``amount`` stays the INR value = amount_usd × exchange_rate_avg.
+    amount_usd: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dividend_details")
 

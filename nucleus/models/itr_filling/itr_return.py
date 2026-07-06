@@ -21,7 +21,7 @@ from sqlalchemy import (
     UUID as SQLUUID,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
@@ -58,7 +58,9 @@ class ITRReturn(Base):
     # Tax credits — Form 67 / Schedule TR1 (TaxPaidOutsideIndFlg)
     form67_enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     # Advisor-confirmed: Form 67 filed on IT portal (Rule 128) when FTC is claimed
-    form67_filed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    form67_filed: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=text("false")
+    )
 
     total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     tax_payable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

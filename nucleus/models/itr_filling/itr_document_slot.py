@@ -60,6 +60,11 @@ class ITRDocumentSlot(Base):
     )
 
     __table_args__ = (
+        # ``notes`` is part of the slot identity so a client can hold several
+        # custom/"Other" broker slots under the same (doc_type, sub_type, source,
+        # region) — one per distinct note. ``NULLS NOT DISTINCT`` keeps normal
+        # slots (notes IS NULL) de-duplicated exactly as before. Requires
+        # PostgreSQL 15+.
         UniqueConstraint(
             "financial_year_id",
             "client_id",
@@ -67,6 +72,8 @@ class ITRDocumentSlot(Base):
             "sub_type",
             "source",
             "region",
+            "notes",
             name="uq_itr_doc_slot",
+            postgresql_nulls_not_distinct=True,
         ),
     )

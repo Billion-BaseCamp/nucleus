@@ -85,6 +85,7 @@ from nucleus.models.itr_filling.itr_filing_validation_job import ITRFilingValida
 from nucleus.models.itr_filling.itr_filing_export_job import ITRFilingExportJob
 from nucleus.models.itr_filling.itr_return import ITRReturn
 from nucleus.models.itr_filling.itr_second_step import (
+    ITRStep2Citizenship,
     ITRStep2OtherInfo,
     ITRStep2OtherInfoData,
     ITRStep2Residency,
@@ -117,6 +118,7 @@ from nucleus.models.itr_filling.salary import (
     ITRSalaryPerquisite,
     ITRSalarySchedule,
 )
+from nucleus.models.itr_filling.ais_json_archive import ITRAisJsonArchive
 from nucleus.models.itr_filling.ais_26as_import import (
     ITR26asEntry,
     ITRAis26asReconciliation,
@@ -242,6 +244,7 @@ __all__ = [
     "ITRDocument",
     "ITRDocumentReview",
     # Step 2 wizard
+    "ITRStep2Citizenship",
     "ITRStep2OtherInfo",
     "ITRStep2OtherInfoData",
     "ITRStep2Residency",
@@ -252,6 +255,7 @@ __all__ = [
     "ITRALMovableAsset",
     "ITRALInvestment",
     "ReliefClaimed",
+    "ITRAisJsonArchive",
     "ITRAis26asUpload",
     "ITRAisEntry",
     "ITR26asEntry",

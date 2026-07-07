@@ -445,6 +445,8 @@ class ITRForm67Entry(Base):
         SQLUUID(as_uuid=True), nullable=True, index=True
     )
 
+    is_ftc_refund_claimed: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
+
     tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
         "ITRTaxCreditSchedule", back_populates="form67_entries"
     )

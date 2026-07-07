@@ -82,16 +82,6 @@ class ITRCGSchedule(Base):
     deficit interest calculation.
     """
 
-    fno_opted_business_last_year: Mapped[bool] = mapped_column(
-        Boolean, nullable=True , server_default=text("false"), default=False
-    )
-    fno_opted_44ad_last_year: Mapped[bool] = mapped_column(
-        Boolean, nullable=True, server_default=text("false"), default=False
-    )
-    fno_has_slab_rate_stcg_elsewhere: Mapped[bool] = mapped_column(
-        Boolean, nullable=True, server_default=text("false"), default=False
-    )
-
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
@@ -628,12 +618,6 @@ class ITRCGExemption54F(Base):
     total_invested: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     net_taxable_gain: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    hp_entry_id: Mapped[Optional[UUID]] = mapped_column(
-        SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_hp_entries.id", ondelete="SET NULL"),
-        nullable=True,
-        index=True,
-    )
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_documents.id", ondelete="CASCADE"),
@@ -724,12 +708,6 @@ class ITRCGExemption54(Base):
     cgas_account_no: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     bank_name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     ifsc: Mapped[Optional[str]] = mapped_column(String(11), nullable=True)
-    hp_entry_id: Mapped[Optional[UUID]] = mapped_column(
-        SQLUUID(as_uuid=True),
-        ForeignKey("itr_cg_hp_entries.id", ondelete="SET NULL"),
-        nullable=True,
-        index=True,
-    )
     source_document_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_documents.id", ondelete="CASCADE"),

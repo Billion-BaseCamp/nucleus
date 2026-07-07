@@ -67,6 +67,7 @@ class ITRTaxCreditSchedule(Base):
     total_form67_dtaa: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )
+    is_ftc_refund_claimed: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     # Snapshots for two-step AIS → 26AS processing (POST /process-ais then /process-26as).
     ais_json_snapshot: Mapped[Optional[dict[str, Any]]] = mapped_column(
         JSONB, nullable=True

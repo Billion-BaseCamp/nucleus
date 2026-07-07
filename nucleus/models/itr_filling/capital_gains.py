@@ -82,6 +82,16 @@ class ITRCGSchedule(Base):
     deficit interest calculation.
     """
 
+    fno_opted_business_last_year: Mapped[bool] = mapped_column(
+        Boolean, nullable=True , server_default=text("false"), default=False
+    )
+    fno_opted_44ad_last_year: Mapped[bool] = mapped_column(
+        Boolean, nullable=True, server_default=text("false"), default=False
+    )
+    fno_has_slab_rate_stcg_elsewhere: Mapped[bool] = mapped_column(
+        Boolean, nullable=True, server_default=text("false"), default=False
+    )
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
 

@@ -154,6 +154,12 @@ class ITRReturn(Base):
         "ITRAisJsonArchive",
         back_populates="itr_return",
     )
+    tis_summary_categories: Mapped[List["ITRTisSummaryCategory"]] = relationship(  # noqa: F821
+        "ITRTisSummaryCategory",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        order_by="ITRTisSummaryCategory.sr_no",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

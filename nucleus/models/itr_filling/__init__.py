@@ -119,6 +119,7 @@ from nucleus.models.itr_filling.salary import (
     ITRSalarySchedule,
 )
 from nucleus.models.itr_filling.ais_json_archive import ITRAisJsonArchive
+from nucleus.models.itr_filling.tis_import import ITRTisSummaryCategory
 from nucleus.models.itr_filling.ais_26as_import import (
     ITR26asEntry,
     ITRAis26asReconciliation,
@@ -261,6 +262,7 @@ __all__ = [
     "ITR26asEntry",
     "ITRAis26asReconciliation",
     "ITRAisSftTransaction",
+    "ITRTisSummaryCategory",
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
     "ITRTaxExemptIncome",

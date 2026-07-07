@@ -154,6 +154,10 @@ class ITRReturn(Base):
         "ITRAisJsonArchive",
         back_populates="itr_return",
     )
+    tis_pdf_archives: Mapped[List["ITRTisPdfArchive"]] = relationship(  # noqa: F821
+        "ITRTisPdfArchive",
+        back_populates="itr_return",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

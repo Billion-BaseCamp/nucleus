@@ -7,7 +7,7 @@ itr_step2_other_info_data, itr_step2_residency.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING, Any, List, Optional
 from uuid import UUID, uuid4
@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 from sqlalchemy import (
     UUID as SQLUUID,
     Boolean,
+    Date,
     DateTime,
     ForeignKey,
     Integer,
@@ -485,6 +486,9 @@ class ITRStep2Citizenship(Base):
     us_status: Mapped[Optional[str]] = mapped_column(
         String(20), nullable=True
     )  # visa | gc | other
+    us_green_card_issue_date: Mapped[Optional[date]] = mapped_column(
+        Date, nullable=True
+    )
     us_visa_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     us_visa_primary_client_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),

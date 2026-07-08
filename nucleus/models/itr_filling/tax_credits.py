@@ -294,6 +294,13 @@ class ITRTDSProperty(Base):
     pan: Mapped[str] = mapped_column(String(10), nullable=False)
     section: Mapped[str] = mapped_column(String(10), nullable=False, default="194IA")
     head_of_income: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
+    # True when the assessee is the BUYER (Form 26AS Part VIII, 194IA purchase).
+    # Such TDS is deposited on the seller's behalf and is NOT claimable by the
+    # assessee — these rows are excluded from all tax-credit computations and are
+    # used only for the informational property-purchase alert.
+    is_property_purchase: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=false()
+    )
     tds_deducted: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )

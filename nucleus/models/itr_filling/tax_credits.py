@@ -394,6 +394,9 @@ class ITRForm67Entry(Base):
         ForeignKey("itr_tax_credit_schedule.id", ondelete="CASCADE"),
         nullable=False,
     )
+    is_ftc_refund_claimed: Mapped[bool] = mapped_column(
+        Boolean, nullable=True, server_default=text("false"), default=False
+    )
 
     display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
 

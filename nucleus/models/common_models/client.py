@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from decimal import Decimal
-from typing import List, Optional
+from typing import List
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, Date, DateTime, Enum, ForeignKey, Numeric, String, UniqueConstraint, UUID as SQLUUID
+from sqlalchemy import Boolean, Date, DateTime, Enum, ForeignKey, String, UniqueConstraint, UUID as SQLUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -41,7 +40,6 @@ class Client(Base):
     deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     it_portal_username: Mapped[str] = mapped_column(String, nullable=True)
     it_portal_pass: Mapped[str] = mapped_column(String, nullable=True)
-    balance_tax: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True)
 
     
     # Foreign key to advisor

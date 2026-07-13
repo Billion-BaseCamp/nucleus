@@ -132,6 +132,10 @@ class DocumentCollectorInfo(Base):
         Numeric(18, 2),
         nullable=True,
     )
+    balance_tax: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2),
+        nullable=True,
+    )
     is_other_info_applicable: Mapped[Optional[bool]] = mapped_column(
         Boolean,
         nullable=True,

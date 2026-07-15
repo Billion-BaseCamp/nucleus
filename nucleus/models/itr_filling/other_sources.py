@@ -47,6 +47,7 @@ class ITROSSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
+    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     total_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
     total_net_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)

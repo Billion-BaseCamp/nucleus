@@ -46,6 +46,7 @@ class ITRDisclosuresSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
+    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     net_movable_assets: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
     investment:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)

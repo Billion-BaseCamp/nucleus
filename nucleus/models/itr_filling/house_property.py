@@ -46,6 +46,7 @@ class ITRHPSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
+    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     total_hp_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)
     brought_forward_loss: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)

@@ -41,7 +41,7 @@ class ITRSalarySchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
-    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     total_gross_salary: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     new_regime_total_exempt_us10: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

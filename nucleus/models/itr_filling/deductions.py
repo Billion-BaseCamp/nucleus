@@ -51,7 +51,7 @@ class ITRDedSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
-    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     sec_80c_capped: Mapped[Decimal] = mapped_column(
         Numeric(15, 2), nullable=False, default=0

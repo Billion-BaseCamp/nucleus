@@ -48,7 +48,7 @@ class ITRCGSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
-    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     stcg_india_eq: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_fno: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)

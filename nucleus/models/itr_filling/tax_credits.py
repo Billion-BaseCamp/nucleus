@@ -48,7 +48,7 @@ class ITRTaxCreditSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
-    review_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     total_advance_sa_tax_paid: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0

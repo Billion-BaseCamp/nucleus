@@ -27,6 +27,7 @@ class Client(Base):
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     middle_name: Mapped[str] = mapped_column(String, nullable=True)
     last_name: Mapped[str] = mapped_column(String, nullable=False)
+    father_name: Mapped[str] = mapped_column(String, nullable=True)
     adhar_number: Mapped[str] = mapped_column(String, nullable=True)
     pan_number: Mapped[str] = mapped_column(String, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=True)

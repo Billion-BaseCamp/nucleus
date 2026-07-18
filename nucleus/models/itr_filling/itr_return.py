@@ -49,7 +49,7 @@ class ITRReturn(Base):
     assessment_year: Mapped[str] = mapped_column(String(10), nullable=False)
     itr_form_type: Mapped[str] = mapped_column(String(10), default="ITR-2")
     regime: Mapped[str] = mapped_column(String(5), nullable=False, default="new")
-    filing_status: Mapped[str] = mapped_column(String(20), default="not_started")
+    filing_status: Mapped[str] = mapped_column(String(50), default="not_started")
     filed_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )

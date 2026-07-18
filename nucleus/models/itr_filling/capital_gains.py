@@ -48,6 +48,7 @@ class ITRCGSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     stcg_india_eq: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     stcg_fno: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
@@ -652,6 +653,18 @@ class ITRCGExemption54F(Base):
         nullable=True,
         index=True,
     )
+    cg_india_eq_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_cg_india_eq_and_debt_mf_brokers_data.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    india_eq_transaction_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        nullable=True,
+        index=True,
+    )
+    india_eq_txn_snapshot: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

@@ -46,6 +46,7 @@ class ITRHPSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     total_hp_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)
     brought_forward_loss: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2),nullable=True, default=0)
@@ -86,7 +87,7 @@ class ITRHPProperty(Base):
     town_district: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     state: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     state_code: Mapped[Optional[str]] = mapped_column(String(2), nullable=True)
-    country: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, default="India")
+    country: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, default="India")
     country_code: Mapped[Optional[str]] = mapped_column(String(4), nullable=True, default="91")
     pin: Mapped[Optional[str]] = mapped_column(String(6), nullable=True)
     zipcode: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)

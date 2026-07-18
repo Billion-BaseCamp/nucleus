@@ -47,6 +47,7 @@ class ITROSSchedule(Base):
         nullable=False,
         server_default="NOT_STARTED",
     )
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     total_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
     total_net_ios_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), default=0)
@@ -371,9 +372,12 @@ class ITROSClubbingEntry(Base):
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     relationship_type: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    head_of_income: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    head_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     head_of_income_code: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     remark: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    # CBDT DateRange quarter slot (Q1–Q4 + Post-Q4).
+    # Upto15Of6 | Upto15Of9 | Up16Of9To15Of12 | Up16Of12To15Of3 | Up16Of3To31Of3
+    quarter: Mapped[str] = mapped_column(String(20), nullable=False, server_default="Upto15Of6")
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="clubbing_entries")
 

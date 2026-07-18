@@ -83,6 +83,9 @@ from nucleus.models.itr_filling.itr_address import ITRAddress
 from nucleus.models.itr_filling.itr_refund_bank import ITRRefundBankAccount
 from nucleus.models.itr_filling.itr_filing_validation_job import ITRFilingValidationJob
 from nucleus.models.itr_filling.itr_filing_export_job import ITRFilingExportJob
+from nucleus.models.itr_filling.itr_utility_validation_request import (
+    ITRUtilityValidationRequest,
+)
 from nucleus.models.itr_filling.itr_return import ITRReturn
 from nucleus.models.itr_filling.itr_second_step import (
     ITRStep2Citizenship,
@@ -146,6 +149,7 @@ __all__ = [
     "ITRReturn",
     "ITRFilingValidationJob",
     "ITRFilingExportJob",
+    "ITRUtilityValidationRequest",
     "ITRAddress",
     "ITRRefundBankAccount",
     # Salary (Schedule S)

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import UUID as SQLUUID
-from sqlalchemy import Boolean, DateTime, ForeignKey, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint
 from sqlalchemy.types import Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -20,6 +20,13 @@ if TYPE_CHECKING:
 
 class DocumentCollectorInfo(Base):
     __tablename__ = "document_collector_info"
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            name="uq_document_collector_info_client_fy",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -130,6 +137,10 @@ class DocumentCollectorInfo(Base):
     ll_pan: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     annual_rent: Mapped[Optional[Decimal]] = mapped_column(
         Numeric(18, 2),
+        nullable=True,
+    )
+    balance_tax: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(15, 2),
         nullable=True,
     )
     is_other_info_applicable: Mapped[Optional[bool]] = mapped_column(

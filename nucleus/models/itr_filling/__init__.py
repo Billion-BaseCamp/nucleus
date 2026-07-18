@@ -121,6 +121,7 @@ from nucleus.models.itr_filling.salary import (
 from nucleus.models.itr_filling.ais_json_archive import ITRAisJsonArchive
 from nucleus.models.itr_filling.tis_import import ITRTisSummaryCategory
 from nucleus.models.itr_filling.tis_pdf_archive import ITRTisPdfArchive
+from nucleus.models.itr_filling.form_26as_archive import ITRForm26asArchive
 from nucleus.models.itr_filling.ais_26as_import import (
     ITR26asEntry,
     ITRAis26asReconciliation,
@@ -259,6 +260,7 @@ __all__ = [
     "ReliefClaimed",
     "ITRAisJsonArchive",
     "ITRTisPdfArchive",
+    "ITRForm26asArchive",
     "ITRAis26asUpload",
     "ITRAisEntry",
     "ITR26asEntry",

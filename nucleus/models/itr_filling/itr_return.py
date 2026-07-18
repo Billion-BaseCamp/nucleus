@@ -168,6 +168,10 @@ class ITRReturn(Base):
         "ITRTisPdfArchive",
         back_populates="itr_return",
     )
+    form_26as_archives: Mapped[List["ITRForm26asArchive"]] = relationship(  # noqa: F821
+        "ITRForm26asArchive",
+        back_populates="itr_return",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

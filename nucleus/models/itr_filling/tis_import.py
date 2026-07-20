@@ -50,10 +50,10 @@ class ITRTisSummaryCategory(Base):
         nullable=False,
         index=True,
     )
-    tis_pdf_archive_id: Mapped[UUID] = mapped_column(
+    tis_pdf_archive_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("itr_tis_pdf_archives.id", ondelete="CASCADE"),
-        nullable=False,
+        nullable=True,
         index=True,
     )
     sr_no: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -79,7 +79,7 @@ class ITRTisSummaryCategory(Base):
         "ITRReturn",
         back_populates="tis_summary_categories",
     )
-    tis_pdf_archive: Mapped["ITRTisPdfArchive"] = relationship(  # noqa: F821
+    tis_pdf_archive: Mapped[Optional["ITRTisPdfArchive"]] = relationship(  # noqa: F821
         "ITRTisPdfArchive",
         back_populates="summary_categories",
     )

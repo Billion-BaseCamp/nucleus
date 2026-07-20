@@ -172,6 +172,12 @@ class ITRReturn(Base):
         "ITRForm26asArchive",
         back_populates="itr_return",
     )
+    prior_year_income_heads: Mapped[Optional["ITRPriorYearIncomeHeads"]] = relationship(  # noqa: F821
+        "ITRPriorYearIncomeHeads",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

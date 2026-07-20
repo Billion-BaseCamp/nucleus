@@ -17,6 +17,7 @@ from sqlalchemy import (
     Index,
     Integer,
     String,
+    Text,
     UniqueConstraint,
     UUID as SQLUUID,
 )
@@ -61,6 +62,12 @@ class ITRReturn(Base):
     form67_filed: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default=text("false")
     )
+
+    # Filed via external tool (Winman, IT portal, etc.) — still filing_status=filed
+    outside_filed: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=text("false")
+    )
+    outside_filing_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     tax_payable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

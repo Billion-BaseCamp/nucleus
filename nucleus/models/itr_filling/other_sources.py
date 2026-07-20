@@ -16,6 +16,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -116,6 +117,9 @@ class ITROSSchedule(Base):
 
 class ITRDeemedIncome(Base):
     __tablename__ = "itr_deemed_income"
+    __table_args__ = (
+        Index("ix_itr_deemed_income_schedule_source", "os_schedule_id", "source"),
+    )
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -139,6 +143,8 @@ class ITRDeemedIncome(Base):
     us57_professional_fees: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57(iii) professional / legal fees
     us57_aif_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # AIF (Investment Fund PTI) expenses
     us57_other_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)       # Sec 57 — other allowable expenses
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="deemed_income")
 
@@ -147,6 +153,13 @@ class ITRDeemedIncome(Base):
 
 class ITRTaxExemptIncome(Base):
     __tablename__ = "itr_tax_exempt_income"
+    __table_args__ = (
+        Index(
+            "ix_itr_tax_exempt_income_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
@@ -161,6 +174,8 @@ class ITRTaxExemptIncome(Base):
     exempt_10_10d: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_10_11: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_10_12: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="tax_exempt_income")
 
@@ -172,6 +187,9 @@ class ITROSIncomeLine(Base):
     """Fixed Other Income grid rows (Nature, Code, Source, Amount, TDS)."""
 
     __tablename__ = "itr_os_income_lines"
+    __table_args__ = (
+        Index("ix_itr_os_income_lines_schedule_source", "os_schedule_id", "source"),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -187,6 +205,8 @@ class ITROSIncomeLine(Base):
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # AIS | TIS | MANUAL — not the same as reference_source (nature/label).
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="income_lines")
     details: Mapped[List["ITROSIncomeLineDetail"]] = relationship(
@@ -203,6 +223,13 @@ class ITROSIncomeLineDetail(Base):
     """Breakdown rows under a fixed Other Income line (description + amount)."""
 
     __tablename__ = "itr_os_income_line_details"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_income_line_details_line_source",
+            "income_line_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     income_line_id: Mapped[UUID] = mapped_column(
@@ -215,6 +242,8 @@ class ITROSIncomeLineDetail(Base):
     description: Mapped[str] = mapped_column(String(200), nullable=False, default="")
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     tds: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     income_line: Mapped["ITROSIncomeLine"] = relationship(back_populates="details")
 
@@ -226,6 +255,13 @@ class ITROSInterestDetail(Base):
     """Bank-wise SB + FD interest breakdowns."""
 
     __tablename__ = "itr_os_interest_details"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_interest_details_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -240,6 +276,7 @@ class ITROSInterestDetail(Base):
     bank_name: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     account_no: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
@@ -253,6 +290,13 @@ class ITROSDividendDetail(Base):
     """Company-wise Indian + Foreign dividend breakdowns."""
 
     __tablename__ = "itr_os_dividend_details"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_dividend_details_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -266,6 +310,7 @@ class ITROSDividendDetail(Base):
     dividend_type: Mapped[str] = mapped_column(String(10), nullable=False)
     company_name: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     # Foreign dividends only — qualified vs ordinary (US tax classification).
@@ -298,6 +343,9 @@ class ITROSPTIEntity(Base):
     """Pass Through Income entity entries."""
 
     __tablename__ = "itr_os_pti_entities"
+    __table_args__ = (
+        Index("ix_itr_os_pti_entities_schedule_source", "os_schedule_id", "source"),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -314,6 +362,8 @@ class ITROSPTIEntity(Base):
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     head_of_income: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     investment_entity: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="pti_entities")
 
@@ -325,6 +375,13 @@ class ITROSBuybackShare(Base):
     """Buyback of Shares entries."""
 
     __tablename__ = "itr_os_buyback_shares"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_buyback_shares_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -346,6 +403,8 @@ class ITROSBuybackShare(Base):
     acquisition_cost_per_unit: Mapped[Decimal] = mapped_column(Numeric(15, 4), nullable=False, default=0)
     total_acquisition_cost: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     loss_amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="buyback_shares")
 
@@ -357,6 +416,13 @@ class ITROSClubbingEntry(Base):
     """Minor + Other Person income clubbing (Schedule SPI)."""
 
     __tablename__ = "itr_os_clubbing_entries"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_clubbing_entries_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -378,6 +444,8 @@ class ITROSClubbingEntry(Base):
     # CBDT DateRange quarter slot (Q1–Q4 + Post-Q4).
     # Upto15Of6 | Upto15Of9 | Up16Of9To15Of12 | Up16Of12To15Of3 | Up16Of3To31Of3
     quarter: Mapped[str] = mapped_column(String(20), nullable=False, server_default="Upto15Of6")
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="clubbing_entries")
 
@@ -389,6 +457,13 @@ class ITROSSpecialRate(Base):
     """NRI OS income at statutory special rates (UI capture; not wired to ITR export yet)."""
 
     __tablename__ = "itr_os_special_rate"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_special_rate_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -406,6 +481,8 @@ class ITROSSpecialRate(Base):
     pass_through_income: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     # Sec 234C proviso quarter slot (CBDT DateRange key).
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="special_rates")
 
@@ -422,6 +499,13 @@ class ITROSDtaaIncome(Base):
     """
 
     __tablename__ = "itr_os_dtaa_income"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_dtaa_income_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -449,6 +533,8 @@ class ITROSDtaaIncome(Base):
     is_pass_through: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True, default=False)
     # Sec 234C proviso quarter slot (CBDT DateRange key).
     quarter: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="dtaa_income_rows")
 
@@ -460,6 +546,13 @@ class ITROSOtherIncome(Base):
     """Other Interest + Any Other Income (unified via income_type discriminator)."""
 
     __tablename__ = "itr_os_other_income"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_other_income_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     os_schedule_id: Mapped[UUID] = mapped_column(
@@ -472,6 +565,8 @@ class ITROSOtherIncome(Base):
     income_type: Mapped[str] = mapped_column(String(20), nullable=False)
     source_of_income: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # AIS | TIS | MANUAL — not the same as source_of_income (nature/label).
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="other_income")
 

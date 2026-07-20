@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
@@ -15,6 +15,7 @@ from nucleus.db.database import Base
 
 if TYPE_CHECKING:
     from nucleus.models.itr_filling.itr_return import ITRReturn
+    from nucleus.models.itr_filling.tis_import import ITRTisSummaryCategory
 
 
 class ITRTisPdfArchive(Base):
@@ -22,6 +23,12 @@ class ITRTisPdfArchive(Base):
 
     Retention is enforced in application code: at most two ``stored`` rows
     per ``itr_return_id`` (latest + previous for compare).
+
+    When a third upload arrives, delete the oldest archive row (and its S3
+    object). ``ON DELETE CASCADE`` on ``itr_tis_summary_categories`` removes
+    that archive's parsed summary rows. Do **not** purge Schedule OS or any
+    other applied filing tables — those are live data, independent of TIS
+    snapshot retention.
     """
 
     __tablename__ = "itr_tis_pdf_archives"
@@ -64,6 +71,11 @@ class ITRTisPdfArchive(Base):
     itr_return: Mapped[Optional["ITRReturn"]] = relationship(  # noqa: F821
         "ITRReturn",
         back_populates="tis_pdf_archives",
+    )
+    summary_categories: Mapped[List["ITRTisSummaryCategory"]] = relationship(  # noqa: F821
+        "ITRTisSummaryCategory",
+        back_populates="tis_pdf_archive",
+        cascade="all, delete-orphan",
     )
 
 

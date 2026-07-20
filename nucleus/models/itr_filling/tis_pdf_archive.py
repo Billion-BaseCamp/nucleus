@@ -19,17 +19,6 @@ if TYPE_CHECKING:
 
 
 class ITRTisPdfArchive(Base):
-    """One stored TIS PDF export linked to an ITR return (raw file in S3).
-
-    Retention is enforced in application code: at most two ``stored`` rows
-    per ``itr_return_id`` (latest + previous for compare).
-
-    When a third upload arrives, delete the oldest archive row (and its S3
-    object). ``ON DELETE CASCADE`` on ``itr_tis_summary_categories`` removes
-    that archive's parsed summary rows. Do **not** purge Schedule OS or any
-    other applied filing tables — those are live data, independent of TIS
-    snapshot retention.
-    """
 
     __tablename__ = "itr_tis_pdf_archives"
 
@@ -72,10 +61,11 @@ class ITRTisPdfArchive(Base):
         "ITRReturn",
         back_populates="tis_pdf_archives",
     )
+    # No delete-orphan: summary lifecycle is owned by Import / Import-from-archive.
     summary_categories: Mapped[List["ITRTisSummaryCategory"]] = relationship(  # noqa: F821
         "ITRTisSummaryCategory",
         back_populates="tis_pdf_archive",
-        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
 
 

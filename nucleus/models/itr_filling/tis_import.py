@@ -1,9 +1,4 @@
-"""TIS (Taxpayer Information Summary) page-1 category totals per ITR.
 
-Each row belongs to a specific ``ITRTisPdfArchive``. When the oldest archive is
-evicted (max 2 per return), ``ON DELETE CASCADE`` removes that archive's
-summary rows. Applied Schedule OS / other filing data is never touched.
-"""
 
 from __future__ import annotations
 
@@ -26,11 +21,6 @@ if TYPE_CHECKING:
 
 
 class ITRTisSummaryCategory(Base):
-    """One row from the TIS page-1 summary table (Accepted / Processed totals).
-
-    Scoped to a PDF archive so latest + previous imports can coexist for
-    compare. Unique per ``(tis_pdf_archive_id, sr_no)``.
-    """
 
     __tablename__ = "itr_tis_summary_categories"
     __table_args__ = (
@@ -52,7 +42,7 @@ class ITRTisSummaryCategory(Base):
     )
     tis_pdf_archive_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("itr_tis_pdf_archives.id", ondelete="CASCADE"),
+        ForeignKey("itr_tis_pdf_archives.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )

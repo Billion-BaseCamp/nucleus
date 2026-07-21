@@ -1,4 +1,4 @@
-"""TIS (Taxpayer Information Summary) page-1 category totals per ITR."""
+
 
 from __future__ import annotations
 
@@ -17,17 +17,17 @@ from nucleus.db.database import Base
 
 if TYPE_CHECKING:
     from nucleus.models.itr_filling.itr_return import ITRReturn
+    from nucleus.models.itr_filling.tis_pdf_archive import ITRTisPdfArchive
 
 
 class ITRTisSummaryCategory(Base):
-    """One row from the TIS page-1 summary table (Accepted / Processed totals)."""
 
     __tablename__ = "itr_tis_summary_categories"
     __table_args__ = (
         UniqueConstraint(
-            "itr_return_id",
+            "tis_pdf_archive_id",
             "sr_no",
-            name="uq_itr_tis_summary_categories_return_sr",
+            name="uq_itr_tis_summary_categories_archive_sr",
         ),
     )
 
@@ -38,6 +38,12 @@ class ITRTisSummaryCategory(Base):
         SQLUUID(as_uuid=True),
         ForeignKey("itr_returns.id", ondelete="CASCADE"),
         nullable=False,
+        index=True,
+    )
+    tis_pdf_archive_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_tis_pdf_archives.id", ondelete="SET NULL"),
+        nullable=True,
         index=True,
     )
     sr_no: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -62,6 +68,10 @@ class ITRTisSummaryCategory(Base):
     itr_return: Mapped["ITRReturn"] = relationship(  # noqa: F821
         "ITRReturn",
         back_populates="tis_summary_categories",
+    )
+    tis_pdf_archive: Mapped[Optional["ITRTisPdfArchive"]] = relationship(  # noqa: F821
+        "ITRTisPdfArchive",
+        back_populates="summary_categories",
     )
 
 

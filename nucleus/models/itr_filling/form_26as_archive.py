@@ -1,9 +1,9 @@
-"""ITR-scoped TIS PDF file archives (S3-backed metadata)."""
+"""Client-wise Form 26AS file archives (S3-backed metadata)."""
 
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
@@ -15,12 +15,12 @@ from nucleus.db.database import Base
 
 if TYPE_CHECKING:
     from nucleus.models.itr_filling.itr_return import ITRReturn
-    from nucleus.models.itr_filling.tis_import import ITRTisSummaryCategory
 
 
-class ITRTisPdfArchive(Base):
+class ITRForm26asArchive(Base):
+    """One stored Form 26AS .txt export for a client (raw file in S3)."""
 
-    __tablename__ = "itr_tis_pdf_archives"
+    __tablename__ = "itr_form_26as_archives"
 
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
@@ -59,14 +59,8 @@ class ITRTisPdfArchive(Base):
 
     itr_return: Mapped[Optional["ITRReturn"]] = relationship(  # noqa: F821
         "ITRReturn",
-        back_populates="tis_pdf_archives",
-    )
-    # No delete-orphan: summary lifecycle is owned by Import / Import-from-archive.
-    summary_categories: Mapped[List["ITRTisSummaryCategory"]] = relationship(  # noqa: F821
-        "ITRTisSummaryCategory",
-        back_populates="tis_pdf_archive",
-        passive_deletes=True,
+        back_populates="form_26as_archives",
     )
 
 
-__all__ = ["ITRTisPdfArchive"]
+__all__ = ["ITRForm26asArchive"]

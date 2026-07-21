@@ -38,7 +38,10 @@ class ITRReturn(Base):
         SQLUUID(as_uuid=True), nullable=False, index=True
     )
     financial_year_id: Mapped[UUID] = mapped_column(
-        SQLUUID(as_uuid=True), nullable=False, index=True
+        SQLUUID(as_uuid=True),
+        ForeignKey("financial_years.id", ondelete="RESTRICT"),
+        nullable=False,
+        index=True,
     )
     version_number: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     parent_itr_return_id: Mapped[Optional[UUID]] = mapped_column(

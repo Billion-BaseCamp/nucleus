@@ -337,7 +337,7 @@ class ITROtherSalary(Base):
     )
 
     employer_name: Mapped[str] = mapped_column(String(125), nullable=False, default="")
-    tan: Mapped[str] = mapped_column(String(10), nullable=False, default="")
+    tan: Mapped[str] = mapped_column(String(10), nullable=True, default="")
     taxable_salary: Mapped[Decimal] = mapped_column(Numeric(18, 2), default=0)
     comments: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     period_from: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)

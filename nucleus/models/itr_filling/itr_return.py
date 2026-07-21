@@ -69,6 +69,9 @@ class ITRReturn(Base):
     )
     outside_filing_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    verifier_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    preparer_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+
     total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     tax_payable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     refund_due: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

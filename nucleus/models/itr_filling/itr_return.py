@@ -73,6 +73,10 @@ class ITRReturn(Base):
     preparer_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     # Captured once when filing_status moves to ``reviewed`` (Tax Summary).
     reviewer_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    # True when review was explicitly skipped (``Review not required``).
+    review_not_required: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=text("false")
+    )
 
     total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     tax_payable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)

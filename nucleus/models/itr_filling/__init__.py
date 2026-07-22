@@ -113,6 +113,9 @@ from nucleus.models.itr_filling.other_sources import (
     ITRTaxExemptIncome,
 )
 from nucleus.models.itr_filling.prior_year_income import ITRPriorYearIncomeHeads
+from nucleus.models.itr_filling.client_summary_download_log import (
+    ITRClientSummaryDownloadLog,
+)
 from nucleus.models.itr_filling.salary import (
     ITRForeignSalary,
     ITROtherSalary,
@@ -181,6 +184,8 @@ __all__ = [
     "ITROSSchedule",
     # Prior-year income heads (Client Summary YoY)
     "ITRPriorYearIncomeHeads",
+    # Client Summary PDF download log
+    "ITRClientSummaryDownloadLog",
     # Deductions (Chapter VI-A)
     "ITRDedSchedule",
     "ITRDed80C",

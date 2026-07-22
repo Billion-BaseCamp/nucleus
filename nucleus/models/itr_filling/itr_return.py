@@ -194,6 +194,12 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
+    client_summary_download_logs: Mapped[List["ITRClientSummaryDownloadLog"]] = relationship(  # noqa: F821
+        "ITRClientSummaryDownloadLog",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        order_by="ITRClientSummaryDownloadLog.downloaded_at.desc()",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

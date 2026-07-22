@@ -156,6 +156,8 @@ class ITRHPCoOwner(Base):
     """Co-owner entry for a property (CoOwners in ITR JSON)."""
 
     __tablename__ = "itr_hp_co_owners"
+    # Non-empty PAN uniqueness enforced in tax-engine create/update (409).
+    # Partial unique index can be added in DB ops when migrations are cut.
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     property_id: Mapped[UUID] = mapped_column(

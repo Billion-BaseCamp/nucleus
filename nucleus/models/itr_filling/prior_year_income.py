@@ -85,7 +85,7 @@ class ITRPriorYearIncomeHeads(Base):
         Boolean, nullable=False, default=False, server_default="false"
     )
     net_business_income: Mapped[Decimal] = mapped_column(
-        Numeric(18, 2), nullable=False, default=Decimal("0")
+        Numeric(18, 2), nullable=True, default=Decimal("0")
     )
     has_business_loss_cf: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"

@@ -1,11 +1,13 @@
 """Prior-year income heads for Client Summary YoY bar chart.
 
 One row per current ``itr_returns`` row. Values are taken as filed from the
-prior-year ITR-2 PartB-TI (whatever regime was used) and stored under the same
+prior-year ITR JSON (whatever regime was used) and stored under the same
 head names as ``ComputationDisplayBlock`` so the chart can compare
 current-vs-prior apples-to-apples at the head level.
 
-No Alembic migration ships with this model — create the table out-of-band.
+Also stores prior-year ITR form type and business / presumptive flags derived
+from ITR-2 / ITR-3 (Schedule BP + Schedule CFL). Schema changes are managed
+via Alembic autogenerate.
 """
 
 from __future__ import annotations
@@ -16,6 +18,7 @@ from typing import Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
+    Boolean,
     DateTime,
     ForeignKey,
     String,
@@ -29,7 +32,7 @@ from nucleus.db.database import Base
 
 
 class ITRPriorYearIncomeHeads(Base):
-    """Snapshot of prior-year PartB-TI income heads for one current ITR return."""
+    """Snapshot of prior-year income heads + business flags for one current ITR return."""
 
     __tablename__ = "itr_prior_year_income_heads"
 
@@ -51,6 +54,9 @@ class ITRPriorYearIncomeHeads(Base):
     # PAN used to match the JSON to the client (uppercase).
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True, index=True)
 
+    # Prior-year form type as filed: "1" / "2" / "3" / …
+    itr_type: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
+
     # Same semantics / names as Client Summary ComputationDisplayBlock heads.
     salary_income: Mapped[Decimal] = mapped_column(
         Numeric(18, 2), nullable=False, default=Decimal("0")
@@ -66,6 +72,23 @@ class ITRPriorYearIncomeHeads(Base):
     )
     dtaa_income: Mapped[Decimal] = mapped_column(
         Numeric(18, 2), nullable=False, default=Decimal("0")
+    )
+
+    # ITR-3 (and optionally ITR-2 for CF flag only) business / presumptive flags.
+    has_section_44ad: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+    has_section_44ada: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+    is_normal_business: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
+    net_business_income: Mapped[Decimal] = mapped_column(
+        Numeric(18, 2), nullable=False, default=Decimal("0")
+    )
+    has_business_loss_cf: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
     )
 
     source_filename: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)

@@ -90,6 +90,20 @@ class ITRPriorYearIncomeHeads(Base):
     has_business_loss_cf: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"
     )
+    # Amounts carried forward into the current filing year, from prior-year
+    # Schedule CFL "total loss carried forward to future years".
+    # Ordinary (non-speculative) business loss drives the F&O treatment
+    # recommendation; speculative / specified are kept separate because they
+    # cannot be set off against ordinary business income.
+    business_loss_cf_amount: Mapped[Decimal] = mapped_column(
+        Numeric(18, 2), nullable=False, default=Decimal("0"), server_default="0"
+    )
+    speculative_loss_cf_amount: Mapped[Decimal] = mapped_column(
+        Numeric(18, 2), nullable=False, default=Decimal("0"), server_default="0"
+    )
+    specified_business_loss_cf_amount: Mapped[Decimal] = mapped_column(
+        Numeric(18, 2), nullable=False, default=Decimal("0"), server_default="0"
+    )
 
     source_filename: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 

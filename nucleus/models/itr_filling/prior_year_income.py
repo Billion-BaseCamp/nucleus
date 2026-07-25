@@ -24,6 +24,7 @@ from sqlalchemy import (
     String,
     UUID as SQLUUID,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
@@ -103,6 +104,14 @@ class ITRPriorYearIncomeHeads(Base):
     )
     specified_business_loss_cf_amount: Mapped[Decimal] = mapped_column(
         Numeric(18, 2), nullable=False, default=Decimal("0"), server_default="0"
+    )
+
+    # Deemed let-out properties from prior-year Schedule HP (ifLetOut == "D").
+    # List of {sno, address, city, state_code, country_code, pincode,
+    # assessee_share_pct, annual_letable_value, income_of_hp}. NULL when the
+    # prior-year return has no deemed let-out property.
+    deemed_let_out_properties: Mapped[Optional[list[dict]]] = mapped_column(
+        JSONB, nullable=True
     )
 
     source_filename: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)

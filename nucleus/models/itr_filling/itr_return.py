@@ -200,6 +200,11 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         order_by="ITRClientSummaryDownloadLog.downloaded_at.desc()",
     )
+    summary_verifications: Mapped[List["ITRSummaryVerification"]] = relationship(  # noqa: F821
+        "ITRSummaryVerification",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

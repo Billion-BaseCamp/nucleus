@@ -116,6 +116,7 @@ from nucleus.models.itr_filling.prior_year_income import ITRPriorYearIncomeHeads
 from nucleus.models.itr_filling.client_summary_download_log import (
     ITRClientSummaryDownloadLog,
 )
+from nucleus.models.itr_filling.summary_verification import ITRSummaryVerification
 from nucleus.models.itr_filling.salary import (
     ITRForeignSalary,
     ITROtherSalary,
@@ -186,6 +187,8 @@ __all__ = [
     "ITRPriorYearIncomeHeads",
     # Client Summary PDF download log
     "ITRClientSummaryDownloadLog",
+    # Summary download verification confirmations
+    "ITRSummaryVerification",
     # Deductions (Chapter VI-A)
     "ITRDedSchedule",
     "ITRDed80C",

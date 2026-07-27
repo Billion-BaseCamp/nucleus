@@ -560,6 +560,11 @@ class ITRFSIEntry(Base):
 
     section_of_relief: Mapped[Optional[str]] = mapped_column(String(5), nullable=True)
     article_of_dtaa: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
+    # FORM67 = auto-synced from Form 67; MANUAL = advisor-entered on Schedule FSI.
+    # Form 67 sync only replaces FORM67 rows so manuals survive.
+    source: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True, default="FORM67", server_default="FORM67"
+    )
 
     tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
         "ITRTaxCreditSchedule", back_populates="fsi_entries"

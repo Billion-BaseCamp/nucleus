@@ -167,13 +167,16 @@ class ITRTaxExemptIncome(Base):
         nullable=False,
         index=True,
     )
-   # ── Tax Exempt Income — fixed 6-row structure ──
+   # ── Tax Exempt Income — fixed rows + free-text Others (Schedule EI) ──
     exempt_interest_income: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_not_chargeable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_pti_not_chargeable: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_10_10d: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_10_11: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_10_12: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # Schedule EI OthersIncDtls: Category=OTH, SubCategory=Receiptnotincme
+    exempt_others: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    exempt_others_description: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 

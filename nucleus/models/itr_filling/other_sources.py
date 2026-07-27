@@ -175,7 +175,10 @@ class ITRTaxExemptIncome(Base):
     exempt_10_11: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     exempt_10_12: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     # Schedule EI OthersIncDtls: Category=OTH, SubCategory=Receiptnotincme
-    exempt_others: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    # server_default required so ADD COLUMN NOT NULL backfills existing rows.
+    exempt_others: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
     exempt_others_description: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
     # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)

@@ -12,8 +12,11 @@ class OtpVerification(Base):
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     login_id: Mapped[int] = mapped_column(Integer, ForeignKey("logins.id"), nullable=False, index=True)
     otp_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    otp: Mapped[str] = mapped_column(String, nullable=False, unique=True, index=True)
+    otp: Mapped[str] = mapped_column(String, nullable=False, index=True)
     otp_expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     unique_id: Mapped[str] = mapped_column(String, nullable=True)
+    # Discriminates which flow this OTP belongs to: "LOGIN", "PASSWORD_RESET", "ADVISOR_2FA".
+    # Prevents an OTP issued for one flow (e.g. password reset) from being replayed in another (e.g. login).
+    purpose: Mapped[str] = mapped_column(String, nullable=False, server_default="LOGIN")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

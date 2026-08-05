@@ -69,6 +69,15 @@ class ITRReturn(Base):
     )
     outside_filing_comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    verifier_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    preparer_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    # Captured once when filing_status moves to ``reviewed`` (Tax Summary).
+    reviewer_name: Mapped[Optional[str]] = mapped_column(String(125), nullable=True)
+    # True when review was explicitly skipped (``Review not required``).
+    review_not_required: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default=text("false")
+    )
+
     total_income: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     tax_payable: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
     refund_due: Mapped[Optional[Decimal]] = mapped_column(Numeric(18, 2), default=0)
@@ -184,6 +193,17 @@ class ITRReturn(Base):
         back_populates="itr_return",
         cascade="all, delete-orphan",
         uselist=False,
+    )
+    client_summary_download_logs: Mapped[List["ITRClientSummaryDownloadLog"]] = relationship(  # noqa: F821
+        "ITRClientSummaryDownloadLog",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        order_by="ITRClientSummaryDownloadLog.downloaded_at.desc()",
+    )
+    summary_verifications: Mapped[List["ITRSummaryVerification"]] = relationship(  # noqa: F821
+        "ITRSummaryVerification",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
     )
 
     created_at: Mapped[datetime] = mapped_column(

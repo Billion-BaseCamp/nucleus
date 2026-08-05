@@ -435,6 +435,14 @@ class ITRStep2Residency(Base):
     client: Mapped["Client"] = relationship("Client")
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear")
 
+    __table_args__ = (
+        UniqueConstraint(
+            "client_id",
+            "financial_year_id",
+            name="uq_itr_step2_residency_client_fy",
+        ),
+    )
+
 
 class ITRStep2Citizenship(Base):
     __tablename__ = "itr_step2_citizenship"

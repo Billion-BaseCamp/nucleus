@@ -24,7 +24,8 @@ class Quarter(Base):
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
     is_locked: Mapped[bool] = mapped_column(Boolean, default=False)
     status: Mapped[str] = mapped_column(String, nullable=False)
-    is_liability: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_liability: Mapped[bool] = mapped_column(Boolean, nullable=True)  # legacy; use liability_status
+    liability_status: Mapped[str | None] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
     is_json_imported: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)

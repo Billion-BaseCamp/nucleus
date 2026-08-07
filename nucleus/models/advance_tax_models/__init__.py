@@ -14,6 +14,7 @@ from nucleus.models.advance_tax_models.excemption import Excemption
 from nucleus.models.advance_tax_models.financial_year import FinancialYear
 from nucleus.models.advance_tax_models.employer import Employer
 from nucleus.models.advance_tax_models.interest_details import InterestDetails
+from nucleus.models.advance_tax_models.interest_accounts import InterestAccounts
 from nucleus.models.advance_tax_models.other_income import OtherIncome
 from nucleus.models.advance_tax_models.quarter import Quarter
 from nucleus.models.advance_tax_models.rental import Rental
@@ -32,6 +33,7 @@ __all__ = [
     "Excemption",
     "FinancialYear",
     "Employer",
+    "InterestAccounts",
     "InterestDetails",
     "OtherIncome",
     "Quarter",

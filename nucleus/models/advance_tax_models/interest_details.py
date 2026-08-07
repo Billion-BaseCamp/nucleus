@@ -1,5 +1,6 @@
 from sqlalchemy import DateTime, Float, ForeignKey, UUID as SQLUUID
 from uuid import UUID, uuid4
+from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -38,11 +39,14 @@ class InterestDetails(Base):
     total_interest: Mapped[float] = mapped_column(Float, default=0.0)
     total_tds: Mapped[float] = mapped_column(Float, default=0.0)
 
-    
-    
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="interest_details")
     client: Mapped["Client"] = relationship("Client", back_populates="interest_details")
+    interest_accounts: Mapped[List["InterestAccounts"]] = relationship(
+        "InterestAccounts",
+        back_populates="interest_details",
+        cascade="all, delete-orphan",
+    )
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

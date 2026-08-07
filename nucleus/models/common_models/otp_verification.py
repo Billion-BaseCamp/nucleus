@@ -15,13 +15,12 @@ class OtpVerification(Base):
         Integer, ForeignKey("logins.id"), nullable=False, index=True
     )
     otp_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    # Not unique: the same OTP digits may exist across purposes/logins.
-    otp: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    # HMAC hex digest of the OTP digits (auth-service stores hash, never plaintext).
+    otp_hash: Mapped[str] = mapped_column(String, nullable=False, index=True)
     otp_expires_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False
     )
-    unique_id: Mapped[str] = mapped_column(String, nullable=True)
-    # Discriminates LOGIN / PASSWORD_RESET / MFA_LOGIN so OTPs cannot be replayed across flows.
+    # Currently only LOGIN is used (single-step OTP auth for all roles).
     purpose: Mapped[str] = mapped_column(
         String, nullable=False, server_default="LOGIN"
     )

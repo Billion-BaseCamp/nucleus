@@ -1,4 +1,3 @@
-
 from uuid import UUID, uuid4
 from sqlalchemy import (
     Integer,
@@ -19,10 +18,10 @@ from nucleus.core.constants import UserRole
 class Login(Base):
     __tablename__ = "logins"
     __table_args__ = (
-        # Advisor/admin rows must have an email (needed for MFA OTP delivery).
+        # OTP login requires a non-empty email for every role.
         CheckConstraint(
-            f"role != '{UserRole.ADVISOR.name}' OR (email IS NOT NULL AND email <> '')",
-            name="ck_logins_advisor_email_required",
+            "email IS NOT NULL AND email <> ''",
+            name="ck_logins_email_required",
         ),
         # Every login belongs to exactly one owner — never both, never neither.
         CheckConstraint(
@@ -31,8 +30,7 @@ class Login(Base):
         ),
     )
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    hashed_password: Mapped[str] = mapped_column(String, nullable=False)
-    email: Mapped[str] = mapped_column(String, nullable=True)
+    email: Mapped[str] = mapped_column(String, nullable=False)
     username: Mapped[str] = mapped_column(String, nullable=False)
     mobile_number: Mapped[str] = mapped_column(String, nullable=True)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
@@ -77,7 +75,6 @@ class LoginEvent(Base):
     login_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("logins.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    service_id: Mapped[str] = mapped_column(String, nullable=True)
     logged_in_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     client: Mapped["Client"] = relationship("Client")

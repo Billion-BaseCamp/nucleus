@@ -18,8 +18,7 @@ from nucleus.core.constants import UserRole
 class Login(Base):
     __tablename__ = "logins"
     __table_args__ = (
-        # Prefer NULL over '' so UNIQUE(email) can coexist with missing emails
-        # (Postgres UNIQUE treats NULLs as distinct; '' would collide).
+        # Prefer NULL over '' for missing emails.
         CheckConstraint(
             "email IS NULL OR email <> ''",
             name="ck_logins_email_null_or_nonempty",
@@ -31,7 +30,7 @@ class Login(Base):
         ),
     )
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    email: Mapped[str | None] = mapped_column(String, nullable=True, unique=True, index=True)
+    email: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
     username: Mapped[str] = mapped_column(String, nullable=False)
     mobile_number: Mapped[str] = mapped_column(String, nullable=True)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)

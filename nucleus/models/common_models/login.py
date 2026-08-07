@@ -30,7 +30,7 @@ class Login(Base):
         ),
     )
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    email: Mapped[str] = mapped_column(String, nullable=True, unique=True)
     username: Mapped[str] = mapped_column(String, nullable=False)
     mobile_number: Mapped[str] = mapped_column(String, nullable=True)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)

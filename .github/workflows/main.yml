@@ -1,8 +1,12 @@
 name: nucleus-backend
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches:
+      - preProd
+
+  pull_request:
+    branches:
+      - preProd
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -22,7 +26,7 @@ jobs:
         run: pip-audit
   deploy:
     needs: ci
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/preProd'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy via SSH
@@ -35,7 +39,9 @@ jobs:
             set -e
             cd nucleus/
             echo "Pulling latest code..."
-            git pull origin main
+            git fetch origin
+            git checkout preProd
+            git pull origin preProd
             echo "Activating virtualenv..."
             source nucleusenv/bin/activate
             echo "Installing dependencies..."

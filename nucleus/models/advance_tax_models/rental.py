@@ -22,10 +22,9 @@ class Rental(Base):
     )
     client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id"), nullable=False)
 
-    # When set, this row is a mirrored share synced from another assessee's rental
-    source_rental_id: Mapped[Optional[UUID]] = mapped_column(
+    # Links co-owner rental rows for the same property in a quarter
+    property_group_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("rentals.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )
@@ -54,18 +53,13 @@ class Rental(Base):
         foreign_keys="RentalCoOwner.rental_id",
         order_by="RentalCoOwner.display_order",
     )
-    source_rental: Mapped[Optional["Rental"]] = relationship(
-        "Rental",
-        remote_side="Rental.id",
-        foreign_keys=[source_rental_id],
-    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
 
 class RentalCoOwner(Base):
-    """Co-owner share for a rental property. Family members get a mirrored rental row."""
+    """Co-owner share for a rental property group. Stored on the anchor rental row."""
 
     __tablename__ = "rental_co_owners"
 
@@ -88,7 +82,7 @@ class RentalCoOwner(Base):
     is_other: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     share_percent: Mapped[float] = mapped_column(Float, nullable=False)
 
-    # Mirrored rental on the co-owner's quarter (null for Other)
+    # Co-owner's rental row in the same quarter (null for Other)
     linked_rental_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("rentals.id", ondelete="SET NULL"),

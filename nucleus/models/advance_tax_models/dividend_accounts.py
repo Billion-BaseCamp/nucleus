@@ -6,27 +6,25 @@ from sqlalchemy.sql import func
 from datetime import datetime
 
 
-class InterestAccounts(Base):
-    """Per-bank-account bifurcation for FD / Savings / Pass / Other / Foreign interest (mirrors brokerage_accounts for CG)."""
+class DividendAccounts(Base):
+    """Per-account bifurcation for dividend heads (mirrors interest_accounts)."""
 
-    __tablename__ = "interest_accounts"
+    __tablename__ = "dividend_accounts"
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
-    interest_details_id: Mapped[UUID] = mapped_column(
+    dividends_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("interest_details.id", ondelete="CASCADE"),
+        ForeignKey("dividends.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
     account_name: Mapped[str] = mapped_column(String, nullable=True)
-    account_value: Mapped[float] = mapped_column(Float, nullable=True)  # interest amount
+    account_value: Mapped[float] = mapped_column(Float, nullable=True)
     tds_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)
-    # "FD" | "SAVINGS" | "PASS" | "OTHER" | "FOREIGN"
+    # "FOREIGN" (FTC stored in tds_amount)
     sub_category: Mapped[str] = mapped_column(String, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
-    interest_details: Mapped["InterestDetails"] = relationship(
-        "InterestDetails", back_populates="interest_accounts"
-    )
+    dividends: Mapped["Dividends"] = relationship("Dividends", back_populates="dividend_accounts")

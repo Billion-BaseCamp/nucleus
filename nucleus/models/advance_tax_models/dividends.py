@@ -1,5 +1,6 @@
 from sqlalchemy import DateTime, Float, ForeignKey, UUID as SQLUUID
 from uuid import UUID, uuid4
+from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -19,6 +20,11 @@ class Dividends(Base):
     tds: Mapped[float] = mapped_column(Float, nullable=True)
     ftc: Mapped[float] = mapped_column(Float, nullable=True)
     india_dividends_tax_rate: Mapped[float] = mapped_column(Float, nullable=True)
+    dividend_accounts: Mapped[List["DividendAccounts"]] = relationship(
+        "DividendAccounts",
+        back_populates="dividends",
+        cascade="all, delete-orphan",
+    )
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="dividends")
     client: Mapped["Client"] = relationship("Client", back_populates="dividends")

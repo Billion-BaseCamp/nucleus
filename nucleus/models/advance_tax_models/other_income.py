@@ -1,5 +1,6 @@
 from sqlalchemy import DateTime, Float, ForeignKey, UUID as SQLUUID
 from uuid import UUID, uuid4
+from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -41,6 +42,12 @@ class OtherIncome(Base):
     tcs_expected: Mapped[float] = mapped_column(Float, default=0.0)
     tds_on_capital_gains: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
     additional_tcs_expected: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
+
+    other_income_accounts: Mapped[List["OtherIncomeAccounts"]] = relationship(
+        "OtherIncomeAccounts",
+        back_populates="other_income",
+        cascade="all, delete-orphan",
+    )
 
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="other_income")

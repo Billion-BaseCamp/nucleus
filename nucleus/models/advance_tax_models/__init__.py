@@ -17,7 +17,7 @@ from nucleus.models.advance_tax_models.interest_details import InterestDetails
 from nucleus.models.advance_tax_models.interest_accounts import InterestAccounts
 from nucleus.models.advance_tax_models.other_income import OtherIncome
 from nucleus.models.advance_tax_models.quarter import Quarter
-from nucleus.models.advance_tax_models.rental import Rental
+from nucleus.models.advance_tax_models.rental import Rental, RentalCoOwner
 from nucleus.models.advance_tax_models.section_54_claim import Section54Claim
 from nucleus.models.advance_tax_models.section_54F_claim import Section54FClaim
 from nucleus.models.advance_tax_models.section_54F_assests import Section54FAssets
@@ -38,6 +38,7 @@ __all__ = [
     "OtherIncome",
     "Quarter",
     "Rental",
+    "RentalCoOwner",
     "Section54Claim",
     "Section54FAssets",
     "Section54FClaim",

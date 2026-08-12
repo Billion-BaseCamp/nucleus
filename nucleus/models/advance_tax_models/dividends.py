@@ -20,14 +20,14 @@ class Dividends(Base):
     tds: Mapped[float] = mapped_column(Float, nullable=True)
     ftc: Mapped[float] = mapped_column(Float, nullable=True)
     india_dividends_tax_rate: Mapped[float] = mapped_column(Float, nullable=True)
+    # Relationships
+    quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="dividends")
+    client: Mapped["Client"] = relationship("Client", back_populates="dividends")
     dividend_accounts: Mapped[List["DividendAccounts"]] = relationship(
         "DividendAccounts",
         back_populates="dividends",
         cascade="all, delete-orphan",
     )
-    # Relationships
-    quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="dividends")
-    client: Mapped["Client"] = relationship("Client", back_populates="dividends")
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

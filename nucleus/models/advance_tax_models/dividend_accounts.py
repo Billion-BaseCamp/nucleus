@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 class DividendAccounts(Base):
-    """Per-account bifurcation for dividend heads (mirrors interest_accounts)."""
+    """Per-account bifurcation for foreign dividends (mirrors interest_accounts)."""
 
     __tablename__ = "dividend_accounts"
 
@@ -20,11 +20,13 @@ class DividendAccounts(Base):
     )
     account_name: Mapped[str] = mapped_column(String, nullable=True)
     account_value: Mapped[float] = mapped_column(Float, nullable=True)
-    tds_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)
-    # "FOREIGN" (FTC stored in tds_amount)
+    tds_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)  # FTC for foreign rows
+    # "FOREIGN" (India breakdown can be added later)
     sub_category: Mapped[str] = mapped_column(String, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
-    dividends: Mapped["Dividends"] = relationship("Dividends", back_populates="dividend_accounts")
+    dividends: Mapped["Dividends"] = relationship(
+        "Dividends", back_populates="dividend_accounts"
+    )

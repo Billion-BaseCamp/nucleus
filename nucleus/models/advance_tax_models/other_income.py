@@ -43,15 +43,14 @@ class OtherIncome(Base):
     tds_on_capital_gains: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
     additional_tcs_expected: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
 
+    # Relationships
+    quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="other_income")
+    client: Mapped["Client"] = relationship("Client", back_populates="other_income")
     other_income_accounts: Mapped[List["OtherIncomeAccounts"]] = relationship(
         "OtherIncomeAccounts",
         back_populates="other_income",
         cascade="all, delete-orphan",
     )
-
-    # Relationships
-    quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="other_income")
-    client: Mapped["Client"] = relationship("Client", back_populates="other_income")
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

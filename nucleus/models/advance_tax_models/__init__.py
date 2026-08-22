@@ -4,6 +4,7 @@
 # 2. Employer second (relationship "FinancialYear" must be in registry)
 # 3. TaxProfile and others (no Employer dependency)
 
+from nucleus.models.advance_tax_models.advance_tax_26as_upload import AdvanceTax26asUpload
 from nucleus.models.advance_tax_models.capital_gains import CapitalGains
 from nucleus.models.advance_tax_models.brokerage_accounts import BrokerageAccounts
 from nucleus.models.advance_tax_models.comments import Comments
@@ -26,6 +27,7 @@ from nucleus.models.advance_tax_models.section_54F_assests import Section54FAsse
 from nucleus.models.advance_tax_models.tax_profile import TaxProfile
 
 __all__ = [
+    "AdvanceTax26asUpload",
     "BrokerageAccounts",
     "CapitalGains",
     "Comments",

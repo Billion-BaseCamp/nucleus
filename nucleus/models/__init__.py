@@ -15,6 +15,7 @@ from nucleus.models.common_models.documents_collector_info import (
 
 # Advance Tax Models (import order in advance_tax_models/__init__.py for relationship resolution)
 from nucleus.models.advance_tax_models import (
+    AdvanceTax26asUpload,
     BrokerageAccounts,
     CapitalGains,
     Comments,
@@ -219,6 +220,7 @@ __all__ = [
     "DocumentCollectorInfo",
     "SubTypeComments",
     # Advance Tax Models
+    "AdvanceTax26asUpload",
     "BrokerageAccounts",
     "CapitalGains",
     "Comments",

@@ -1,6 +1,6 @@
-from sqlalchemy import DateTime, Float, ForeignKey, UUID as SQLUUID
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, UUID as SQLUUID
 from uuid import UUID, uuid4
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -27,6 +27,7 @@ class InterestDetails(Base):
     pass_interest: Mapped[float] = mapped_column(Float, default=0.0)
     pass_tds: Mapped[float] = mapped_column(Float, default=0.0)
     pass_interest_tax_rate: Mapped[float] = mapped_column(Float, default=0.0,server_default="0")
+    pass_through_confirmed: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     epf_interest: Mapped[float] = mapped_column(Float, default=0.0)
     epf_tds: Mapped[float] = mapped_column(Float, default=0.0)
     epf_interest_tax_rate: Mapped[float] = mapped_column(Float, default=0.0,server_default="0")

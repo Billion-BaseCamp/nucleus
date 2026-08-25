@@ -19,6 +19,12 @@ class Form26ASPart1(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -45,6 +51,12 @@ class Form26ASPart2(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -72,6 +84,12 @@ class Form26ASPart3(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -99,6 +117,12 @@ class Form26ASPart4(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductor: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
@@ -125,6 +149,12 @@ class Form26ASPart5(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_buyer: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
@@ -148,6 +178,12 @@ class Form26ASPart6(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_collector: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -174,6 +210,12 @@ class Form26ASPart7(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     assessment_year: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
@@ -199,6 +241,12 @@ class Form26ASPart8(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_deductee: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
@@ -226,6 +274,12 @@ class Form26ASPart9(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     name_of_seller: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
@@ -250,6 +304,12 @@ class Form26ASPart10(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False, index=True)
+    upload_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("advance_tax_26as_uploads.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
 
     sr_no: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
     short_payment: Mapped[float] = mapped_column(Numeric(15, 2), nullable=False, default=0, server_default=text('0'))

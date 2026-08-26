@@ -15,6 +15,16 @@ from nucleus.models.common_models.documents_collector_info import (
 
 # Advance Tax Models (import order in advance_tax_models/__init__.py for relationship resolution)
 from nucleus.models.advance_tax_models import (
+    ATCGDocument,
+    ATCGDocumentProcessingLog,
+    ATCGDocumentSlot,
+    ATCGIndiaEQAndDebtMFBroker,
+    ATCGIndiaEQAndDebtMFTransaction,
+    ATCGSchedule,
+    ATCGUnlistedTransaction,
+    ATCGUSBroker,
+    ATCGUSTransaction,
+    ATCGVDATransaction,
     AdvanceTax26asUpload,
     BrokerageAccounts,
     CapitalGains,
@@ -220,6 +230,16 @@ __all__ = [
     "DocumentCollectorInfo",
     "SubTypeComments",
     # Advance Tax Models
+    "ATCGDocument",
+    "ATCGDocumentProcessingLog",
+    "ATCGDocumentSlot",
+    "ATCGIndiaEQAndDebtMFBroker",
+    "ATCGIndiaEQAndDebtMFTransaction",
+    "ATCGSchedule",
+    "ATCGUnlistedTransaction",
+    "ATCGUSBroker",
+    "ATCGUSTransaction",
+    "ATCGVDATransaction",
     "AdvanceTax26asUpload",
     "BrokerageAccounts",
     "CapitalGains",

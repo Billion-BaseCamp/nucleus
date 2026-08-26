@@ -46,6 +46,17 @@ class Quarter(Base):
     interest_details: Mapped[List["InterestDetails"]] = relationship("InterestDetails", back_populates="quarter")
     dividends: Mapped[List["Dividends"]] = relationship("Dividends", back_populates="quarter")
     capital_gains: Mapped[List["CapitalGains"]] = relationship("CapitalGains", back_populates="quarter")
+    cg_document_slots: Mapped[List["ATCGDocumentSlot"]] = relationship(
+        "ATCGDocumentSlot",
+        back_populates="quarter",
+        cascade="all, delete-orphan",
+    )
+    cg_schedule: Mapped[Optional["ATCGSchedule"]] = relationship(
+        "ATCGSchedule",
+        back_populates="quarter",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
     other_income: Mapped[List["OtherIncome"]] = relationship("OtherIncome", back_populates="quarter")
     rentals: Mapped[List["Rental"]] = relationship("Rental", back_populates="quarter")
     excemptions: Mapped[List["Excemption"]] = relationship("Excemption", back_populates="quarter", cascade="all, delete-orphan")

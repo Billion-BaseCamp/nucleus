@@ -1,12 +1,19 @@
-from sqlalchemy import String, DateTime, ForeignKey, UUID as SQLUUID, Float, Boolean
-from nucleus.db.database import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from uuid import UUID, uuid4
-from sqlalchemy.sql import func
+from __future__ import annotations
+
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+from uuid import UUID, uuid4
+
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, UUID as SQLUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
+
+from nucleus.db.database import Base
+
+if TYPE_CHECKING:
+    from nucleus.models.advance_tax_models.cg_documents import ATCGDocument
 
 
 class BrokerageAccounts(Base):
@@ -20,8 +27,17 @@ class BrokerageAccounts(Base):
     is_exempt: Mapped[bool] = mapped_column(Boolean, nullable=True)
     category: Mapped[str] = mapped_column(String, nullable=True)
     sub_category: Mapped[str] = mapped_column(String, nullable=True)
+    source_document_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("at_cg_documents.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
-    # Relationships
     capital_gains: Mapped["CapitalGains"] = relationship("CapitalGains", back_populates="brokerage_accounts")
+    source_document: Mapped[Optional["ATCGDocument"]] = relationship(
+        "ATCGDocument",
+        back_populates="brokerage_accounts",
+    )

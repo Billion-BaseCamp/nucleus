@@ -21,6 +21,7 @@ from sqlalchemy.sql import func
 from nucleus.db.database import Base
 
 if TYPE_CHECKING:
+    from nucleus.models.advance_tax_models.brokerage_accounts import BrokerageAccounts
     from nucleus.models.advance_tax_models.quarter import Quarter
     from nucleus.models.common_models.client import Client
 
@@ -138,6 +139,10 @@ class ATCGDocument(Base):
         "ATCGDocumentProcessingLog",
         back_populates="document",
         cascade="all, delete-orphan",
+    )
+    brokerage_accounts: Mapped[List["BrokerageAccounts"]] = relationship(
+        "BrokerageAccounts",
+        back_populates="source_document",
     )
 
 

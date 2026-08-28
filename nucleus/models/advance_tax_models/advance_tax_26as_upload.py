@@ -43,6 +43,10 @@ class AdvanceTax26asUpload(Base):
     original_filename: Mapped[str] = mapped_column(String(255), nullable=False)
     file_size_bytes: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    # pending | parsing | parsed | failed
+    parse_status: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default="pending", default="pending", index=True
+    )
     uploaded_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

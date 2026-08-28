@@ -26,21 +26,14 @@ class Quarter(Base):
     status: Mapped[str] = mapped_column(String, nullable=False)
     is_liability: Mapped[bool] = mapped_column(Boolean, nullable=True)  # legacy; use liability_status
     liability_status: Mapped[str | None] = mapped_column(String, nullable=True)
-    advance_tax_26as_upload_id: Mapped[Optional[UUID]] = mapped_column(
-        SQLUUID(as_uuid=True),
-        ForeignKey("advance_tax_26as_uploads.id", ondelete="SET NULL"),
-        nullable=True,
-    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
     is_json_imported: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
     
     # Relationships
+    # 26AS uploads own the link via AdvanceTax26asUpload.quarter_id (unique) —
+    # no reverse FK here, to avoid a cycle with advance_tax_26as_uploads.
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear", back_populates="quarters")
-    advance_tax_26as_upload: Mapped["AdvanceTax26asUpload | None"] = relationship(
-        "AdvanceTax26asUpload",
-        foreign_keys=[advance_tax_26as_upload_id],
-    )
     
     # Financial data relationships
     interest_details: Mapped[List["InterestDetails"]] = relationship("InterestDetails", back_populates="quarter")

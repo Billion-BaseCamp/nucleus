@@ -1,19 +1,48 @@
-from sqlalchemy import String, DateTime, ForeignKey, UUID as SQLUUID, Float
-from nucleus.db.database import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from uuid import UUID, uuid4
-from sqlalchemy.sql import func
 from datetime import datetime
 from decimal import Decimal
+from typing import Optional
+from uuid import UUID, uuid4
+
+from sqlalchemy import (
+    DateTime,
+    Enum,
+    Float,
+    ForeignKey,
+    Index,
+    String,
+    UUID as SQLUUID,
+    text,
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
 
+from nucleus.core.constants import EmployerSource
+from nucleus.db.database import Base
 
 
 class Employer(Base):
     __tablename__ = "employers"
+    __table_args__ = (
+        Index(
+            "uq_employers_financial_year_id_tan",
+            "financial_year_id",
+            "tan",
+            unique=True,
+            postgresql_where=text("tan IS NOT NULL"),
+        ),
+    )
+
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
+    tan: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
+    source: Mapped[EmployerSource] = mapped_column(
+        Enum(EmployerSource, native_enum=False, length=10),
+        nullable=False,
+        default=EmployerSource.MANUAL,
+        server_default="MANUAL",
+    )
     gross_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=True)
     income_under_the_head_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=True)
     basic_salary: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=True)
@@ -37,11 +66,6 @@ class Employer(Base):
 
 
 #
-
-
-
-
-
 #1 sum of gross salary
 #2 sum of all (gratuity+leave_encashment)
 #3 sum of all standard deduction (not more than 750000)
@@ -50,6 +74,3 @@ class Employer(Base):
 #6 nps deduction Min(sum of all nps,14% of all basic salary)
 #7 net salary=Max((5-6),0)
 #tds sum all of tds
-
-
-

@@ -1,5 +1,6 @@
 from uuid import UUID, uuid4
 from sqlalchemy import (
+    Boolean,
     Integer,
     String,
     DateTime,
@@ -45,6 +46,12 @@ class Login(Base):
         SQLUUID(as_uuid=True), ForeignKey("advisors.id"), nullable=True
     )
 
+    # Staff WebAuthn: existing admins are grandfathered (false) in the migration.
+    # New admins and all advisors default to true. Clients stay false.
+    device_binding_required: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True, server_default="true"
+    )
+
     # Relationships
     client: Mapped["Client"] = relationship("Client", back_populates="logins")
     advisor: Mapped["Advisor"] = relationship("Advisor", back_populates="logins")
@@ -53,6 +60,12 @@ class Login(Base):
     )
     login_events: Mapped[list["LoginEvent"]] = relationship(
         "LoginEvent", back_populates="login"
+    )
+    trusted_devices: Mapped[list["TrustedDevice"]] = relationship(
+        "TrustedDevice",
+        back_populates="login",
+        foreign_keys="[TrustedDevice.login_id]",
+        cascade="all, delete-orphan",
     )
 
     created_at: Mapped[datetime] = mapped_column(

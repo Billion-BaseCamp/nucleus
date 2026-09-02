@@ -20,7 +20,8 @@ class DividendAccounts(Base):
     )
     account_name: Mapped[str] = mapped_column(String, nullable=True)
     account_value: Mapped[float] = mapped_column(Float, nullable=True)
-    tds_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)  # FTC for foreign rows
+    ftc_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)  # FTC for foreign rows
+    ftc_rate: Mapped[float] = mapped_column(Float, nullable=True, default=25) # 25%
     # "FOREIGN" (India breakdown can be added later)
     sub_category: Mapped[str] = mapped_column(String, nullable=False)
 

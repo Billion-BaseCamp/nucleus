@@ -4,7 +4,6 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import (
     Boolean,
-    CheckConstraint,
     DateTime,
     ForeignKey,
     Index,
@@ -30,10 +29,6 @@ class TrustedDevice(Base):
 
     __tablename__ = "trusted_devices"
     __table_args__ = (
-        CheckConstraint(
-            "status IN ('pending', 'trusted', 'revoked')",
-            name="ck_trusted_devices_status",
-        ),
         Index(
             "uq_trusted_devices_one_trusted_per_login",
             "login_id",

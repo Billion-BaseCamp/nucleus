@@ -12,13 +12,6 @@ class UserRole(Enum):
     ANALYST = "analyst"
 
 
-class DeviceBindingStatus(str, Enum):
-    """Lifecycle of a staff WebAuthn device. Stored as lowercase strings."""
-
-    PENDING = "pending"
-    TRUSTED = "trusted"
-    REVOKED = "revoked" 
-
 class CapitalGainsCategory(Enum):
     INTRA_DAY = "INTRA_DAY"
     INTER_DAY = "INTER_DAY"

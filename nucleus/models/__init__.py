@@ -7,6 +7,7 @@ from nucleus.models.reference.amfi_mf import AmfiMasterMeta, AmfiMfIsin
 from nucleus.models.common_models.advisor import Advisor
 from nucleus.models.common_models.client import Client, ClientPhoneMapping
 from nucleus.models.common_models.login import Login, LoginEvent
+from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
 from nucleus.models.common_models.otp_verification import OtpVerification
 from nucleus.models.common_models.documents_collector_info import (
     DocumentCollectorInfo,
@@ -226,6 +227,8 @@ __all__ = [
     "ClientPhoneMapping",
     "Login",
     "LoginEvent",
+    "TrustedDevice",
+    "WebAuthnCredential",
     "OtpVerification",
     "DocumentCollectorInfo",
     "SubTypeComments",

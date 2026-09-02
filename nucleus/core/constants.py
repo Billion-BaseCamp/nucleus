@@ -9,7 +9,15 @@ class UserRole(Enum):
     ADMIN = "admin"
     CLIENT = "client"
     ADVISOR = "advisor"
-    ANALYST = "analyst"     
+    ANALYST = "analyst"
+
+
+class DeviceBindingStatus(str, Enum):
+    """Lifecycle of a staff WebAuthn device. Stored as lowercase strings."""
+
+    PENDING = "pending"
+    TRUSTED = "trusted"
+    REVOKED = "revoked" 
 
 class CapitalGainsCategory(Enum):
     INTRA_DAY = "INTRA_DAY"

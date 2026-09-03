@@ -99,3 +99,8 @@ class LoanType(Enum):
     OTHER_LOAN = "Other Loan"
 
 
+class EmployerSource(str, Enum):
+    JSON = "JSON"
+    MANUAL = "MANUAL"
+
+

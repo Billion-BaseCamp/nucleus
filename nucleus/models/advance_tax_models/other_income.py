@@ -1,4 +1,4 @@
-from sqlalchemy import DateTime, Float, ForeignKey, UUID as SQLUUID
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, UUID as SQLUUID, text
 from uuid import UUID, uuid4
 from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -42,6 +42,11 @@ class OtherIncome(Base):
     tcs_expected: Mapped[float] = mapped_column(Float, default=0.0)
     tds_on_capital_gains: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
     additional_tcs_expected: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
+    aif_expenses: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
+    is_aif_expenses_from_json: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, server_default=text("false")
+    )
+    other_expenses: Mapped[float] = mapped_column(Float, default=0.0, nullable=True)
 
     # Relationships
     quarter: Mapped["Quarter"] = relationship("Quarter", back_populates="other_income")

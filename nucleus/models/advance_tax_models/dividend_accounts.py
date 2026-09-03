@@ -7,7 +7,6 @@ from datetime import datetime
 
 
 class DividendAccounts(Base):
-    """Per-account bifurcation for foreign dividends (mirrors interest_accounts)."""
 
     __tablename__ = "dividend_accounts"
 
@@ -20,9 +19,12 @@ class DividendAccounts(Base):
     )
     account_name: Mapped[str] = mapped_column(String, nullable=True)
     account_value: Mapped[float] = mapped_column(Float, nullable=True)
-    ftc_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0)  # FTC for foreign rows
-    ftc_rate: Mapped[float] = mapped_column(Float, nullable=True, default=25) # 25%
-    # "FOREIGN" (India breakdown can be added later)
+    ftc_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0) #only for foreign dividends
+    ftc_rate: Mapped[float] = mapped_column(Float, nullable=True, default=25) #only for foreign dividends
+    tds_amount: Mapped[float] = mapped_column(Float, nullable=True, default=0.0) #only for Indian dividends
+    tds_rate: Mapped[float] = mapped_column(Float, nullable=True, default=10) #only for Indian dividends
+
+    # Foreign Dividends or Indian Dividends
     sub_category: Mapped[str] = mapped_column(String, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -25,7 +25,7 @@ class Employer(Base):
     __tablename__ = "employers"
     __table_args__ = (
         Index(
-            "uq_employers_financial_year_id_quarter_id_tan",
+            "uq_employers_quarter_id_tan",
             "quarter_id",
             "tan",
             unique=True,
@@ -58,6 +58,7 @@ class Employer(Base):
     tds: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=True)
 
     # Relationships (string-based to avoid circular imports)
+    quarter: Mapped[Optional["Quarter"]] = relationship("Quarter", back_populates="employers")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

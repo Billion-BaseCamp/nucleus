@@ -34,6 +34,11 @@ class Quarter(Base):
     # 26AS uploads own the link via AdvanceTax26asUpload.quarter_id (unique) —
     # no reverse FK here, to avoid a cycle with advance_tax_26as_uploads.
     financial_year: Mapped["FinancialYear"] = relationship("FinancialYear", back_populates="quarters")
+    employers: Mapped[List["Employer"]] = relationship(
+        "Employer",
+        back_populates="quarter",
+        cascade="all, delete-orphan",
+    )
     
     # Financial data relationships
     interest_details: Mapped[List["InterestDetails"]] = relationship("InterestDetails", back_populates="quarter")

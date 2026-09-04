@@ -26,7 +26,6 @@ class Employer(Base):
     __table_args__ = (
         Index(
             "uq_employers_financial_year_id_quarter_id_tan",
-            "financial_year_id",
             "quarter_id",
             "tan",
             unique=True,
@@ -35,7 +34,6 @@ class Employer(Base):
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
-    financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False)
     quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=True)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
     tan: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
@@ -60,7 +58,6 @@ class Employer(Base):
     tds: Mapped[Float] = mapped_column(Numeric[Decimal](18,2), default=0,nullable=True)
 
     # Relationships (string-based to avoid circular imports)
-    financial_year: Mapped["FinancialYear"] = relationship("FinancialYear", back_populates="employers")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

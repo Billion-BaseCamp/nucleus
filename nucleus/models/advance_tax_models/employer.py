@@ -35,7 +35,7 @@ class Employer(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False)
-    quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=False)
+    quarter_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="CASCADE"), nullable=True)
     employer_name: Mapped[str] = mapped_column(String, nullable=False)
     tan: Mapped[Optional[str]] = mapped_column(String(20), nullable=True, index=True)
     source: Mapped[EmployerSource] = mapped_column(

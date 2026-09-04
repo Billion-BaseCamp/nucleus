@@ -8,10 +8,8 @@ from sqlalchemy import (
     Enum,
     Float,
     ForeignKey,
-    Index,
     String,
     UUID as SQLUUID,
-    text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -23,15 +21,6 @@ from nucleus.db.database import Base
 
 class Employer(Base):
     __tablename__ = "employers"
-    __table_args__ = (
-        Index(
-            "uq_employers_financial_year_id_tan",
-            "financial_year_id",
-            "tan",
-            unique=True,
-            postgresql_where=text("tan IS NOT NULL"),
-        ),
-    )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     financial_year_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("financial_years.id", ondelete="CASCADE"), nullable=False)

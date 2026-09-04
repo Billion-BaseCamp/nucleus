@@ -24,7 +24,6 @@ class FinancialYear(Base):
     # Relationships (string-based to avoid circular imports)
     client: Mapped["Client"] = relationship("Client", back_populates="financial_years")
     quarters: Mapped[List["Quarter"]] = relationship("Quarter", back_populates="financial_year")
-    employers: Mapped[List["Employer"]] = relationship("Employer", back_populates="financial_year")
 
     form_26as_part1:  Mapped[List["Form26ASPart1"]]  = relationship("Form26ASPart1",  back_populates="financial_year", cascade="all, delete-orphan")
     form_26as_part2:  Mapped[List["Form26ASPart2"]]  = relationship("Form26ASPart2",  back_populates="financial_year", cascade="all, delete-orphan")

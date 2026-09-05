@@ -23,6 +23,7 @@ class BrokerageAccounts(Base):
     account_name: Mapped[str] = mapped_column(String, nullable=True)
     account_value: Mapped[Decimal] = mapped_column(Numeric[Decimal](18,2), nullable=True)
     processed_value: Mapped[Optional[Decimal]] = mapped_column(Numeric[Decimal](18, 2), nullable=True)
+    pms_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric[Decimal](18, 2), nullable=True, default=0)
     tds_amount: Mapped[Decimal] = mapped_column(Numeric[Decimal](18,2), nullable=True)
     is_exempt: Mapped[bool] = mapped_column(Boolean, nullable=True)
     category: Mapped[str] = mapped_column(String, nullable=True)

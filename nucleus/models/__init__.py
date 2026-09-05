@@ -45,6 +45,7 @@ from nucleus.models.advance_tax_models import (
     Section54FAssets,
     Section54FClaim,
     TaxProfile,
+    PriorItrSnapshot,
 )
 
 # TSM Models
@@ -261,6 +262,7 @@ __all__ = [
     "Section54FAssets",
     "Section54FClaim",
     "TaxProfile",
+    "PriorItrSnapshot",
     # TSM Models
     "CallLogs",
     "File",

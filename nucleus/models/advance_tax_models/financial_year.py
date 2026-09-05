@@ -36,6 +36,12 @@ class FinancialYear(Base):
     form_26as_part9:  Mapped[List["Form26ASPart9"]]  = relationship("Form26ASPart9",  back_populates="financial_year", cascade="all, delete-orphan")
     form_26as_part10: Mapped[List["Form26ASPart10"]] = relationship("Form26ASPart10", back_populates="financial_year", cascade="all, delete-orphan")
     carry_forward_losses: Mapped[List["CarryForwardLosses"]] = relationship("CarryForwardLosses", back_populates="financial_year", cascade="all, delete-orphan")
+    prior_itr_snapshot: Mapped["PriorItrSnapshot"] = relationship(
+        "PriorItrSnapshot",
+        back_populates="financial_year",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

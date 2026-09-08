@@ -4,7 +4,19 @@ from datetime import date, datetime
 from typing import List
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, Date, DateTime, Enum, ForeignKey, String, UniqueConstraint, UUID as SQLUUID
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    Date,
+    DateTime,
+    Enum,
+    ForeignKey,
+    Index,
+    String,
+    UniqueConstraint,
+    UUID as SQLUUID,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -14,11 +26,36 @@ from nucleus.db.database import Base
 
 
 class ClientPhoneMapping(Base):
+    """Alternate phone numbers for a client. TSM resolves inbound calls through this."""
     __tablename__ = "client_phone_mappings"
     __table_args__ = (UniqueConstraint("client_id", "phone_number", name="uix_client_phone_mapping"),)
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
+
+
+class ClientEmailMapping(Base):
+    """Alternate email addresses for a client.
+
+    Deliberately its own table rather than an ``email`` column on ``ClientPhoneMapping``:
+    that one is shared with TSM, and holding an email there would mean making
+    ``phone_number`` nullable, which changes what TSM's own queries see.
+
+    The primary address stays on ``logins.email``, which is the sign-in identity — these
+    are extra ways to reach someone, not credentials.
+    """
+    __tablename__ = "client_email_mappings"
+    __table_args__ = (
+        UniqueConstraint("client_id", "email", name="uix_client_email_mapping"),
+        CheckConstraint("email <> ''", name="ck_client_email_mappings_email_nonempty"),
+        # Case-insensitive guard, so foo@x.com can't be added again as Foo@X.com.
+        Index("uix_client_email_mapping_lower", "client_id", text("lower(email)"), unique=True),
+    )
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    client_id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False, index=True)
+    email: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
 
 class Client(Base):

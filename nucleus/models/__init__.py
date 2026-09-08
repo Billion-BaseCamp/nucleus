@@ -5,7 +5,7 @@ from nucleus.models.reference.amfi_mf import AmfiMasterMeta, AmfiMfIsin
 
 # Common Models
 from nucleus.models.common_models.advisor import Advisor
-from nucleus.models.common_models.client import Client, ClientPhoneMapping
+from nucleus.models.common_models.client import Client, ClientEmailMapping, ClientPhoneMapping
 from nucleus.models.common_models.login import Login, LoginEvent
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
 from nucleus.models.common_models.otp_verification import OtpVerification
@@ -225,6 +225,7 @@ __all__ = [
     # Common Models
     "Advisor",
     "Client",
+    "ClientEmailMapping",
     "ClientPhoneMapping",
     "Login",
     "LoginEvent",

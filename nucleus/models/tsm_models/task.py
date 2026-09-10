@@ -19,6 +19,10 @@ class TaskAssignee(Base):
     advisor_id: Mapped[UUID] = mapped_column(
         ForeignKey("advisors.id", ondelete="CASCADE"), primary_key=True
     )
+    # True when added via "ask for help" — timer-only; cannot create subtasks as collaborator
+    is_collaborator: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default=text("false"), nullable=False
+    )
 
 
 class Task(Base):
@@ -150,6 +154,11 @@ class Session(Base):
 
     task_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.task_id", ondelete="CASCADE"), nullable=True, index=True)
 
+    # Who worked this time block (nullable for legacy rows created before attribution)
+    advisor_id: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+
     session_start_time: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
 
     session_end_time: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
@@ -157,3 +166,19 @@ class Session(Base):
     session_duration: Mapped[int] = mapped_column(nullable=True)
 
     task: Mapped["Task"] = relationship("Task", back_populates="sessions")
+
+
+class ActiveTimer(Base):
+    """Per-advisor open timer so multiple assignees can track time on the same task."""
+
+    __tablename__ = "active_timers"
+
+    advisor_id: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="CASCADE"), primary_key=True
+    )
+    task_id: Mapped[UUID] = mapped_column(
+        ForeignKey("tasks.task_id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    activation_time: Mapped[datetime] = mapped_column(
+        DateTime(timezone=False), nullable=False
+    )

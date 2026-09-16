@@ -64,6 +64,12 @@ class PortalAutomationJob(Base):
     financial_year_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True), nullable=True
     )
+    batch_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("portal_automation_batches.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
 
     # queued | running | waiting_for_password | waiting_for_otp |
     # waiting_for_human | completed | failed | timed_out | cancelled

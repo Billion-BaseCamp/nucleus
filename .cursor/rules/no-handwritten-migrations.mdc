@@ -1,0 +1,12 @@
+---
+description: Never write Alembic or SQL migration files unless the user asks
+alwaysApply: true
+---
+
+# Migrations
+
+Nucleus uses Alembic autogenerate (`alembic revision --autogenerate`). Schema changes belong in SQLAlchemy models only.
+
+- Do not create, edit, or commit files under `migrations/versions/`, `migrations/manual/`, or any `*.sql` migration.
+- Do not run `alembic revision` unless the user explicitly asks.
+- If a table or column is needed, change the model and stop. The user generates the migration.

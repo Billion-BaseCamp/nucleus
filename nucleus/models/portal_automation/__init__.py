@@ -1,3 +1,4 @@
+from nucleus.models.portal_automation.batch import PortalAutomationBatch
 from nucleus.models.portal_automation.job import (
     PORTAL_AUTOMATION_ACTIVE_STATUSES,
     PortalAutomationJob,
@@ -5,5 +6,6 @@ from nucleus.models.portal_automation.job import (
 
 __all__ = [
     "PORTAL_AUTOMATION_ACTIVE_STATUSES",
+    "PortalAutomationBatch",
     "PortalAutomationJob",
 ]

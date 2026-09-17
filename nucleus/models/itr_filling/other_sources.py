@@ -107,6 +107,11 @@ class ITROSSchedule(Base):
         cascade="all, delete-orphan",
         order_by="ITROSDtaaIncome.display_order",
     )
+    it_refund_interest: Mapped[List["ITROSItRefundInterest"]] = relationship(
+        back_populates="os_schedule",
+        cascade="all, delete-orphan",
+        order_by="ITROSItRefundInterest.display_order",
+    )
 
     #one to one relationship with ITRTaxExemptIncome
     tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
@@ -287,6 +292,59 @@ class ITROSInterestDetail(Base):
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="interest_details")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSItRefundInterest(Base):
+    """IT refund interest (Sec 244A) — dedicated table with real typed columns.
+
+    Replaces the previous approach of encoding refund_principal / dates /
+    interest_manual as JSON inside ``itr_os_interest_details.comment`` (with
+    the FY label additionally regex-parsed out of ``bank_name``). Each row is
+    interest on a refund from a specific (possibly prior) assessment year's
+    return; a client may have multiple rows if refunds for more than one AY
+    were processed in the same financial year.
+    """
+
+    __tablename__ = "itr_os_it_refund_interest"
+    __table_args__ = (
+        Index(
+            "ix_itr_os_it_refund_interest_schedule_source",
+            "os_schedule_id",
+            "source",
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+
+    # Row label, e.g. "Refund for AY 2022-23" — lets a preparer distinguish
+    # multiple rows when refunds for more than one AY land in the same year.
+    description: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+
+    refund_principal: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+    return_filing_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    refund_received_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+
+    # False = amount is auto-computed (0.5%/month simple interest, start date
+    # derived from the return's own FY — no dedicated UI input exists yet for
+    # an explicit start date); True = amount was typed directly by the
+    # preparer, overriding the formula.
+    interest_manual: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    amount: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
+
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="it_refund_interest")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())

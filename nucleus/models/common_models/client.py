@@ -60,6 +60,20 @@ class ClientEmailMapping(Base):
 
 class Client(Base):
     __tablename__ = "clients"
+    __table_args__ = (
+        # One non-empty PAN among *active* clients. Soft-deleted rows keep
+        # their PAN so a later re-register can reuse it. NULL is_active is
+        # treated as active (legacy rows). Multiple NULLs/blanks allowed.
+        Index(
+            "uix_clients_pan_number",
+            text("upper(btrim(pan_number))"),
+            unique=True,
+            postgresql_where=text(
+                "pan_number IS NOT NULL AND btrim(pan_number) <> '' "
+                "AND is_active IS NOT FALSE"
+            ),
+        ),
+    )
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     middle_name: Mapped[str] = mapped_column(String, nullable=True)

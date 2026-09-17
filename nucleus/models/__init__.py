@@ -89,6 +89,12 @@ from nucleus.models.itr_filling.disclosures import ITRALMovableAsset, ITRALInves
 from nucleus.models.itr_filling.tax_credits import ReliefClaimed, ITRTaxCreditSchedule
 from nucleus.models.itr_filling.other_sources import ITRDeemedIncome, ITRTaxExemptIncome
 
+# Portal automation (browser/task jobs — shared by tax-engine API + worker)
+from nucleus.models.portal_automation import (
+    PortalAutomationBatch,
+    PortalAutomationJob,
+)
+
 # US tax filing models (import all so Alembic autogenerate registers every table)
 from nucleus.models.us_tax_filing import (
     ClientPriorReturn,
@@ -429,6 +435,9 @@ __all__ = [
     "ITRAisSftTransaction",
     "ITRDeemedIncome",
     "ITRTaxExemptIncome",
+    # Portal automation
+    "PortalAutomationBatch",
+    "PortalAutomationJob",
     # US tax filing
     "ClientPriorReturn",
     "DocumentUpload",

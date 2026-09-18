@@ -114,6 +114,7 @@ from nucleus.models.itr_filling.other_sources import (
     ITRTaxExemptIncome,
 )
 from nucleus.models.itr_filling.prior_year_income import ITRPriorYearIncomeHeads
+from nucleus.models.itr_filling.filed_year_summary import ITRFiledYearSummary
 from nucleus.models.itr_filling.client_summary_download_log import (
     ITRClientSummaryDownloadLog,
 )
@@ -187,6 +188,8 @@ __all__ = [
     "ITROSSchedule",
     # Prior-year income heads (Client Summary YoY)
     "ITRPriorYearIncomeHeads",
+    # Admin-dashboard filed-year ITR snapshots
+    "ITRFiledYearSummary",
     # Client Summary PDF download log
     "ITRClientSummaryDownloadLog",
     # Summary download verification confirmations

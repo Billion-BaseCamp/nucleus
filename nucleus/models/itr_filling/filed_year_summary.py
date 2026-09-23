@@ -1,8 +1,11 @@
-"""Dashboard-only snapshot of a filed ITR year (CBDT schedules as JSONB).
+"""Dashboard-only snapshot of a filed ITR year.
 
-One row per client per assessment year. Raw JSON lives in S3; this table
-stores per-schedule JSONB plus totals so the admin profile GET never
-parses S3 or hydrates live ``ITRReturn`` trees.
+One header row per client per assessment year. Raw JSON lives in S3. Each
+CBDT schedule is a child row so GET never parses S3 or hydrates live
+``ITRReturn`` trees.
+
+``financial_year_id`` is set only when ``financial_years`` already has that
+client+FY; otherwise it stays NULL.
 
 Schema changes are managed via Alembic autogenerate.
 """
@@ -11,7 +14,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
@@ -25,21 +28,15 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.types import Numeric
 
 from nucleus.db.database import Base
 
-_EMPTY_JSONB = text("'{}'::jsonb")
-
-
-def _schedule_jsonb() -> Mapped[dict]:
-    return mapped_column(JSONB, nullable=False, server_default=_EMPTY_JSONB)
-
 
 class ITRFiledYearSummary(Base):
-    """Admin-dashboard snapshot of one filed ITR (ITR-1 / ITR-2 / ITR-3)."""
+    """Header for one filed ITR snapshot (ITR-1 / ITR-2 / ITR-3)."""
 
     __tablename__ = "itr_filed_year_summaries"
     __table_args__ = (
@@ -102,34 +99,49 @@ class ITRFiledYearSummary(Base):
         String(20), nullable=False, default="1", server_default=text("'1'")
     )
 
-    schedule_s: Mapped[dict] = _schedule_jsonb()
-    schedule_hp: Mapped[dict] = _schedule_jsonb()
-    schedule_os: Mapped[dict] = _schedule_jsonb()
-    schedule_cg: Mapped[dict] = _schedule_jsonb()
-    schedule_112a: Mapped[dict] = _schedule_jsonb()
-    schedule_115ad: Mapped[dict] = _schedule_jsonb()
-    schedule_vda: Mapped[dict] = _schedule_jsonb()
-    schedule_cfl: Mapped[dict] = _schedule_jsonb()
-    schedule_cyla: Mapped[dict] = _schedule_jsonb()
-    schedule_bfla: Mapped[dict] = _schedule_jsonb()
-    schedule_via: Mapped[dict] = _schedule_jsonb()
-    schedule_it: Mapped[dict] = _schedule_jsonb()
-    schedule_tds1: Mapped[dict] = _schedule_jsonb()
-    schedule_tds2: Mapped[dict] = _schedule_jsonb()
-    schedule_tds3: Mapped[dict] = _schedule_jsonb()
-    schedule_tcs: Mapped[dict] = _schedule_jsonb()
-    schedule_si: Mapped[dict] = _schedule_jsonb()
-    schedule_spi: Mapped[dict] = _schedule_jsonb()
-    schedule_pti: Mapped[dict] = _schedule_jsonb()
-    schedule_al: Mapped[dict] = _schedule_jsonb()
-    schedule_fa: Mapped[dict] = _schedule_jsonb()
-    schedule_fsi: Mapped[dict] = _schedule_jsonb()
-    schedule_tr: Mapped[dict] = _schedule_jsonb()
-    schedule_amt: Mapped[dict] = _schedule_jsonb()
-    schedule_80g: Mapped[dict] = _schedule_jsonb()
-    part_a_gen1: Mapped[dict] = _schedule_jsonb()
-    part_b_ti: Mapped[dict] = _schedule_jsonb()
-    part_b_tti: Mapped[dict] = _schedule_jsonb()
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now(), nullable=True
+    )
+
+    schedules: Mapped[List["ITRFiledYearSchedule"]] = relationship(
+        back_populates="filed_year_summary",
+        cascade="all, delete-orphan",
+    )
+
+
+class ITRFiledYearSchedule(Base):
+    """One CBDT schedule JSONB payload for a filed-year snapshot."""
+
+    __tablename__ = "itr_filed_year_schedules"
+    __table_args__ = (
+        UniqueConstraint(
+            "filed_year_summary_id",
+            "schedule_code",
+            name="uq_itr_filed_year_schedules_summary_code",
+        ),
+        Index(
+            "ix_itr_filed_year_schedules_code",
+            "schedule_code",
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    filed_year_summary_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_filed_year_summaries.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    # Extractor key, e.g. schedule_s / schedule_hp / part_b_ti.
+    schedule_code: Mapped[str] = mapped_column(String(32), nullable=False)
+    schedule_data: Mapped[dict] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb")
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -138,5 +150,9 @@ class ITRFiledYearSummary(Base):
         DateTime(timezone=True), onupdate=func.now(), nullable=True
     )
 
+    filed_year_summary: Mapped["ITRFiledYearSummary"] = relationship(
+        back_populates="schedules"
+    )
 
-__all__ = ["ITRFiledYearSummary"]
+
+__all__ = ["ITRFiledYearSummary", "ITRFiledYearSchedule"]

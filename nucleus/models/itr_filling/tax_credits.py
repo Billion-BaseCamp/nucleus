@@ -70,11 +70,11 @@ class ITRTaxCreditSchedule(Base):
     )
 
     total_relief_available: Mapped[Decimal] = mapped_column(
-        Numeric(20, 2), nullable=False, default=0
+        Numeric(20, 2), nullable=False, default=0, server_default=text("0")
     )
 
     total_tds_on_property: Mapped[Decimal] = mapped_column(
-        Numeric(20, 2), nullable=False, default=0
+        Numeric(20, 2), nullable=False, default=0, server_default=text("0")
     )
 
     # Snapshots for two-step AIS → 26AS processing (POST /process-ais then /process-26as).

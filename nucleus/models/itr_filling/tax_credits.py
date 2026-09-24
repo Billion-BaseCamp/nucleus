@@ -68,11 +68,22 @@ class ITRTaxCreditSchedule(Base):
     total_form67_dtaa: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )
+
+    total_relief_available: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+
+    total_tds_on_property: Mapped[Decimal] = mapped_column(
+        Numeric(20, 2), nullable=False, default=0
+    )
+
     # Snapshots for two-step AIS → 26AS processing (POST /process-ais then /process-26as).
     ais_json_snapshot: Mapped[Optional[dict[str, Any]]] = mapped_column(
         JSONB, nullable=True
     )
+
     form_26as_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
     itr_return: Mapped["ITRReturn"] = relationship(
         "ITRReturn", back_populates="tax_credit_schedule"
     )
@@ -194,14 +205,14 @@ class ITRTDSSalary(Base):
     tds_claimed: Mapped[Decimal] = mapped_column(
         Numeric(20, 2), nullable=False, default=0
     )
-    income_chargeable: Mapped[Decimal] = mapped_column(
+    income_chargeable: Mapped[Decimal] = mapped_column( 
         Numeric(20, 2), nullable=False, default=0
     )
 
-    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship(
+    tax_credit_schedule: Mapped["ITRTaxCreditSchedule"] = relationship( 
         "ITRTaxCreditSchedule", back_populates="tds_salary"
     )
-    salary_employer: Mapped[Optional["ITRSalaryEmployer"]] = relationship(
+    salary_employer: Mapped[Optional["ITRSalaryEmployer"]] = relationship(  
         "ITRSalaryEmployer",
         back_populates="tds_salary_entries",
         foreign_keys=[salary_employer_id],

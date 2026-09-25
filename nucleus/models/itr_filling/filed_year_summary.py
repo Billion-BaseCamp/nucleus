@@ -142,6 +142,14 @@ class ITRFiledYearSchedule(Base):
     schedule_data: Mapped[dict] = mapped_column(
         JSONB, nullable=False, server_default=text("'{}'::jsonb")
     )
+    # Advisor/admin FY notes. Only the ``schedule_code="notes"`` row is used;
+    # CBDT schedule rows keep the empty defaults. Arrays stay aligned by note id.
+    notes: Mapped[list] = mapped_column(
+        JSONB, nullable=False, server_default=text("'[]'::jsonb")
+    )
+    noted_by: Mapped[list] = mapped_column(
+        JSONB, nullable=False, server_default=text("'[]'::jsonb")
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

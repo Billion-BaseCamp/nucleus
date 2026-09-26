@@ -99,6 +99,7 @@ from nucleus.models.itr_filling.itr_second_step import (
 )
 from nucleus.models.itr_filling.other_sources import (
     ITRDeemedIncome,
+    ITROSDeductionUs57,
     ITROSBuybackShare,
     ITROSClubbingEntry,
     ITROSDividendDetail,
@@ -182,6 +183,7 @@ __all__ = [
     "ITROSIncomeLineDetail",
     "ITROSInterestDetail",
     "ITROSItRefundInterest",
+    "ITROSDeductionUs57",
     "ITROSOtherIncome",
     "ITROSSpecialRate",
     "ITROSPTIEntity",
@@ -289,5 +291,6 @@ __all__ = [
     "ITRTisSummaryCategory",
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
+    "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
 ]

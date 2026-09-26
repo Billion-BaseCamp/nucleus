@@ -144,15 +144,7 @@ class ITRDeemedIncome(Base):
     gross_rent_from_machinery: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
     machinery_rent_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57 — expenses against machinery rent
     machinery_rent_depreciation: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)  # Sec 57 — depreciation on plant / machinery
-    deduction_us57: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=False, default=0)
-    # Itemized Sec 57 deductions — deduction_us57 stays the persisted total.
-    # Nullable: pre-itemization rows exist; NULL is treated as 0 by consumers.
-    us57_commission_paid: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)        # Sec 57(i)
-    us57_interest_expense: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)       # Sec 57(i) interest on borrowed capital
-    us57_bank_charges: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # Sec 57(iii) bank / service charges
-    us57_professional_fees: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)      # Sec 57(iii) professional / legal fees
-    us57_aif_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)           # AIF (Investment Fund PTI) expenses
-    us57_other_expenses: Mapped[Optional[Decimal]] = mapped_column(Numeric(15, 2), nullable=True, default=0)       # Sec 57 — other allowable expenses
+    # Itemized u/s 57 lives on ``itr_os_deduction_us57`` (not this table).
     # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
     source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 

@@ -116,6 +116,11 @@ class ITROSSchedule(Base):
     #one to one relationship with ITRTaxExemptIncome
     tax_exempt_income: Mapped["ITRTaxExemptIncome"] = relationship(back_populates="os_schedule")
     deemed_income: Mapped["ITRDeemedIncome"] = relationship(back_populates="os_schedule")
+    deduction_us57: Mapped[Optional["ITROSDeductionUs57"]] = relationship(
+        back_populates="os_schedule",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
@@ -155,6 +160,58 @@ class ITRDeemedIncome(Base):
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
+
+class ITROSDeductionUs57(Base):
+    """Sec 57 deductions — 1:1 child of ``itr_os_schedule``.
+
+    Split out of ``itr_deemed_income`` so 56(2)(x) / machinery rent stay on
+    deemed while itemized u/s 57 lives on its own table. ``deduction_us57``
+    is the persisted total of the six item columns.
+    """
+
+    __tablename__ = "itr_os_deduction_us57"
+    __table_args__ = (
+        Index("ix_itr_os_deduction_us57_schedule_source", "os_schedule_id", "source"),
+    )
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    os_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_os_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    us57_commission_paid: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    us57_interest_expense: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    us57_bank_charges: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    us57_professional_fees: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    us57_aif_expenses: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    us57_other_expenses: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    deduction_us57: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0, server_default=text("0")
+    )
+    # AIS | TIS | MANUAL — used when replacing auto-imported rows on TIS apply.
+    source: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+
+    os_schedule: Mapped["ITROSSchedule"] = relationship(back_populates="deduction_us57")
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now())
+
 
 class ITRTaxExemptIncome(Base):
     __tablename__ = "itr_tax_exempt_income"

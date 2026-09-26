@@ -87,7 +87,11 @@ from nucleus.models.form26_as_log_models.file_metadata import FileMetadata
 from nucleus.models.form26_as_log_models.upload_batches import UploadBatches
 from nucleus.models.itr_filling.disclosures import ITRALMovableAsset, ITRALInvestment
 from nucleus.models.itr_filling.tax_credits import ReliefClaimed, ITRTaxCreditSchedule
-from nucleus.models.itr_filling.other_sources import ITRDeemedIncome, ITRTaxExemptIncome
+from nucleus.models.itr_filling.other_sources import (
+    ITRDeemedIncome,
+    ITROSDeductionUs57,
+    ITRTaxExemptIncome,
+)
 
 # Portal automation (browser/task jobs — shared by tax-engine API + worker)
 from nucleus.models.portal_automation import (
@@ -223,6 +227,7 @@ from nucleus.models.itr_filling import (
     ITRAisEntry,
     ITRAisSftTransaction,
     ITRDeemedIncome,
+    ITROSDeductionUs57,
     ITRTaxExemptIncome,
 )
 
@@ -348,6 +353,7 @@ __all__ = [
     "ITROSIncomeLineDetail",
     "ITROSInterestDetail",
     "ITROSItRefundInterest",
+    "ITROSDeductionUs57",
     "ITROSOtherIncome",
     "ITROSSpecialRate",
     "ITROSPTIEntity",
@@ -438,6 +444,7 @@ __all__ = [
     "ITRAis26asReconciliation",
     "ITRAisSftTransaction",
     "ITRDeemedIncome",
+    "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
     # Portal automation
     "PortalAutomationBatch",

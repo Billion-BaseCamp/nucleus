@@ -104,3 +104,144 @@ class EmployerSource(str, Enum):
     MANUAL = "MANUAL"
 
 
+
+
+# ---------------------------------------------------------------------------
+# Client Service Agreement (CSA) repository
+# ---------------------------------------------------------------------------
+
+
+class CSALegalEntity(str, Enum):
+    """Contracting Billion BaseCamp entity named in the agreement."""
+
+    KLOK = "KLOK"      # Klok Global Family Office LLP (ACD-6756)
+    BFAPL = "BFAPL"    # Billion Financial Advisors Private Limited (U67190PN2020PTC190207)
+    OTHER = "OTHER"
+
+
+class CSAMatchTier(str, Enum):
+    """How a csa_parties row was linked to a client. NULL = unmapped.
+
+    Fuzzy matches are never auto-linked, so there is deliberately no FUZZY tier:
+    a fuzzy suggestion lives in ``match_candidates`` until a human accepts it,
+    at which point the tier becomes MANUAL.
+    """
+
+    EXACT = "EXACT"          # normalized sorted-token key matched a client
+    CROSSWALK = "CROSSWALK"  # matched via ClientNameMapping.xlsx
+    MANUAL = "MANUAL"        # a human confirmed the link
+
+
+class CSAReviewStatus(str, Enum):
+    """Extraction-quality state of a document — about the PDF, not the client link."""
+
+    PENDING = "PENDING"    # extracted, not yet checked
+    FLAGGED = "FLAGGED"    # auto-flagged: unreadable table, empty section, contradiction
+    VERIFIED = "VERIFIED"  # a human confirmed the extraction
+    FAILED = "FAILED"      # could not be extracted at all
+
+
+class CSAFeeType(str, Enum):
+    ANNUAL_RETAINER = "ANNUAL_RETAINER"
+    ONE_TIME = "ONE_TIME"
+    MILESTONE = "MILESTONE"
+    RENEWAL = "RENEWAL"
+    UPFRONT = "UPFRONT"          # 0.50% initial one-time fixed fee
+    PERFORMANCE = "PERFORMANCE"  # 20% over a hurdle
+    EARLY_EXIT = "EARLY_EXIT"    # 0.50% on withdrawal before minimum period
+    PERCENTAGE = "PERCENTAGE"    # other rate-based charge (e.g. 7% of tax refund)
+    OTHER = "OTHER"
+
+
+class CSAInclusion(str, Enum):
+    """Whether a service line is covered, extra, or explicitly carved out.
+
+    EXCLUDED is a negative entitlement ("except scrutiny notices") and must not
+    be read as a service provided.
+    """
+
+    INCLUDED_IN_RETAINER = "INCLUDED_IN_RETAINER"
+    CHARGED_SEPARATELY = "CHARGED_SEPARATELY"
+    EXCLUDED = "EXCLUDED"
+    UNSPECIFIED = "UNSPECIFIED"
+
+
+class CSAServiceCode(str, Enum):
+    """Canonical service catalogue.
+
+    v2 (2026-09-25). Extended after a full-corpus UNMAPPED clustering pass;
+    see csa-repository-pipeline skill for the method.
+    """
+
+    # --- India tax ---
+    IN_ITR_FILING = "IN_ITR_FILING"
+    IN_ADVANCE_TAX = "IN_ADVANCE_TAX"
+    IN_TAX_PLANNING = "IN_TAX_PLANNING"
+    IN_PRIOR_YEAR_REVIEW = "IN_PRIOR_YEAR_REVIEW"
+    IN_NOTICE_SUPPORT = "IN_NOTICE_SUPPORT"
+    IN_SCRUTINY = "IN_SCRUTINY"
+    IN_APPEALS = "IN_APPEALS"
+    IN_HUF = "IN_HUF"
+    IN_TDS = "IN_TDS"
+    IN_CA_CERTIFICATE = "IN_CA_CERTIFICATE"  # 15CA/15CB remittance certificate
+    IN_GST = "IN_GST"
+
+    # --- UK tax ---
+    # The corpus is not India/US only: a small UK cohort exists, with fees
+    # billed in GBP (Hemant Arora, Gunjan Soni, Nikunj Jhunjhunwala) and
+    # UK-specific deliverables. Do not fold these into IN_*/US_* codes.
+    UK_TAX_FILING = "UK_TAX_FILING"
+    UK_TAX_PLANNING = "UK_TAX_PLANNING"
+    UK_RESIDENCY_CERT = "UK_RESIDENCY_CERT"
+    UK_INHERITANCE_TAX = "UK_INHERITANCE_TAX"
+
+    # --- cross-border & equity comp ---
+    CAP_GAINS_ADVISORY = "CAP_GAINS_ADVISORY"
+    RSU_ESOP = "RSU_ESOP"
+    CROSS_BORDER = "CROSS_BORDER"
+    FOREX_ADVISORY = "FOREX_ADVISORY"
+    FOREX_NEGOTIATION = "FOREX_NEGOTIATION"
+
+    # --- US tax ---
+    US_1040 = "US_1040"
+    US_STATE = "US_STATE"
+    US_TAX_PLANNING = "US_TAX_PLANNING"
+    US_PRIOR_YEAR_REVIEW = "US_PRIOR_YEAR_REVIEW"
+    US_FBAR = "US_FBAR"
+    US_FATCA = "US_FATCA"
+    US_PFIC = "US_PFIC"
+    US_STREAMLINED = "US_STREAMLINED"
+    US_ESTIMATED_TAX = "US_ESTIMATED_TAX"
+    US_IRS_NOTICE = "US_IRS_NOTICE"
+    US_GIFT_ESTATE = "US_GIFT_ESTATE"
+    US_K1 = "US_K1"
+    US_FORM_3520 = "US_FORM_3520"
+    US_FORM_5471 = "US_FORM_5471"
+    US_FORM_5472 = "US_FORM_5472"
+    US_FORM_8833 = "US_FORM_8833"
+    US_1040X = "US_1040X"
+    US_FTC_FEIE = "US_FTC_FEIE"      # Form 1116 / 2555
+    US_EXTENSION = "US_EXTENSION"
+    US_SCHED_A = "US_SCHED_A"
+    US_SCHED_C = "US_SCHED_C"
+    US_SCHED_E = "US_SCHED_E"
+    US_CREDIT_CARRYOVER = "US_CREDIT_CARRYOVER"
+    US_TAX_ADV_SAVINGS = "US_TAX_ADV_SAVINGS"
+    US_401K = "US_401K"
+
+    # --- wealth / structuring ---
+    ESTATE_PLANNING = "ESTATE_PLANNING"
+    TRUST_SPV = "TRUST_SPV"
+    RISK_MANAGEMENT = "RISK_MANAGEMENT"
+    SALARY_RESTRUCTURING = "SALARY_RESTRUCTURING"
+    BOOKKEEPING = "BOOKKEEPING"
+    FIN_PLANNING = "FIN_PLANNING"
+    WEALTH_ADVISORY = "WEALTH_ADVISORY"
+
+    # --- investment advisory ---
+    ADVISORY_INVESTMENT = "ADVISORY_INVESTMENT"
+    ADVISORY_ACCOUNT_OPENING = "ADVISORY_ACCOUNT_OPENING"
+    ADVISORY_REPORTING = "ADVISORY_REPORTING"
+    ADVISORY_PLAN_EXECUTION = "ADVISORY_PLAN_EXECUTION"
+
+    UNMAPPED = "UNMAPPED"

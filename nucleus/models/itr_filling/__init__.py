@@ -99,7 +99,6 @@ from nucleus.models.itr_filling.itr_second_step import (
 )
 from nucleus.models.itr_filling.other_sources import (
     ITRDeemedIncome,
-    ITROSDeductionUs57,
     ITROSBuybackShare,
     ITROSClubbingEntry,
     ITROSDividendDetail,
@@ -115,10 +114,7 @@ from nucleus.models.itr_filling.other_sources import (
     ITRTaxExemptIncome,
 )
 from nucleus.models.itr_filling.prior_year_income import ITRPriorYearIncomeHeads
-from nucleus.models.itr_filling.filed_year_summary import (
-    ITRFiledYearSchedule,
-    ITRFiledYearSummary,
-)
+from nucleus.models.itr_filling.filed_year_summary import ITRFiledYearSummary
 from nucleus.models.itr_filling.client_summary_download_log import (
     ITRClientSummaryDownloadLog,
 )
@@ -186,7 +182,6 @@ __all__ = [
     "ITROSIncomeLineDetail",
     "ITROSInterestDetail",
     "ITROSItRefundInterest",
-    "ITROSDeductionUs57",
     "ITROSOtherIncome",
     "ITROSSpecialRate",
     "ITROSPTIEntity",
@@ -195,7 +190,6 @@ __all__ = [
     "ITRPriorYearIncomeHeads",
     # Admin-dashboard filed-year ITR snapshots
     "ITRFiledYearSummary",
-    "ITRFiledYearSchedule",
     # Client Summary PDF download log
     "ITRClientSummaryDownloadLog",
     # Summary download verification confirmations
@@ -295,6 +289,5 @@ __all__ = [
     "ITRTisSummaryCategory",
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
-    "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
 ]

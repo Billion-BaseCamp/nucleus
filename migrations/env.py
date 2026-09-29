@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-import nucleus.models 
+import nucleus.models
 from nucleus.db.database import Base
 
 # this is the Alembic Config object, which provides
@@ -22,16 +22,36 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel 
+# from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 DATABASE_URL = os.getenv("DATABASE_URL_SYNC")
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# Legacy Account Aggregator tables still present in some DBs but no longer
+# modeled in SQLAlchemy. Keep them out of autogenerate so deploys do not
+# emit DROP TABLE for them.
+_AA_LEGACY_TABLES = frozenset(
+    {
+        "aa_transactions",
+        "aa_fi_sessions",
+        "aa_consents",
+        "aa_linked_accounts",
+        "aa_customers",
+        "aa_jobs",
+        "aa_account_snapshots",
+    }
+)
+
+
+def include_object(object, name, type_, reflected, compare_to):
+    """Skip AA legacy tables (and their indexes/FKs) during autogenerate."""
+    if type_ == "table" and name in _AA_LEGACY_TABLES:
+        return False
+    table = getattr(object, "table", None)
+    if table is not None and getattr(table, "name", None) in _AA_LEGACY_TABLES:
+        return False
+    return True
 
 
 def run_migrations_offline() -> None:
@@ -39,7 +59,7 @@ def run_migrations_offline() -> None:
 
     This configures the context with just a URL
     and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
+    here as well. By skipping the Engine creation
     we don't even need a DBAPI to be available.
 
     Calls to context.execute() here emit the given string to the
@@ -52,6 +72,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_object=include_object,
     )
 
     with context.begin_transaction():
@@ -74,7 +95,8 @@ def run_migrations_online() -> None:
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
-            target_metadata=target_metadata
+            target_metadata=target_metadata,
+            include_object=include_object,
         )
 
         with context.begin_transaction():

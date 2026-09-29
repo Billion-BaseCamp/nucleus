@@ -9,6 +9,14 @@ from nucleus.models.common_models.client import Client, ClientEmailMapping, Clie
 from nucleus.models.common_models.login import Login, LoginEvent
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
 from nucleus.models.common_models.otp_verification import OtpVerification
+from nucleus.models.common_models.csa import (
+    CSAClauseFlag,
+    CSADocument,
+    CSAFee,
+    CSAParseWarning,
+    CSAParty,
+    CSAService,
+)
 from nucleus.models.common_models.documents_collector_info import (
     DocumentCollectorInfo,
     SubTypeComments,
@@ -87,12 +95,27 @@ from nucleus.models.form26_as_log_models.file_metadata import FileMetadata
 from nucleus.models.form26_as_log_models.upload_batches import UploadBatches
 from nucleus.models.itr_filling.disclosures import ITRALMovableAsset, ITRALInvestment
 from nucleus.models.itr_filling.tax_credits import ReliefClaimed, ITRTaxCreditSchedule
-from nucleus.models.itr_filling.other_sources import ITRDeemedIncome, ITRTaxExemptIncome
+from nucleus.models.itr_filling.other_sources import (
+    ITRDeemedIncome,
+    ITROSDeductionUs57,
+    ITRTaxExemptIncome,
+)
 
 # Portal automation (browser/task jobs — shared by tax-engine API + worker)
 from nucleus.models.portal_automation import (
     PortalAutomationBatch,
     PortalAutomationJob,
+)
+
+# Account Aggregator (Finvu/Finsense — shared by aa-backend + cronjob-scheduler worker)
+from nucleus.models.account_aggregator import (
+    AAAccountSnapshot,
+    AAConsent,
+    AACustomer,
+    AAFISession,
+    AAJob,
+    AALinkedAccount,
+    AATransaction,
 )
 
 # US tax filing models (import all so Alembic autogenerate registers every table)
@@ -139,6 +162,7 @@ from nucleus.models.itr_filling import (
     ITROSSchedule,
     ITRPriorYearIncomeHeads,
     ITRFiledYearSummary,
+    ITRFiledYearSchedule,
     ITRClientSummaryDownloadLog,
     ITRSummaryVerification,
     ITRDedSchedule,
@@ -223,6 +247,7 @@ from nucleus.models.itr_filling import (
     ITRAisEntry,
     ITRAisSftTransaction,
     ITRDeemedIncome,
+    ITROSDeductionUs57,
     ITRTaxExemptIncome,
 )
 
@@ -348,12 +373,14 @@ __all__ = [
     "ITROSIncomeLineDetail",
     "ITROSInterestDetail",
     "ITROSItRefundInterest",
+    "ITROSDeductionUs57",
     "ITROSOtherIncome",
     "ITROSSpecialRate",
     "ITROSPTIEntity",
     "ITROSSchedule",
     "ITRPriorYearIncomeHeads",
     "ITRFiledYearSummary",
+    "ITRFiledYearSchedule",
     "ITRClientSummaryDownloadLog",
     "ITRSummaryVerification",
     "ITRDedSchedule",
@@ -438,10 +465,19 @@ __all__ = [
     "ITRAis26asReconciliation",
     "ITRAisSftTransaction",
     "ITRDeemedIncome",
+    "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
     # Portal automation
     "PortalAutomationBatch",
     "PortalAutomationJob",
+    # Account Aggregator
+    "AAAccountSnapshot",
+    "AAConsent",
+    "AACustomer",
+    "AAFISession",
+    "AAJob",
+    "AALinkedAccount",
+    "AATransaction",
     # US tax filing
     "ClientPriorReturn",
     "DocumentUpload",

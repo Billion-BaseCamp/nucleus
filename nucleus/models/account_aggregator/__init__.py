@@ -33,6 +33,13 @@ from nucleus.models.account_aggregator.constants import (
 from nucleus.models.account_aggregator.consent import AAConsent
 from nucleus.models.account_aggregator.customer import AACustomer
 from nucleus.models.account_aggregator.data import AAAccountSnapshot, AATransaction
+from nucleus.models.account_aggregator.investment import (
+    ASSET_EQUITY,
+    ASSET_ETF,
+    ASSET_MUTUAL_FUND,
+    AAHolding,
+    AAInvestmentTransaction,
+)
 from nucleus.models.account_aggregator.job import AAJob
 from nucleus.models.account_aggregator.session import AAFISession, AALinkedAccount
 
@@ -42,9 +49,15 @@ __all__ = [
     "AAConsent",
     "AACustomer",
     "AAFISession",
+    "AAHolding",
+    "AAInvestmentTransaction",
     "AAJob",
     "AALinkedAccount",
     "AATransaction",
+    # investment asset classes
+    "ASSET_EQUITY",
+    "ASSET_ETF",
+    "ASSET_MUTUAL_FUND",
     # consent status
     "CONSENT_ACTIVE",
     "CONSENT_EXPIRED",

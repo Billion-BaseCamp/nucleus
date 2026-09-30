@@ -103,17 +103,6 @@ from nucleus.models.portal_automation import (
     PortalAutomationJob,
 )
 
-# Account Aggregator (Finvu/Finsense — shared by aa-backend + cronjob-scheduler worker)
-from nucleus.models.account_aggregator import (
-    AAAccountSnapshot,
-    AAConsent,
-    AACustomer,
-    AAFISession,
-    AAJob,
-    AALinkedAccount,
-    AATransaction,
-)
-
 # US tax filing models (import all so Alembic autogenerate registers every table)
 from nucleus.models.us_tax_filing import (
     ClientPriorReturn,
@@ -463,14 +452,6 @@ __all__ = [
     # Portal automation
     "PortalAutomationBatch",
     "PortalAutomationJob",
-    # Account Aggregator
-    "AAAccountSnapshot",
-    "AAConsent",
-    "AACustomer",
-    "AAFISession",
-    "AAJob",
-    "AALinkedAccount",
-    "AATransaction",
     # US tax filing
     "ClientPriorReturn",
     "DocumentUpload",

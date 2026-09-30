@@ -1,8 +1,3 @@
-"""
-ITR filing layer: Disclosures (Schedule AL, Part A Gen, Schedule FA).
-
-itr_returns → itr_disclosures_schedule (1:1) → child tables
-"""
 
 from __future__ import annotations
 
@@ -28,7 +23,6 @@ from nucleus.db.database import Base
 
 
 class ITRDisclosuresSchedule(Base):
-    """Schedule AL + Part A disclosures + Schedule FA root (1:1 with itr_returns)."""
 
     __tablename__ = "itr_disclosures_schedule"
 
@@ -49,8 +43,8 @@ class ITRDisclosuresSchedule(Base):
     verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
 
     net_movable_assets: Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
-    investment:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
-    immovable:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    net_investment:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
+    net_immovable:Mapped[Decimal] = mapped_column(Numeric(15, 2), nullable=True, default=0)
 
     is_directorship: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)
     is_unlisted_shares: Mapped[bool] = mapped_column(Boolean, nullable=True, default=False)

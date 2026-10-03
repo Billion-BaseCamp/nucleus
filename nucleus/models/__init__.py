@@ -62,7 +62,7 @@ from nucleus.models.tsm_models.chat_messages import TaskChatMessage
 from nucleus.models.tsm_models.files import File
 from nucleus.models.tsm_models.notification import Notification
 from nucleus.models.tsm_models.push_subscription import PushSubscription
-from nucleus.models.tsm_models.task import Task, TaskAssignee, Session, PinTask, ActiveTimer
+from nucleus.models.tsm_models.task import Task, TaskAssignee, Session, PinTask, ActiveTimer, TaskCollaboration
 
 # Client Profiling Models
 from nucleus.models.client_profiling.address import Address
@@ -293,6 +293,7 @@ __all__ = [
     "Session",
     "PinTask",
     "ActiveTimer",
+    "TaskCollaboration",
     "Task",
     "TaskAssignee",
     "TaskChatMessage",

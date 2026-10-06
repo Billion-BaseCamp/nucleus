@@ -104,6 +104,7 @@ from nucleus.models.itr_filling.other_sources import (
 # Portal automation (browser/task jobs — shared by tax-engine API + worker)
 from nucleus.models.portal_automation import (
     ClientNotice,
+    EProceedingsWatchlist,
     PortalAutomationBatch,
     PortalAutomationJob,
 )
@@ -473,6 +474,7 @@ __all__ = [
     "ITRTaxExemptIncome",
     # Portal automation
     "ClientNotice",
+    "EProceedingsWatchlist",
     "PortalAutomationBatch",
     "PortalAutomationJob",
     # Account Aggregator

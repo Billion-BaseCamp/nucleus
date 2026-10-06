@@ -2,12 +2,12 @@ import uuid
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import ARRAY, Boolean, DateTime, Enum, ForeignKey, String, text, UniqueConstraint
+from sqlalchemy import ARRAY, Boolean, DateTime, Enum, ForeignKey, Index, Integer, String, text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nucleus.core.constants import IST_TIMEZONE
 from nucleus.db.database import Base
-from nucleus.core.constants import ACCEPTANCE_STATUS
+from nucleus.core.constants import ACCEPTANCE_STATUS, COLLABORATION_STATUS
 
 
 class TaskAssignee(Base):
@@ -18,10 +18,6 @@ class TaskAssignee(Base):
     )
     advisor_id: Mapped[UUID] = mapped_column(
         ForeignKey("advisors.id", ondelete="CASCADE"), primary_key=True
-    )
-    # True when added via "ask for help" — timer-only; cannot create subtasks as collaborator
-    is_collaborator: Mapped[bool] = mapped_column(
-        Boolean, default=False, server_default=text("false"), nullable=False
     )
 
 
@@ -181,4 +177,57 @@ class ActiveTimer(Base):
     )
     activation_time: Mapped[datetime] = mapped_column(
         DateTime(timezone=False), nullable=False
+    )
+
+
+class TaskCollaboration(Base):
+    """One help request from a task's assignee to a teammate, and the session it produced.
+
+    Rows are never deleted: FKs use SET NULL and task_title is snapshotted so the
+    collaborator's log survives task deletion and advisor removal.
+    """
+
+    __tablename__ = "task_collaborations"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid.uuid4)
+
+    task_id: Mapped[UUID] = mapped_column(
+        ForeignKey("tasks.task_id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    task_title: Mapped[str] = mapped_column(String, nullable=False)
+
+    requested_by: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    collaborator_id: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+
+    status: Mapped[COLLABORATION_STATUS] = mapped_column(
+        Enum(COLLABORATION_STATUS, native_enum=False), nullable=False
+    )
+
+    requested_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=False)
+    responded_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+    decline_reason: Mapped[str] = mapped_column(String, nullable=True)
+
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+    ended_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=True)
+    duration_seconds: Mapped[int] = mapped_column(Integer, nullable=True)
+
+    end_note: Mapped[str] = mapped_column(String, nullable=True)
+    # NULL when the system ended it (task paused, reassigned, completed or deleted)
+    ended_by: Mapped[UUID] = mapped_column(
+        ForeignKey("advisors.id", ondelete="SET NULL"), nullable=True
+    )
+
+    __table_args__ = (
+        # At most one open (pending, accepted or live) collaboration per task
+        Index(
+            "uix_task_collaborations_open_per_task",
+            "task_id",
+            unique=True,
+            postgresql_where=text("status IN ('PENDING', 'ACCEPTED', 'ACTIVE')"),
+        ),
+        Index("ix_task_collaborations_collaborator_task", "collaborator_id", "task_id"),
     )

@@ -7,7 +7,7 @@ Design constraints agreed with Akash 2026-09-25:
 
 * Every document in the corpus is a CSA. There is NO doc_type discriminator —
   percentage-fee investment-advisory deals are CSAs whose fee rows are rate rows.
-* ``csa_parties.client_id`` NULL = we could not map that name. Normal and
+* ``csa_parties_raw.client_id`` NULL = we could not map that name. Normal and
   permanent; the row is flagged unmapped and nothing else happens. Unmapped
   names are mostly family members who are not clients.
 * Every extracted value is auditable back to the page it came from.
@@ -57,7 +57,7 @@ class CSADocument(Base):
     and a ``_1`` suffix can be an unrelated engagement rather than a version.
     """
 
-    __tablename__ = "csa_documents"
+    __tablename__ = "csa_documents_raw"
     __table_args__ = (
         UniqueConstraint("sha256", name="uix_csa_documents_sha256"),
         # One row per envelope among non-superseded documents. Envelope is NULL
@@ -108,7 +108,7 @@ class CSADocument(Base):
     refund_on_termination: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     refund_terms: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    # AUM is an investment amount, never a fee — it lives here, not in csa_fees.
+    # AUM is an investment amount, never a fee — it lives here, not in csa_fees_raw.
     aum_amount: Mapped[Optional[float]] = mapped_column(Numeric(20, 4), nullable=True)
     aum_currency: Mapped[Optional[str]] = mapped_column(String(3), nullable=True)
 
@@ -136,7 +136,7 @@ class CSADocument(Base):
 
     # A later CSA that replaces this one (renewal / re-execution).
     superseded_by_id: Mapped[Optional[UUID]] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("csa_documents.id", ondelete="SET NULL"), nullable=True
+        SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="SET NULL"), nullable=True
     )
 
     parties: Mapped[List["CSAParty"]] = relationship(
@@ -177,7 +177,7 @@ class CSAParty(Base):
     ``match_candidates`` and left NULL for someone to confirm or ignore.
     """
 
-    __tablename__ = "csa_parties"
+    __tablename__ = "csa_parties_raw"
     __table_args__ = (
         Index("ix_csa_parties_client", "client_id"),
         # The flag: every party we could not map to a client.
@@ -199,7 +199,7 @@ class CSAParty(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     csa_document_id: Mapped[UUID] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("csa_documents.id", ondelete="CASCADE"), nullable=False, index=True
+        SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False, index=True
     )
 
     # The link. NULL = not yet resolved to a client; the review queue works this.
@@ -246,7 +246,7 @@ class CSAFee(Base):
     different hurdles per investment plan (8/6, 5/2.5, 4/2 all observed).
     """
 
-    __tablename__ = "csa_fees"
+    __tablename__ = "csa_fees_raw"
     __table_args__ = (
         # A row must say something: an amount, a rate, or an explicit statement
         # that the price is deliberately unquantified ("mutually agreed at
@@ -275,7 +275,7 @@ class CSAFee(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     csa_document_id: Mapped[UUID] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("csa_documents.id", ondelete="CASCADE"), nullable=False
+        SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False
     )
 
     component_label: Mapped[str] = mapped_column(String, nullable=False)
@@ -321,7 +321,7 @@ class CSAService(Base):
     read as services provided.
     """
 
-    __tablename__ = "csa_services"
+    __tablename__ = "csa_services_raw"
     __table_args__ = (
         Index("ix_csa_services_code", "canonical_code"),
         Index("ix_csa_services_document", "csa_document_id"),
@@ -330,7 +330,7 @@ class CSAService(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     csa_document_id: Mapped[UUID] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("csa_documents.id", ondelete="CASCADE"), nullable=False
+        SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False
     )
 
     canonical_code: Mapped[CSAServiceCode] = mapped_column(Enum(CSAServiceCode), nullable=False)
@@ -358,14 +358,14 @@ class CSAClauseFlag(Base):
     model — the newer KLOK template permits it, the older BFAPL one does not.
     """
 
-    __tablename__ = "csa_clause_flags"
+    __tablename__ = "csa_clause_flags_raw"
     __table_args__ = (
         UniqueConstraint("csa_document_id", "clause_key", name="uix_csa_clause_flag"),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     csa_document_id: Mapped[UUID] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("csa_documents.id", ondelete="CASCADE"), nullable=False
+        SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False
     )
     clause_key: Mapped[str] = mapped_column(String, nullable=False)
     present: Mapped[bool] = mapped_column(Boolean, nullable=False)
@@ -378,7 +378,7 @@ class CSAClauseFlag(Base):
 class CSAParseWarning(Base):
     """Why a document is in the review queue. One row per issue, machine-generated."""
 
-    __tablename__ = "csa_parse_warnings"
+    __tablename__ = "csa_parse_warnings_raw"
     __table_args__ = (
         Index("ix_csa_parse_warnings_document", "csa_document_id"),
         Index("ix_csa_parse_warnings_code", "warning_code"),
@@ -386,7 +386,7 @@ class CSAParseWarning(Base):
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
     csa_document_id: Mapped[UUID] = mapped_column(
-        SQLUUID(as_uuid=True), ForeignKey("csa_documents.id", ondelete="CASCADE"), nullable=False
+        SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False
     )
     warning_code: Mapped[str] = mapped_column(String, nullable=False)   # e.g. CURRENCY_MISMATCH
     severity: Mapped[str] = mapped_column(String, nullable=False)       # blocker | review | note

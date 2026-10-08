@@ -10,12 +10,19 @@ from nucleus.models.common_models.login import Login, LoginEvent
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
 from nucleus.models.common_models.otp_verification import OtpVerification
 from nucleus.models.common_models.csa import (
-    CSAClauseFlag,
     CSADocument,
     CSAFee,
     CSAParseWarning,
     CSAParty,
     CSAService,
+)
+from nucleus.models.common_models.csa_raw import (
+    CSAClauseFlagRaw,
+    CSADocumentRaw,
+    CSAFeeRaw,
+    CSAParseWarningRaw,
+    CSAPartyRaw,
+    CSAServiceRaw,
 )
 from nucleus.models.common_models.documents_collector_info import (
     DocumentCollectorInfo,

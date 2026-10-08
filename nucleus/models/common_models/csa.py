@@ -44,6 +44,11 @@ from nucleus.core.constants import (
 from nucleus.db.database import Base
 
 
+def _existing_enum(enum_cls):
+    """Reuse the PostgreSQL enum already created for the raw CSA tables."""
+    return Enum(enum_cls, name=enum_cls.__name__.lower(), create_type=False)
+
+
 class CSADocument(Base):
     """One signed CSA PDF."""
 
@@ -67,7 +72,7 @@ class CSADocument(Base):
     page_count: Mapped[int] = mapped_column(Integer, nullable=False)
     docusign_envelope_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
-    legal_entity: Mapped[Optional[CSALegalEntity]] = mapped_column(Enum(CSALegalEntity), nullable=True)
+    legal_entity: Mapped[Optional[CSALegalEntity]] = mapped_column(_existing_enum(CSALegalEntity), nullable=True)
 
     retainer_start: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     retainer_end: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
@@ -83,7 +88,7 @@ class CSADocument(Base):
     not_csa_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     review_status: Mapped[CSAReviewStatus] = mapped_column(
-        Enum(CSAReviewStatus), default=CSAReviewStatus.PENDING, nullable=False
+        _existing_enum(CSAReviewStatus), default=CSAReviewStatus.PENDING, nullable=False
     )
 
     affiliate_transfer: Mapped[bool] = mapped_column(Boolean, nullable=False)
@@ -149,7 +154,7 @@ class CSAParty(Base):
     auth_receive_info: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
     auth_financial_decisions: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
-    match_tier: Mapped[Optional[CSAMatchTier]] = mapped_column(Enum(CSAMatchTier), nullable=True)
+    match_tier: Mapped[Optional[CSAMatchTier]] = mapped_column(_existing_enum(CSAMatchTier), nullable=True)
     matched_by_advisor_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("advisors.id", name="fk_csa_parties_matched_by"),
@@ -194,7 +199,7 @@ class CSAFee(Base):
     )
 
     component_label: Mapped[str] = mapped_column(String, nullable=False)
-    fee_type: Mapped[CSAFeeType] = mapped_column(Enum(CSAFeeType), nullable=False)
+    fee_type: Mapped[CSAFeeType] = mapped_column(_existing_enum(CSAFeeType), nullable=False)
 
     amount: Mapped[Optional[float]] = mapped_column(Numeric(20, 4), nullable=True)
     currency: Mapped[Optional[str]] = mapped_column(String(3), nullable=True)
@@ -234,8 +239,8 @@ class CSAService(Base):
     )
 
     fy: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    canonical_code: Mapped[CSAServiceCode] = mapped_column(Enum(CSAServiceCode), nullable=False)
-    inclusion: Mapped[CSAInclusion] = mapped_column(Enum(CSAInclusion), nullable=False)
+    canonical_code: Mapped[CSAServiceCode] = mapped_column(_existing_enum(CSAServiceCode), nullable=False)
+    inclusion: Mapped[CSAInclusion] = mapped_column(_existing_enum(CSAInclusion), nullable=False)
     verbatim_text: Mapped[str] = mapped_column(Text, nullable=False)
     unit_amount: Mapped[Optional[float]] = mapped_column(Numeric(20, 4), nullable=True)
     unit_currency: Mapped[Optional[str]] = mapped_column(String(3), nullable=True)

@@ -52,7 +52,11 @@ class CSADocument(Base):
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), default=uuid4)
-
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("clients.id", ondelete="CASCADE", name="fk_csa_documents_client"),
+        nullable=False,
+    )
     file_name: Mapped[str] = mapped_column(String, nullable=False)
     sha256: Mapped[str] = mapped_column(String(64), nullable=False)
     page_count: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -93,6 +97,8 @@ class CSADocument(Base):
     warnings: Mapped[List["CSAParseWarning"]] = relationship(
         "CSAParseWarning", back_populates="document", cascade="all, delete-orphan"
     )
+
+    client: Mapped["Client"] = relationship("Client", back_populates="csa_documents")
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

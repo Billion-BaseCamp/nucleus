@@ -119,7 +119,7 @@ class Client(Base):
     loans: Mapped[List["LoanRecord"]] = relationship("LoanRecord", back_populates="client")
     insurances: Mapped[List["Insurance"]] = relationship("Insurance", back_populates="client")
     real_estate: Mapped[List["RealEstate"]] = relationship("RealEstate", back_populates="client")
-    csa_documents: Mapped[List["CsaDocument"]] = relationship("CsaDocument", back_populates="client")
+    csa_documents: Mapped[List["CSADocument"]] = relationship("CSADocument", back_populates="client")
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

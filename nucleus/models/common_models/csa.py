@@ -60,7 +60,7 @@ class CSADocument(Base):
     file_name: Mapped[str] = mapped_column(String, nullable=False)
     sha256: Mapped[str] = mapped_column(String(64), nullable=False)
     page_count: Mapped[int] = mapped_column(Integer, nullable=False)
-    pan_number: Mapped[str] = mapped_column(String, nullable=True, unique=True)
+    pan_number: Mapped[str] = mapped_column(String, nullable=True)
     docusign_envelope_id: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     legal_entity: Mapped[Optional[str]] = mapped_column(String, nullable=True)

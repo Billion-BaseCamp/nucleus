@@ -87,7 +87,10 @@ class CSADocumentRaw(Base):
     docusign_envelope_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
 
     # --- agreement identity ----------------------------------------------
-    legal_entity: Mapped[Optional[CSALegalEntity]] = mapped_column(Enum(CSALegalEntity), nullable=True)
+    legal_entity: Mapped[Optional[CSALegalEntity]] = mapped_column(
+        Enum(CSALegalEntity, native_enum=False, length=10),
+        nullable=True,
+    )
     covers_family: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     # --- term --------------------------------------------------------------
@@ -131,7 +134,9 @@ class CSADocumentRaw(Base):
     not_csa_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     review_status: Mapped[CSAReviewStatus] = mapped_column(
-        Enum(CSAReviewStatus), default=CSAReviewStatus.PENDING, nullable=False
+        Enum(CSAReviewStatus, native_enum=False, length=20),
+        default=CSAReviewStatus.PENDING,
+        nullable=False,
     )
     reviewed_by_advisor_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True), ForeignKey("advisors.id"), nullable=True
@@ -224,7 +229,10 @@ class CSAPartyRaw(Base):
     auth_financial_decisions: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     # --- how the link was made ---------------------------------------------
-    match_tier: Mapped[Optional[CSAMatchTier]] = mapped_column(Enum(CSAMatchTier), nullable=True)
+    match_tier: Mapped[Optional[CSAMatchTier]] = mapped_column(
+        Enum(CSAMatchTier, native_enum=False, length=20),
+        nullable=True,
+    )
     match_confidence: Mapped[Optional[float]] = mapped_column(Numeric(4, 3), nullable=True)
     # JSON: fuzzy candidates with scores, for a human to confirm or ignore.
     match_candidates: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
@@ -283,7 +291,10 @@ class CSAFeeRaw(Base):
     )
 
     component_label: Mapped[str] = mapped_column(String, nullable=False)
-    fee_type: Mapped[CSAFeeType] = mapped_column(Enum(CSAFeeType), nullable=False)
+    fee_type: Mapped[CSAFeeType] = mapped_column(
+        Enum(CSAFeeType, native_enum=False, length=20),
+        nullable=False,
+    )
 
     amount: Mapped[Optional[float]] = mapped_column(Numeric(20, 4), nullable=True)
     currency: Mapped[Optional[str]] = mapped_column(String(3), nullable=True)
@@ -337,8 +348,14 @@ class CSAServiceRaw(Base):
         SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False
     )
 
-    canonical_code: Mapped[CSAServiceCode] = mapped_column(Enum(CSAServiceCode), nullable=False)
-    inclusion: Mapped[CSAInclusion] = mapped_column(Enum(CSAInclusion), nullable=False)
+    canonical_code: Mapped[CSAServiceCode] = mapped_column(
+        Enum(CSAServiceCode, native_enum=False, length=30),
+        nullable=False,
+    )
+    inclusion: Mapped[CSAInclusion] = mapped_column(
+        Enum(CSAInclusion, native_enum=False, length=25),
+        nullable=False,
+    )
 
     verbatim_text: Mapped[str] = mapped_column(Text, nullable=False)
     fy: Mapped[Optional[str]] = mapped_column(String, nullable=True)

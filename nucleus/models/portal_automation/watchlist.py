@@ -4,8 +4,9 @@ Rows with a ``batch_id`` were chosen by that monthly run. The weekly run reads
 only the latest monthly batch whose status is ``completed``, so a running or
 failed month never replaces the previous list.
 
-Rows without a ``batch_id`` were added by hand. They are not tied to a month
-and stay until ``removed_at`` is set.
+Rows without a ``batch_id`` are standing entries: added by hand (``manual``)
+or by a check that found a notice needing action (``action_required``). They
+are not tied to a month and stay until ``removed_at`` is set.
 
 Generate the table with Alembic autogenerate. Do not hand-write the migration.
 """

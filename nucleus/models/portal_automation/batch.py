@@ -5,6 +5,15 @@ Jobs point back via ``batch_id``.
 
 Scheduled runs set ``run_type`` and ``status``. Excel/API batches leave both
 null. Only one scheduled batch per workflow may be ``running`` at a time.
+
+A run that never finishes would block every later run of its workflow, so the
+consumer must fail ``running`` batches past a deadline, counted from
+``started_at`` (cronjob-scheduler: the notice batch finalizer,
+``NOTICE_BATCH_DEADLINE_HOURS``).
+
+``assessment_year`` is required, but a scheduled notice run covers every year
+on the portal; it stores the financial year label of the run date
+(``notice_assessment_year``).
 """
 
 from __future__ import annotations

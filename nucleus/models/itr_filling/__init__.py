@@ -32,6 +32,8 @@ from nucleus.models.itr_filling.cfl import (
 )
 from nucleus.models.itr_filling.deductions import (
     ITRDed80C,
+    ITRDed80DD,
+    ITRDed80U,
     ITRDed80DD80U,
     ITRDed80DDB,
     ITRDed80DDetail,
@@ -204,6 +206,8 @@ __all__ = [
     "ITRDed80DMeta",
     "ITRDed80DPolicy",
     "ITRDed80GDonation",
+    "ITRDed80DD",
+    "ITRDed80U",
     "ITRDed80DD80U",
     "ITRDed80DDB",
     "ITRDed80GGAEntry",

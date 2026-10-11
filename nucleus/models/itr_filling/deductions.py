@@ -130,9 +130,6 @@ class ITRDedSchedule(Base):
     ded_80g_donations: Mapped[List["ITRDed80GDonation"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    ded_80d_80u: Mapped["ITRDed80DD80U"] = relationship(
-        back_populates="ded_schedule"
-    )
     ded_80dd: Mapped[Optional["ITRDed80DD"]] = relationship(
         back_populates="ded_schedule",
         cascade="all, delete-orphan",
@@ -397,6 +394,10 @@ class ITRDed80DD(Base):
             "dependent_type IN ('1', '2', '3', '4', '5', '6', '7', '8')",
             name="check_80dd_dependent_type",
         ),
+        CheckConstraint(
+            "deduction_amount >= 0",
+            name="check_80dd_deduction_amount_non_negative",
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(
@@ -421,6 +422,7 @@ class ITRDed80DD(Base):
     dependent_type: Mapped[str] = mapped_column(String(1), nullable=False)
     dependent_pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     dependent_aadhaar: Mapped[Optional[str]] = mapped_column(String(12), nullable=True)
+    form_10ia_filing_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     form_10ia_ack_num: Mapped[Optional[str]] = mapped_column(String(15), nullable=True)
     udid_num: Mapped[Optional[str]] = mapped_column(String(18), nullable=True)
 

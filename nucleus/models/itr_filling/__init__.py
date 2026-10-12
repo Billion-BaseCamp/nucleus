@@ -66,6 +66,14 @@ from nucleus.models.itr_filling.disclosures import (
     ITRFAOtherForeignIncome,
     ITRFASigningAuthority,
 )
+from nucleus.models.itr_filling.business_profession import (
+    ITRBPGoods44AE,
+    ITRBPGstinTurnover,
+    ITRBPNatOfBus44AD,
+    ITRBPNatOfBus44ADA,
+    ITRBPNatOfBus44AE,
+    ITRBPSchedule,
+)
 from nucleus.models.itr_filling.house_property import (
     ITRHPCoOwner,
     ITRHPLoan,
@@ -175,6 +183,13 @@ __all__ = [
     "ITRHPProperty",
     "ITRHPSchedule",
     "ITRHPTenant",
+    # Business / profession (Schedule BP)
+    "ITRBPSchedule",
+    "ITRBPNatOfBus44AD",
+    "ITRBPNatOfBus44ADA",
+    "ITRBPNatOfBus44AE",
+    "ITRBPGoods44AE",
+    "ITRBPGstinTurnover",
     # Other Sources (Schedule OS)
     "ITROSBuybackShare",
     "ITROSClubbingEntry",

@@ -56,6 +56,37 @@ class ITRBPSchedule(Base):
         index=True,
     )
 
+    computation_status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        server_default="NOT_STARTED",
+    )
+    verification_status: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+
+    # Income % used for 44AD / 44ADA (statutory minimum is the default)
+    ad_income_pct_digital: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(9, 6),
+        CheckConstraint(
+            "ad_income_pct_digital BETWEEN 6 AND 100", name="ck_bp_ad_income_pct_digital"
+        ),
+        nullable=True,
+        server_default="6",
+    )
+    ad_income_pct_other: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(9, 6),
+        CheckConstraint(
+            "ad_income_pct_other BETWEEN 8 AND 100", name="ck_bp_ad_income_pct_other"
+        ),
+        nullable=True,
+        server_default="8",
+    )
+    ada_income_pct: Mapped[Optional[Decimal]] = mapped_column(
+        Numeric(9, 6),
+        CheckConstraint("ada_income_pct BETWEEN 50 AND 100", name="ck_bp_ada_income_pct"),
+        nullable=True,
+        server_default="50",
+    )
+
     # PersumptiveInc44AD
     grs_total_trn_over: Mapped[Optional[Decimal]] = _rupees("grs_total_trn_over", upper=_AD_MAX)
     grs_trn_over_bank: Mapped[Optional[Decimal]] = _rupees("grs_trn_over_bank", upper=_AD_MAX)

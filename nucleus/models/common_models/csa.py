@@ -54,7 +54,7 @@ class CSADocument(Base):
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), default=uuid4)
     client_id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True),
-        ForeignKey("clients.id", ondelete="CASCADE", name="fk_csa_documents_client"),
+        ForeignKey("clients.id", name="fk_csa_documents_client"),
         nullable=True,
     )
     file_name: Mapped[str] = mapped_column(String, nullable=False)

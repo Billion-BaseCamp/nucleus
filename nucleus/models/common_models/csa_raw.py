@@ -63,18 +63,18 @@ class CSADocumentRaw(Base):
 
     __tablename__ = "csa_documents_raw"
     __table_args__ = (
-        UniqueConstraint("sha256", name="uix_csa_documents_sha256"),
+        UniqueConstraint("sha256", name="uix_csa_documents_raw_sha256"),
         # One row per envelope among non-superseded documents. Envelope is NULL
         # for the rare PDF with no DocuSign header, so the index is partial.
         Index(
-            "uix_csa_documents_envelope",
+            "uix_csa_documents_raw_envelope",
             "docusign_envelope_id",
             unique=True,
             postgresql_where=text(
                 "docusign_envelope_id IS NOT NULL AND superseded_by_id IS NULL"
             ),
         ),
-        Index("ix_csa_documents_review", "review_status"),
+        Index("ix_csa_documents_raw_review", "review_status"),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4, index=True)
@@ -87,7 +87,10 @@ class CSADocumentRaw(Base):
     docusign_envelope_id: Mapped[Optional[str]] = mapped_column(String, nullable=True, index=True)
 
     # --- agreement identity ----------------------------------------------
-    legal_entity: Mapped[Optional[CSALegalEntity]] = mapped_column(Enum(CSALegalEntity), nullable=True)
+    legal_entity: Mapped[Optional[CSALegalEntity]] = mapped_column(
+        Enum(CSALegalEntity, native_enum=False, length=10),
+        nullable=True,
+    )
     covers_family: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     # --- term --------------------------------------------------------------
@@ -131,7 +134,9 @@ class CSADocumentRaw(Base):
     not_csa_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     review_status: Mapped[CSAReviewStatus] = mapped_column(
-        Enum(CSAReviewStatus), default=CSAReviewStatus.PENDING, nullable=False
+        Enum(CSAReviewStatus, native_enum=False, length=20),
+        default=CSAReviewStatus.PENDING,
+        nullable=False,
     )
     reviewed_by_advisor_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True), ForeignKey("advisors.id"), nullable=True
@@ -183,21 +188,21 @@ class CSAPartyRaw(Base):
 
     __tablename__ = "csa_parties_raw"
     __table_args__ = (
-        Index("ix_csa_parties_client", "client_id"),
+        Index("ix_csa_parties_raw_client", "client_id"),
         # The flag: every party we could not map to a client.
         Index(
-            "ix_csa_parties_unmapped",
+            "ix_csa_parties_raw_unmapped",
             "csa_document_id",
             postgresql_where=text("client_id IS NULL"),
         ),
         CheckConstraint(
             "match_confidence IS NULL OR (match_confidence >= 0 AND match_confidence <= 1)",
-            name="ck_csa_parties_confidence_range",
+            name="ck_csa_parties_raw_confidence_range",
         ),
         # A link must say how it was made; an unlinked row must not claim one.
         CheckConstraint(
             "(client_id IS NULL) = (match_tier IS NULL)",
-            name="ck_csa_parties_link_has_tier",
+            name="ck_csa_parties_raw_link_has_tier",
         ),
     )
 
@@ -224,7 +229,10 @@ class CSAPartyRaw(Base):
     auth_financial_decisions: Mapped[Optional[bool]] = mapped_column(Boolean, nullable=True)
 
     # --- how the link was made ---------------------------------------------
-    match_tier: Mapped[Optional[CSAMatchTier]] = mapped_column(Enum(CSAMatchTier), nullable=True)
+    match_tier: Mapped[Optional[CSAMatchTier]] = mapped_column(
+        Enum(CSAMatchTier, native_enum=False, length=20),
+        nullable=True,
+    )
     match_confidence: Mapped[Optional[float]] = mapped_column(Numeric(4, 3), nullable=True)
     # JSON: fuzzy candidates with scores, for a human to confirm or ignore.
     match_candidates: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
@@ -258,20 +266,20 @@ class CSAFeeRaw(Base):
         # rows would lose the knowledge that a renewal/extra charge exists.
         CheckConstraint(
             "amount IS NOT NULL OR percentage_value IS NOT NULL OR is_unquantified",
-            name="ck_csa_fees_amount_rate_or_unquantified",
+            name="ck_csa_fees_raw_amount_rate_or_unquantified",
         ),
         CheckConstraint(
             "NOT (is_unquantified AND (amount IS NOT NULL OR percentage_value IS NOT NULL))",
-            name="ck_csa_fees_unquantified_has_no_value",
+            name="ck_csa_fees_raw_unquantified_has_no_value",
         ),
         CheckConstraint(
             "amount IS NULL OR currency IS NOT NULL",
-            name="ck_csa_fees_amount_needs_currency",
+            name="ck_csa_fees_raw_amount_needs_currency",
         ),
-        Index("ix_csa_fees_document", "csa_document_id"),
+        Index("ix_csa_fees_raw_document", "csa_document_id"),
         # Revenue queries must be able to exclude unpriced rows cheaply.
         Index(
-            "ix_csa_fees_priced",
+            "ix_csa_fees_raw_priced",
             "csa_document_id",
             postgresql_where=text("NOT is_unquantified"),
         ),
@@ -283,7 +291,10 @@ class CSAFeeRaw(Base):
     )
 
     component_label: Mapped[str] = mapped_column(String, nullable=False)
-    fee_type: Mapped[CSAFeeType] = mapped_column(Enum(CSAFeeType), nullable=False)
+    fee_type: Mapped[CSAFeeType] = mapped_column(
+        Enum(CSAFeeType, native_enum=False, length=20),
+        nullable=False,
+    )
 
     amount: Mapped[Optional[float]] = mapped_column(Numeric(20, 4), nullable=True)
     currency: Mapped[Optional[str]] = mapped_column(String(3), nullable=True)
@@ -327,9 +338,9 @@ class CSAServiceRaw(Base):
 
     __tablename__ = "csa_services_raw"
     __table_args__ = (
-        Index("ix_csa_services_code", "canonical_code"),
-        Index("ix_csa_services_document", "csa_document_id"),
-        Index("ix_csa_services_code_inclusion", "canonical_code", "inclusion"),
+        Index("ix_csa_services_raw_code", "canonical_code"),
+        Index("ix_csa_services_raw_document", "csa_document_id"),
+        Index("ix_csa_services_raw_code_inclusion", "canonical_code", "inclusion"),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -337,8 +348,14 @@ class CSAServiceRaw(Base):
         SQLUUID(as_uuid=True), ForeignKey("csa_documents_raw.id", ondelete="CASCADE"), nullable=False
     )
 
-    canonical_code: Mapped[CSAServiceCode] = mapped_column(Enum(CSAServiceCode), nullable=False)
-    inclusion: Mapped[CSAInclusion] = mapped_column(Enum(CSAInclusion), nullable=False)
+    canonical_code: Mapped[CSAServiceCode] = mapped_column(
+        Enum(CSAServiceCode, native_enum=False, length=30),
+        nullable=False,
+    )
+    inclusion: Mapped[CSAInclusion] = mapped_column(
+        Enum(CSAInclusion, native_enum=False, length=25),
+        nullable=False,
+    )
 
     verbatim_text: Mapped[str] = mapped_column(Text, nullable=False)
     fy: Mapped[Optional[str]] = mapped_column(String, nullable=True)
@@ -364,7 +381,7 @@ class CSAClauseFlagRaw(Base):
 
     __tablename__ = "csa_clause_flags_raw"
     __table_args__ = (
-        UniqueConstraint("csa_document_id", "clause_key", name="uix_csa_clause_flag"),
+        UniqueConstraint("csa_document_id", "clause_key", name="uix_csa_clause_flag_raw"),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -384,8 +401,8 @@ class CSAParseWarningRaw(Base):
 
     __tablename__ = "csa_parse_warnings_raw"
     __table_args__ = (
-        Index("ix_csa_parse_warnings_document", "csa_document_id"),
-        Index("ix_csa_parse_warnings_code", "warning_code"),
+        Index("ix_csa_parse_warnings_raw_document", "csa_document_id"),
+        Index("ix_csa_parse_warnings_raw_code", "warning_code"),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)

@@ -130,8 +130,13 @@ class ITRDedSchedule(Base):
     ded_80g_donations: Mapped[List["ITRDed80GDonation"]] = relationship(
         back_populates="ded_schedule", cascade="all, delete-orphan"
     )
-    ded_80d_80u: Mapped["ITRDed80DD80U"] = relationship(
-        back_populates="ded_schedule"
+    ded_80dd: Mapped[Optional["ITRDed80DD"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
+    )
+    ded_80u: Mapped[Optional["ITRDed80U"]] = relationship(
+        back_populates="ded_schedule",
+        cascade="all, delete-orphan",
     )
 
     ded_80ddb: Mapped[List["ITRDed80DDB"]] = relationship(
@@ -372,8 +377,29 @@ class ITRDed80GDonation(Base):
     )
 
 
-class ITRDed80DD80U(Base):
-    __tablename__ = "itr_80d_80u"
+class ITRDed80DD(Base):
+    """Schedule 80DD — deduction for a dependent with disability. One row per return."""
+
+    __tablename__ = "itr_80dd"
+    __table_args__ = (
+        CheckConstraint(
+            "nature_of_disability IN ('1', '2')",
+            name="check_80dd_nature_of_disability",
+        ),
+        CheckConstraint(
+            "type_of_disability IN ('1', '2')",
+            name="check_80dd_type_of_disability",
+        ),
+        CheckConstraint(
+            "dependent_type IN ('1', '2', '3', '4', '5', '6', '7', '8')",
+            name="check_80dd_dependent_type",
+        ),
+        CheckConstraint(
+            "deduction_amount >= 0",
+            name="check_80dd_deduction_amount_non_negative",
+        ),
+    )
+
     id: Mapped[UUID] = mapped_column(
         SQLUUID(as_uuid=True), primary_key=True, default=uuid4
     )
@@ -381,22 +407,26 @@ class ITRDed80DD80U(Base):
         SQLUUID(as_uuid=True),
         ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
         nullable=False,
+        unique=True,
         index=True,
     )
-    is_servere_disability: Mapped[bool] = mapped_column(Boolean, default=False)
-    eligible_deduction: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
-    dependant_pan: Mapped[str | None] = mapped_column(String, nullable=True)
-    dependant_aadhar: Mapped[str | None] = mapped_column(String, nullable=True)
-    relation: Mapped[str] = mapped_column(String, nullable=False)
-    uudid_number: Mapped[str | None] = mapped_column(String, nullable=True)
-    form10_number: Mapped[str | None] = mapped_column(String, nullable=True)
-    form10_date: Mapped[date | None] = mapped_column(Date, nullable=True)
 
-    is_80u_eligible: Mapped[bool] = mapped_column(Boolean, default=False)
-    sec_80u_deduction: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
-    sec_80u_uudid_number: Mapped[str | None] = mapped_column(String, nullable=True)
-    sec_80u_form10_number: Mapped[str | None] = mapped_column(String, nullable=True)
-    sec_80u_form10_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    # 1: disability; 2: severe disability
+    nature_of_disability: Mapped[str] = mapped_column(String(1), nullable=False)
+    # 1: autism, cerebral palsy, or multiple disabilities; 2: others
+    type_of_disability: Mapped[str] = mapped_column(String(1), nullable=False)
+    deduction_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    # 1 Spouse, 2 Son, 3 Daughter, 4 Father, 5 Mother, 6 Brother, 7 Sister, 8 HUF member
+    dependent_type: Mapped[str] = mapped_column(String(1), nullable=False)
+    dependent_pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    dependent_aadhaar: Mapped[Optional[str]] = mapped_column(String(12), nullable=True)
+    form_10ia_filing_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    form_10ia_ack_num: Mapped[Optional[str]] = mapped_column(String(15), nullable=True)
+    udid_num: Mapped[Optional[str]] = mapped_column(String(18), nullable=True)
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80dd")
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -405,7 +435,57 @@ class ITRDed80DD80U(Base):
         DateTime(timezone=True), onupdate=func.now()
     )
 
-    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80d_80u")
+
+class ITRDed80U(Base):
+    """Schedule 80U — deduction for the taxpayer's own disability. One row per return."""
+
+    __tablename__ = "itr_80u"
+    __table_args__ = (
+        CheckConstraint(
+            "nature_of_disability IN ('1', '2')",
+            name="check_80u_nature_of_disability",
+        ),
+        CheckConstraint(
+            "type_of_disability IN ('1', '2')",
+            name="check_80u_type_of_disability",
+        ),
+        CheckConstraint(
+            "deduction_amount >= 0",
+            name="check_80u_deduction_amount_non_negative",
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    ded_schedule_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True),
+        ForeignKey("itr_ded_schedule.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+
+    # 1: self with disability; 2: self with severe disability
+    nature_of_disability: Mapped[str] = mapped_column(String(1), nullable=False)
+    # 1: autism, cerebral palsy, or multiple disabilities; 2: others
+    type_of_disability: Mapped[str] = mapped_column(String(1), nullable=False)
+    deduction_amount: Mapped[Decimal] = mapped_column(
+        Numeric(15, 2), nullable=False, default=0
+    )
+    form_10ia_filing_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    form_10ia_ack_num: Mapped[Optional[str]] = mapped_column(String(15), nullable=True)
+    form_ack_num_11a: Mapped[Optional[str]] = mapped_column(String(15), nullable=True)
+    udid_num: Mapped[Optional[str]] = mapped_column(String(18), nullable=True)
+
+    ded_schedule: Mapped["ITRDedSchedule"] = relationship(back_populates="ded_80u")
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
 
 class ITRDed80DDB(Base):

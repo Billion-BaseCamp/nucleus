@@ -32,7 +32,8 @@ from nucleus.models.itr_filling.cfl import (
 )
 from nucleus.models.itr_filling.deductions import (
     ITRDed80C,
-    ITRDed80DD80U,
+    ITRDed80DD,
+    ITRDed80U,
     ITRDed80DDB,
     ITRDed80DDetail,
     ITRDed80DMeta,
@@ -64,6 +65,14 @@ from nucleus.models.itr_filling.disclosures import (
     ITRFAOtherAsset,
     ITRFAOtherForeignIncome,
     ITRFASigningAuthority,
+)
+from nucleus.models.itr_filling.business_profession import (
+    ITRBPGoods44AE,
+    ITRBPGstinTurnover,
+    ITRBPNatOfBus44AD,
+    ITRBPNatOfBus44ADA,
+    ITRBPNatOfBus44AE,
+    ITRBPSchedule,
 )
 from nucleus.models.itr_filling.house_property import (
     ITRHPCoOwner,
@@ -174,6 +183,13 @@ __all__ = [
     "ITRHPProperty",
     "ITRHPSchedule",
     "ITRHPTenant",
+    # Business / profession (Schedule BP)
+    "ITRBPSchedule",
+    "ITRBPNatOfBus44AD",
+    "ITRBPNatOfBus44ADA",
+    "ITRBPNatOfBus44AE",
+    "ITRBPGoods44AE",
+    "ITRBPGstinTurnover",
     # Other Sources (Schedule OS)
     "ITROSBuybackShare",
     "ITROSClubbingEntry",
@@ -204,7 +220,8 @@ __all__ = [
     "ITRDed80DMeta",
     "ITRDed80DPolicy",
     "ITRDed80GDonation",
-    "ITRDed80DD80U",
+    "ITRDed80DD",
+    "ITRDed80U",
     "ITRDed80DDB",
     "ITRDed80GGAEntry",
     "ITRDed80GGCEntry",

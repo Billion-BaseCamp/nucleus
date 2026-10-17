@@ -221,6 +221,9 @@ class ITRDed_80C_80CCD(Base):
     sec_80ccc_pension_comment: Mapped[str | None] = mapped_column(
         String, nullable=True
     )
+    # Personal NPS entered by the taxpayer. 80CCD(1) and 80CCD(1B) are
+    # calculated from this amount; they are not entered separately.
+    personal_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
     sec_80ccd1_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
     sec_80ccd2_nps_amount: Mapped[float] = mapped_column(Numeric(12, 2), default=0)
     pran_number: Mapped[str | None] = mapped_column(String, nullable=True)

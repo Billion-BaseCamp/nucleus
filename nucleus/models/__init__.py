@@ -111,6 +111,7 @@ from nucleus.models.itr_filling.other_sources import (
 
 # Portal automation (browser/task jobs — shared by tax-engine API + worker)
 from nucleus.models.portal_automation import (
+    ClientForeignAssetYear,
     ClientNotice,
     EProceedingsWatchlist,
     PortalAutomationBatch,
@@ -496,6 +497,7 @@ __all__ = [
     "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
     # Portal automation
+    "ClientForeignAssetYear",
     "ClientNotice",
     "EProceedingsWatchlist",
     "PortalAutomationBatch",

@@ -45,7 +45,6 @@ class ClientForeignAssetYear(Base):
     # downloaded | no_data | year_not_in_dropdown | dry_run
     status: Mapped[str] = mapped_column(String(32), nullable=False)
     s3_key: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
-    pdf_password: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     job_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True),
         ForeignKey("portal_automation_jobs.id", ondelete="SET NULL"),

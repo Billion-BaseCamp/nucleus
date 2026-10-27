@@ -40,6 +40,7 @@ from nucleus.models.advance_tax_models.section_54F_claim import Section54FClaim
 from nucleus.models.advance_tax_models.section_54F_assests import Section54FAssets
 from nucleus.models.advance_tax_models.tax_profile import TaxProfile
 from nucleus.models.advance_tax_models.prior_itr_snapshot import PriorItrSnapshot
+from nucleus.models.advance_tax_models.email_message import EmailMessage
 
 __all__ = [
     "ATCGDocument",
@@ -74,4 +75,5 @@ __all__ = [
     "Section54FClaim",
     "TaxProfile",
     "PriorItrSnapshot",
+    "EmailMessage",
 ]

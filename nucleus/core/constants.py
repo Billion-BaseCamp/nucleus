@@ -64,6 +64,15 @@ class ACCEPTANCE_STATUS(Enum):
     TRANSFERRED = "Transferred"
 
 
+class COLLABORATION_STATUS(Enum):
+    PENDING = "Pending"
+    ACCEPTED = "Accepted"
+    ACTIVE = "Active"
+    DECLINED = "Declined"
+    CANCELLED = "Cancelled"
+    ENDED = "Ended"
+
+
 # Marital status enum
 class MaritalStatus(Enum):
     SINGLE = "Single"

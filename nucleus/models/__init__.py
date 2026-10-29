@@ -10,12 +10,19 @@ from nucleus.models.common_models.login import Login, LoginEvent
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
 from nucleus.models.common_models.otp_verification import OtpVerification
 from nucleus.models.common_models.csa import (
-    CSAClauseFlag,
     CSADocument,
     CSAFee,
     CSAParseWarning,
     CSAParty,
     CSAService,
+)
+from nucleus.models.common_models.csa_raw import (
+    CSAClauseFlagRaw,
+    CSADocumentRaw,
+    CSAFeeRaw,
+    CSAParseWarningRaw,
+    CSAPartyRaw,
+    CSAServiceRaw,
 )
 from nucleus.models.common_models.documents_collector_info import (
     DocumentCollectorInfo,
@@ -54,6 +61,7 @@ from nucleus.models.advance_tax_models import (
     Section54FClaim,
     TaxProfile,
     PriorItrSnapshot,
+    EmailMessage,
 )
 
 # TSM Models
@@ -62,7 +70,7 @@ from nucleus.models.tsm_models.chat_messages import TaskChatMessage
 from nucleus.models.tsm_models.files import File
 from nucleus.models.tsm_models.notification import Notification
 from nucleus.models.tsm_models.push_subscription import PushSubscription
-from nucleus.models.tsm_models.task import Task, TaskAssignee, Session, PinTask, ActiveTimer
+from nucleus.models.tsm_models.task import Task, TaskAssignee, Session, PinTask, ActiveTimer, TaskCollaboration
 
 # Client Profiling Models
 from nucleus.models.client_profiling.address import Address
@@ -95,12 +103,32 @@ from nucleus.models.form26_as_log_models.file_metadata import FileMetadata
 from nucleus.models.form26_as_log_models.upload_batches import UploadBatches
 from nucleus.models.itr_filling.disclosures import ITRALMovableAsset, ITRALInvestment
 from nucleus.models.itr_filling.tax_credits import ReliefClaimed, ITRTaxCreditSchedule
-from nucleus.models.itr_filling.other_sources import ITRDeemedIncome, ITRTaxExemptIncome
+from nucleus.models.itr_filling.other_sources import (
+    ITRDeemedIncome,
+    ITROSDeductionUs57,
+    ITRTaxExemptIncome,
+)
 
 # Portal automation (browser/task jobs — shared by tax-engine API + worker)
 from nucleus.models.portal_automation import (
+    ClientForeignAssetYear,
+    ClientNotice,
+    EProceedingsWatchlist,
     PortalAutomationBatch,
     PortalAutomationJob,
+)
+
+# Account Aggregator (Finvu/Finsense — shared by aa-backend + cronjob-scheduler worker)
+from nucleus.models.account_aggregator import (
+    AAAccountSnapshot,
+    AAConsent,
+    AACustomer,
+    AAFISession,
+    AAHolding,
+    AAInvestmentTransaction,
+    AAJob,
+    AALinkedAccount,
+    AATransaction,
 )
 
 # US tax filing models (import all so Alembic autogenerate registers every table)
@@ -133,6 +161,12 @@ from nucleus.models.itr_filling import (
     ITRHPProperty,
     ITRHPSchedule,
     ITRHPTenant,
+    ITRBPSchedule,
+    ITRBPNatOfBus44AD,
+    ITRBPNatOfBus44ADA,
+    ITRBPNatOfBus44AE,
+    ITRBPGoods44AE,
+    ITRBPGstinTurnover,
     ITROSBuybackShare,
     ITROSClubbingEntry,
     ITROSDividendDetail,
@@ -147,6 +181,7 @@ from nucleus.models.itr_filling import (
     ITROSSchedule,
     ITRPriorYearIncomeHeads,
     ITRFiledYearSummary,
+    ITRFiledYearSchedule,
     ITRClientSummaryDownloadLog,
     ITRSummaryVerification,
     ITRDedSchedule,
@@ -156,7 +191,8 @@ from nucleus.models.itr_filling import (
     ITRDed80DMeta,
     ITRDed80DPolicy,
     ITRDed80GDonation,
-    ITRDed80DD80U,
+    ITRDed80DD,
+    ITRDed80U,
     ITRDed80DDB,
     ITRDed80GGAEntry,
     ITRDed80GGCEntry,
@@ -231,6 +267,7 @@ from nucleus.models.itr_filling import (
     ITRAisEntry,
     ITRAisSftTransaction,
     ITRDeemedIncome,
+    ITROSDeductionUs57,
     ITRTaxExemptIncome,
 )
 
@@ -280,6 +317,7 @@ __all__ = [
     "Section54FClaim",
     "TaxProfile",
     "PriorItrSnapshot",
+    "EmailMessage",
     # TSM Models
     "CallLogs",
     "File",
@@ -288,6 +326,7 @@ __all__ = [
     "Session",
     "PinTask",
     "ActiveTimer",
+    "TaskCollaboration",
     "Task",
     "TaskAssignee",
     "TaskChatMessage",
@@ -348,6 +387,12 @@ __all__ = [
     "ITRHPProperty",
     "ITRHPSchedule",
     "ITRHPTenant",
+    "ITRBPSchedule",
+    "ITRBPNatOfBus44AD",
+    "ITRBPNatOfBus44ADA",
+    "ITRBPNatOfBus44AE",
+    "ITRBPGoods44AE",
+    "ITRBPGstinTurnover",
     "ITROSBuybackShare",
     "ITROSClubbingEntry",
     "ITROSDividendDetail",
@@ -356,12 +401,14 @@ __all__ = [
     "ITROSIncomeLineDetail",
     "ITROSInterestDetail",
     "ITROSItRefundInterest",
+    "ITROSDeductionUs57",
     "ITROSOtherIncome",
     "ITROSSpecialRate",
     "ITROSPTIEntity",
     "ITROSSchedule",
     "ITRPriorYearIncomeHeads",
     "ITRFiledYearSummary",
+    "ITRFiledYearSchedule",
     "ITRClientSummaryDownloadLog",
     "ITRSummaryVerification",
     "ITRDedSchedule",
@@ -371,7 +418,8 @@ __all__ = [
     "ITRDed80DMeta",
     "ITRDed80DPolicy",
     "ITRDed80GDonation",
-    "ITRDed80DD80U",
+    "ITRDed80DD",
+    "ITRDed80U",
     "ITRDed80DDB",
     "ITRDed80GGAEntry",
     "ITRDed80GGCEntry",
@@ -446,10 +494,24 @@ __all__ = [
     "ITRAis26asReconciliation",
     "ITRAisSftTransaction",
     "ITRDeemedIncome",
+    "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
     # Portal automation
+    "ClientForeignAssetYear",
+    "ClientNotice",
+    "EProceedingsWatchlist",
     "PortalAutomationBatch",
     "PortalAutomationJob",
+    # Account Aggregator
+    "AAAccountSnapshot",
+    "AAConsent",
+    "AACustomer",
+    "AAFISession",
+    "AAHolding",
+    "AAInvestmentTransaction",
+    "AAJob",
+    "AALinkedAccount",
+    "AATransaction",
     # US tax filing
     "ClientPriorReturn",
     "DocumentUpload",

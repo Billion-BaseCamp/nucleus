@@ -95,6 +95,12 @@ class ITRReturn(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
+    bp_schedule: Mapped[Optional["ITRBPSchedule"]] = relationship(
+        "ITRBPSchedule",
+        back_populates="itr_return",
+        cascade="all, delete-orphan",
+        uselist=False,
+    )
     other_sources: Mapped[Optional["ITROSSchedule"]] = relationship(
         "ITROSSchedule",
         back_populates="itr_return",

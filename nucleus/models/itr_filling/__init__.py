@@ -32,7 +32,8 @@ from nucleus.models.itr_filling.cfl import (
 )
 from nucleus.models.itr_filling.deductions import (
     ITRDed80C,
-    ITRDed80DD80U,
+    ITRDed80DD,
+    ITRDed80U,
     ITRDed80DDB,
     ITRDed80DDetail,
     ITRDed80DMeta,
@@ -64,6 +65,14 @@ from nucleus.models.itr_filling.disclosures import (
     ITRFAOtherAsset,
     ITRFAOtherForeignIncome,
     ITRFASigningAuthority,
+)
+from nucleus.models.itr_filling.business_profession import (
+    ITRBPGoods44AE,
+    ITRBPGstinTurnover,
+    ITRBPNatOfBus44AD,
+    ITRBPNatOfBus44ADA,
+    ITRBPNatOfBus44AE,
+    ITRBPSchedule,
 )
 from nucleus.models.itr_filling.house_property import (
     ITRHPCoOwner,
@@ -99,6 +108,7 @@ from nucleus.models.itr_filling.itr_second_step import (
 )
 from nucleus.models.itr_filling.other_sources import (
     ITRDeemedIncome,
+    ITROSDeductionUs57,
     ITROSBuybackShare,
     ITROSClubbingEntry,
     ITROSDividendDetail,
@@ -114,7 +124,10 @@ from nucleus.models.itr_filling.other_sources import (
     ITRTaxExemptIncome,
 )
 from nucleus.models.itr_filling.prior_year_income import ITRPriorYearIncomeHeads
-from nucleus.models.itr_filling.filed_year_summary import ITRFiledYearSummary
+from nucleus.models.itr_filling.filed_year_summary import (
+    ITRFiledYearSchedule,
+    ITRFiledYearSummary,
+)
 from nucleus.models.itr_filling.client_summary_download_log import (
     ITRClientSummaryDownloadLog,
 )
@@ -173,6 +186,13 @@ __all__ = [
     "ITRHPProperty",
     "ITRHPSchedule",
     "ITRHPTenant",
+    # Business / profession (Schedule BP)
+    "ITRBPSchedule",
+    "ITRBPNatOfBus44AD",
+    "ITRBPNatOfBus44ADA",
+    "ITRBPNatOfBus44AE",
+    "ITRBPGoods44AE",
+    "ITRBPGstinTurnover",
     # Other Sources (Schedule OS)
     "ITROSBuybackShare",
     "ITROSClubbingEntry",
@@ -182,6 +202,7 @@ __all__ = [
     "ITROSIncomeLineDetail",
     "ITROSInterestDetail",
     "ITROSItRefundInterest",
+    "ITROSDeductionUs57",
     "ITROSOtherIncome",
     "ITROSSpecialRate",
     "ITROSPTIEntity",
@@ -190,6 +211,7 @@ __all__ = [
     "ITRPriorYearIncomeHeads",
     # Admin-dashboard filed-year ITR snapshots
     "ITRFiledYearSummary",
+    "ITRFiledYearSchedule",
     # Client Summary PDF download log
     "ITRClientSummaryDownloadLog",
     # Summary download verification confirmations
@@ -202,7 +224,8 @@ __all__ = [
     "ITRDed80DMeta",
     "ITRDed80DPolicy",
     "ITRDed80GDonation",
-    "ITRDed80DD80U",
+    "ITRDed80DD",
+    "ITRDed80U",
     "ITRDed80DDB",
     "ITRDed80GGAEntry",
     "ITRDed80GGCEntry",
@@ -289,5 +312,6 @@ __all__ = [
     "ITRTisSummaryCategory",
     "ITRTaxCreditSchedule",
     "ITRDeemedIncome",
+    "ITROSDeductionUs57",
     "ITRTaxExemptIncome",
 ]

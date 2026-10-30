@@ -8,6 +8,11 @@ from nucleus.models.common_models.advisor import Advisor
 from nucleus.models.common_models.client import Client, ClientEmailMapping, ClientPhoneMapping
 from nucleus.models.common_models.login import Login, LoginEvent
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
+from nucleus.models.common_models.access_control import (
+    AccessGrant,
+    AccessGrantPermission,
+    Permission,
+)
 from nucleus.models.common_models.otp_verification import OtpVerification
 from nucleus.models.common_models.csa import (
     CSADocument,
@@ -284,6 +289,9 @@ __all__ = [
     "LoginEvent",
     "TrustedDevice",
     "WebAuthnCredential",
+    "Permission",
+    "AccessGrant",
+    "AccessGrantPermission",
     "OtpVerification",
     "DocumentCollectorInfo",
     "SubTypeComments",

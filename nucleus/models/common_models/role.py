@@ -16,12 +16,12 @@ from nucleus.db.database import Base
 
 
 class Role(Base):
-    """Role assigned to a login (JWT role comes from ``key``)."""
+    """Role assigned to a login (JWT role comes from ``role``)."""
 
     __tablename__ = "roles"
 
     id: Mapped[int] = mapped_column(SmallInteger, primary_key=True, autoincrement=True)
-    key: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
+    role: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

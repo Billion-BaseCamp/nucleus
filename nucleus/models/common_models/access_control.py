@@ -50,14 +50,18 @@ class AccessGrant(Base):
     __tablename__ = "access_grants"
     __table_args__ = (
         Index(
-            "uq_access_grants_active_employee_client",
-            "employee_id",
+            "ix_access_grants_active_client",
             "client_id",
-            unique=True,
             postgresql_where=text("revoked_at IS NULL"),
         ),
         Index(
-            "ix_access_grants_active_client",
+            "ix_access_grants_active_employee",
+            "employee_id",
+            postgresql_where=text("revoked_at IS NULL"),
+        ),
+        Index(
+            "ix_access_grants_active_employee_client",
+            "employee_id",
             "client_id",
             postgresql_where=text("revoked_at IS NULL"),
         ),

@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, Text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, String, Text, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -76,6 +76,14 @@ class BlueApproval(Base):
             name="ck_blue_approvals_decided_at",
         ),
         Index("ix_blue_approvals_advisor_status", "advisor_id", "status"),
+        # At most one open request per thing being approved, so an action can't be approved and run twice.
+        Index(
+            "uq_blue_approvals_pending_subject",
+            "kind",
+            "subject_id",
+            unique=True,
+            postgresql_where=text("status = 'pending'"),
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)

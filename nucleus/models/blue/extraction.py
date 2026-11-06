@@ -7,7 +7,7 @@ from decimal import Decimal
 from typing import Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, Numeric, String, Text
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, Numeric, String, Text, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -24,6 +24,13 @@ class BlueExtraction(Base):
     __table_args__ = (
         CheckConstraint(check_in("status", BLUE_EXTRACTION_STATUSES), name="ck_blue_extractions_status"),
         Index("ix_blue_extractions_document_status", "document_id", "status"),
+        # A re-run must mark the previous success "superseded" first: one current result per document.
+        Index(
+            "uq_blue_extractions_one_succeeded",
+            "document_id",
+            unique=True,
+            postgresql_where=text("status = 'succeeded'"),
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)

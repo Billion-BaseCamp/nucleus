@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 from uuid import UUID, uuid4
 
@@ -86,7 +87,7 @@ class BlueIntakeDocument(Base):
         SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="SET NULL"), nullable=True
     )
     match_status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
-    match_confidence: Mapped[Optional[float]] = mapped_column(Numeric(4, 3), nullable=True)
+    match_confidence: Mapped[Optional[Decimal]] = mapped_column(Numeric(4, 3), nullable=True)
     # [{"signal": "pan_in_document", "value": "ABCDE1234F", "client_id": "...", "weight": 0.9}, ...]
     match_evidence: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
     # Financial year the document relates to, e.g. "2026-27", when the document states it.

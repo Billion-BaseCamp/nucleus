@@ -125,6 +125,19 @@ from nucleus.models.portal_automation import (
     PortalAutomationJob,
 )
 
+# BLUE — advance-tax copilot (at-copilot). Import all so autogenerate registers every table.
+from nucleus.models.blue import (
+    BlueApproval,
+    BlueClientEmail,
+    BlueEvent,
+    BlueExtractedField,
+    BlueExtraction,
+    BlueIntakeDocument,
+    BlueIntakeMessage,
+    BlueQuarterReview,
+    BlueRmIdentity,
+)
+
 # Account Aggregator (Finvu/Finsense — shared by aa-backend + cronjob-scheduler worker)
 from nucleus.models.account_aggregator import (
     AAAccountSnapshot,

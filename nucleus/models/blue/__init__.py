@@ -14,6 +14,11 @@ Generate the tables with Alembic autogenerate. Do not hand-write the migration.
 from nucleus.models.blue.constants import (
     BLUE_APPROVAL_KINDS,
     BLUE_APPROVAL_STATUSES,
+    BLUE_CG_CORRECTION_SOURCES,
+    BLUE_CG_GAIN_TYPES,
+    BLUE_CG_SEGMENTS,
+    BLUE_CG_STATEMENT_STATUSES,
+    BLUE_CG_TXN_STATUSES,
     BLUE_DOCUMENT_TYPES,
     BLUE_EMAIL_STATUSES,
     BLUE_EXTRACTION_STATUSES,
@@ -25,16 +30,25 @@ from nucleus.models.blue.extraction import BlueExtractedField, BlueExtraction
 from nucleus.models.blue.review import BlueQuarterReview
 from nucleus.models.blue.outreach import BlueApproval, BlueClientEmail
 from nucleus.models.blue.audit import BlueEvent, BlueRmIdentity
+from nucleus.models.blue.capital_gains import BlueCgCorrection, BlueCgStatement, BlueCgTransaction
 
 __all__ = [
     "BLUE_APPROVAL_KINDS",
     "BLUE_APPROVAL_STATUSES",
+    "BLUE_CG_CORRECTION_SOURCES",
+    "BLUE_CG_GAIN_TYPES",
+    "BLUE_CG_SEGMENTS",
+    "BLUE_CG_STATEMENT_STATUSES",
+    "BLUE_CG_TXN_STATUSES",
     "BLUE_DOCUMENT_TYPES",
     "BLUE_EMAIL_STATUSES",
     "BLUE_EXTRACTION_STATUSES",
     "BLUE_MATCH_STATUSES",
     "BLUE_REVIEW_READINESS",
     "BlueApproval",
+    "BlueCgCorrection",
+    "BlueCgStatement",
+    "BlueCgTransaction",
     "BlueClientEmail",
     "BlueEvent",
     "BlueExtractedField",

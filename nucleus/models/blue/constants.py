@@ -36,3 +36,11 @@ BLUE_EMAIL_STATUSES = ("draft", "pending_approval", "approved", "sent", "discard
 
 BLUE_APPROVAL_KINDS = ("client_match", "client_email", "write_back", "figure_correction")
 BLUE_APPROVAL_STATUSES = ("pending", "approved", "rejected", "expired")
+
+# Capital-gains statements (blue_cg_*). Segments/gain types match tax-engine's ExcelTradeRecord.
+BLUE_CG_STATEMENT_STATUSES = ("read", "verified", "needs_rm", "approved", "pushed", "failed", "superseded")
+BLUE_CG_SEGMENTS = ("Equity", "F&O", "Currency", "Commodity", "Intraday", "MF", "NonEquity", "Buyback")
+BLUE_CG_GAIN_TYPES = ("LTCG", "STCG", "Speculation", "Intraday")
+# ok: use it. flagged: a check failed, RM to look. excluded: outside FY / duplicate / RM said drop.
+BLUE_CG_TXN_STATUSES = ("ok", "flagged", "excluded")
+BLUE_CG_CORRECTION_SOURCES = ("auto", "rm", "revert")

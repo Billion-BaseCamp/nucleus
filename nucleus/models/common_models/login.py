@@ -1,4 +1,6 @@
 from uuid import UUID, uuid4
+from typing import Optional
+
 from sqlalchemy import (
     Boolean,
     Integer,
@@ -6,6 +8,7 @@ from sqlalchemy import (
     DateTime,
     Enum,
     ForeignKey,
+    SmallInteger,
     UUID as SQLUUID,
     CheckConstraint,
 )
@@ -34,7 +37,15 @@ class Login(Base):
     email: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
     username: Mapped[str] = mapped_column(String, nullable=False)
     mobile_number: Mapped[str] = mapped_column(String, nullable=True)
+    # Legacy enum — kept for data migration / backfill into role_id. Prefer role_id.
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
+    # Link to roles table (nullable until backfilled from ``role``).
+    role_id: Mapped[Optional[int]] = mapped_column(
+        SmallInteger,
+        ForeignKey("roles.id"),
+        nullable=True,
+        index=True,
+    )
 
     # Foreign key to client (if role is client)
     client_id: Mapped[UUID] = mapped_column(
@@ -53,6 +64,10 @@ class Login(Base):
     )
 
     # Relationships
+    role_row: Mapped[Optional["Role"]] = relationship(
+        "Role",
+        back_populates="logins",
+    )
     client: Mapped["Client"] = relationship("Client", back_populates="logins")
     advisor: Mapped["Advisor"] = relationship("Advisor", back_populates="logins")
     push_subscriptions: Mapped[list["PushSubscription"]] = relationship(

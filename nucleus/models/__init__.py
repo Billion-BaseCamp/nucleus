@@ -7,7 +7,13 @@ from nucleus.models.reference.amfi_mf import AmfiMasterMeta, AmfiMfIsin
 from nucleus.models.common_models.advisor import Advisor
 from nucleus.models.common_models.client import Client, ClientEmailMapping, ClientPhoneMapping
 from nucleus.models.common_models.login import Login, LoginEvent
+from nucleus.models.common_models.role import Role
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
+from nucleus.models.common_models.access_control import (
+    AccessGrant,
+    AccessGrantPermission,
+    Permission,
+)
 from nucleus.models.common_models.otp_verification import OtpVerification
 from nucleus.models.common_models.csa import (
     CSADocument,
@@ -117,6 +123,19 @@ from nucleus.models.portal_automation import (
     EProceedingsWatchlist,
     PortalAutomationBatch,
     PortalAutomationJob,
+)
+
+# BLUE — advance-tax copilot (at-copilot). Import all so autogenerate registers every table.
+from nucleus.models.blue import (
+    BlueApproval,
+    BlueClientEmail,
+    BlueEvent,
+    BlueExtractedField,
+    BlueExtraction,
+    BlueIntakeDocument,
+    BlueIntakeMessage,
+    BlueQuarterReview,
+    BlueRmIdentity,
 )
 
 # US tax filing models (import all so Alembic autogenerate registers every table)
@@ -269,8 +288,12 @@ __all__ = [
     "ClientPhoneMapping",
     "Login",
     "LoginEvent",
+    "Role",
     "TrustedDevice",
     "WebAuthnCredential",
+    "Permission",
+    "AccessGrant",
+    "AccessGrantPermission",
     "OtpVerification",
     "DocumentCollectorInfo",
     "SubTypeComments",

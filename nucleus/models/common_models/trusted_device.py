@@ -30,9 +30,8 @@ class TrustedDevice(Base):
     __tablename__ = "trusted_devices"
     __table_args__ = (
         Index(
-            "uq_trusted_devices_one_trusted_per_login",
+            "ix_trusted_devices_login_trusted",
             "login_id",
-            unique=True,
             postgresql_where=text("status = 'trusted'"),
         ),
         Index(

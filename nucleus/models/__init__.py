@@ -132,9 +132,13 @@ from nucleus.models.blue import (
     BlueEvent,
     BlueExtractedField,
     BlueExtraction,
+    BlueGraphSubscription,
     BlueIntakeDocument,
     BlueIntakeMessage,
+    BlueJob,
+    BlueMailboxSyncState,
     BlueQuarterReview,
+    BlueWebhookEvent,
     BlueRmIdentity,
 )
 

@@ -19,7 +19,13 @@ from nucleus.models.blue.constants import (
     BLUE_CG_SEGMENTS,
     BLUE_CG_STATEMENT_STATUSES,
     BLUE_CG_TXN_STATUSES,
+    BLUE_DOCUMENT_PIPELINE_STATUSES,
     BLUE_DOCUMENT_TYPES,
+    BLUE_INTAKE_PIPELINE_STATUSES,
+    BLUE_JOB_STATUSES,
+    BLUE_JOB_TYPES,
+    BLUE_NOTICED_BY,
+    BLUE_SUBSCRIPTION_STATUSES,
     BLUE_EMAIL_STATUSES,
     BLUE_EXTRACTION_STATUSES,
     BLUE_MATCH_STATUSES,
@@ -31,6 +37,12 @@ from nucleus.models.blue.review import BlueQuarterReview
 from nucleus.models.blue.outreach import BlueApproval, BlueClientEmail
 from nucleus.models.blue.audit import BlueEvent, BlueRmIdentity
 from nucleus.models.blue.capital_gains import BlueCgCorrection, BlueCgStatement, BlueCgTransaction
+from nucleus.models.blue.mail_queue import (
+    BlueGraphSubscription,
+    BlueJob,
+    BlueMailboxSyncState,
+    BlueWebhookEvent,
+)
 
 __all__ = [
     "BLUE_APPROVAL_KINDS",
@@ -40,7 +52,13 @@ __all__ = [
     "BLUE_CG_SEGMENTS",
     "BLUE_CG_STATEMENT_STATUSES",
     "BLUE_CG_TXN_STATUSES",
+    "BLUE_DOCUMENT_PIPELINE_STATUSES",
     "BLUE_DOCUMENT_TYPES",
+    "BLUE_INTAKE_PIPELINE_STATUSES",
+    "BLUE_JOB_STATUSES",
+    "BLUE_JOB_TYPES",
+    "BLUE_NOTICED_BY",
+    "BLUE_SUBSCRIPTION_STATUSES",
     "BLUE_EMAIL_STATUSES",
     "BLUE_EXTRACTION_STATUSES",
     "BLUE_MATCH_STATUSES",
@@ -51,10 +69,14 @@ __all__ = [
     "BlueCgTransaction",
     "BlueClientEmail",
     "BlueEvent",
+    "BlueGraphSubscription",
+    "BlueJob",
     "BlueExtractedField",
     "BlueExtraction",
     "BlueIntakeDocument",
     "BlueIntakeMessage",
+    "BlueMailboxSyncState",
     "BlueQuarterReview",
     "BlueRmIdentity",
+    "BlueWebhookEvent",
 ]

@@ -13,6 +13,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     Numeric,
     String,
     Text,
@@ -24,7 +25,14 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import UUID as SQLUUID
 
 from nucleus.db.database import Base
-from nucleus.models.blue.constants import BLUE_DOCUMENT_TYPES, BLUE_MATCH_STATUSES, check_in
+from nucleus.models.blue.constants import (
+    BLUE_DOCUMENT_PIPELINE_STATUSES,
+    BLUE_DOCUMENT_TYPES,
+    BLUE_INTAKE_PIPELINE_STATUSES,
+    BLUE_MATCH_STATUSES,
+    BLUE_NOTICED_BY,
+    check_in,
+)
 
 
 class BlueIntakeMessage(Base):
@@ -33,6 +41,15 @@ class BlueIntakeMessage(Base):
     __tablename__ = "blue_intake_messages"
     __table_args__ = (
         UniqueConstraint("mailbox", "internet_message_id", name="uq_blue_intake_messages_mailbox_imid"),
+        CheckConstraint(
+            "pipeline_status IS NULL OR " + check_in("pipeline_status", BLUE_INTAKE_PIPELINE_STATUSES),
+            name="ck_blue_intake_messages_pipeline_status",
+        ),
+        CheckConstraint(
+            "noticed_by IS NULL OR " + check_in("noticed_by", BLUE_NOTICED_BY),
+            name="ck_blue_intake_messages_noticed_by",
+        ),
+        Index("ix_blue_intake_messages_pipeline", "pipeline_status", "last_seen_at"),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -51,6 +68,12 @@ class BlueIntakeMessage(Base):
     # auto_reply / bounce / no_documents / non_client — set when intake ignores the mail.
     ignored_reason: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     processed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    # NULL on rows written by the 10-minute poller. The delta pipeline sets the rest.
+    pipeline_status: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    noticed_by: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    seen_count: Mapped[int] = mapped_column(Integer, nullable=False, default=1, server_default="1")
+    first_seen_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_seen_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
@@ -67,6 +90,10 @@ class BlueIntakeDocument(Base):
             name="ck_blue_intake_documents_match_confidence",
         ),
         Index("ix_blue_intake_documents_client_status", "client_id", "match_status"),
+        CheckConstraint(
+            "pipeline_status IS NULL OR " + check_in("pipeline_status", BLUE_DOCUMENT_PIPELINE_STATUSES),
+            name="ck_blue_intake_documents_pipeline_status",
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -95,5 +122,7 @@ class BlueIntakeDocument(Base):
     duplicate_of_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True), ForeignKey("blue_intake_documents.id", ondelete="SET NULL"), nullable=True
     )
+    # NULL: old poller. The delta pipeline sets received/processing/done/unreadable/failed.
+    pipeline_status: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now(), nullable=True)

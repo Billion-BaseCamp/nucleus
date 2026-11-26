@@ -92,6 +92,9 @@ class Client(Base):
     deactivated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     it_portal_username: Mapped[str] = mapped_column(String, nullable=True)
     it_portal_pass: Mapped[str] = mapped_column(String, nullable=True)
+    # Advisor-set. Empty means the client can be automated. Both can be true.
+    it_portal_does_not_share_password: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    it_portal_otp_required: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
     
     # Foreign key to advisor

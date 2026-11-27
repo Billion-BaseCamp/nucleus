@@ -7,6 +7,7 @@ from nucleus.models.reference.amfi_mf import AmfiMasterMeta, AmfiMfIsin
 from nucleus.models.common_models.advisor import Advisor
 from nucleus.models.common_models.client import Client, ClientEmailMapping, ClientPhoneMapping
 from nucleus.models.common_models.login import Login, LoginEvent
+from nucleus.models.common_models.role import Role
 from nucleus.models.common_models.trusted_device import TrustedDevice, WebAuthnCredential
 from nucleus.models.common_models.access_control import (
     AccessGrant,
@@ -117,10 +118,24 @@ from nucleus.models.itr_filling.other_sources import (
 # Portal automation (browser/task jobs — shared by tax-engine API + worker)
 from nucleus.models.portal_automation import (
     ClientForeignAssetYear,
+    ClientItrJsonYear,
     ClientNotice,
     EProceedingsWatchlist,
     PortalAutomationBatch,
     PortalAutomationJob,
+)
+
+# BLUE — advance-tax copilot (at-copilot). Import all so autogenerate registers every table.
+from nucleus.models.blue import (
+    BlueApproval,
+    BlueClientEmail,
+    BlueEvent,
+    BlueExtractedField,
+    BlueExtraction,
+    BlueIntakeDocument,
+    BlueIntakeMessage,
+    BlueQuarterReview,
+    BlueRmIdentity,
 )
 
 # Account Aggregator (Finvu/Finsense — shared by aa-backend + cronjob-scheduler worker)
@@ -287,6 +302,7 @@ __all__ = [
     "ClientPhoneMapping",
     "Login",
     "LoginEvent",
+    "Role",
     "TrustedDevice",
     "WebAuthnCredential",
     "Permission",
@@ -506,6 +522,7 @@ __all__ = [
     "ITRTaxExemptIncome",
     # Portal automation
     "ClientForeignAssetYear",
+    "ClientItrJsonYear",
     "ClientNotice",
     "EProceedingsWatchlist",
     "PortalAutomationBatch",

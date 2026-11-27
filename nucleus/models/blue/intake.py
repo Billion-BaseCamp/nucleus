@@ -25,6 +25,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import UUID as SQLUUID
 
 from nucleus.db.database import Base
+from nucleus.models.blue.constants import BLUE_DOCUMENT_TYPES, BLUE_MATCH_STATUSES, check_in
 from nucleus.models.blue.constants import (
     BLUE_DOCUMENT_PIPELINE_STATUSES,
     BLUE_DOCUMENT_TYPES,

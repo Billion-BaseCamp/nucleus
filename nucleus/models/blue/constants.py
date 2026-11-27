@@ -44,3 +44,21 @@ BLUE_CG_GAIN_TYPES = ("LTCG", "STCG", "Speculation", "Intraday")
 # ok: use it. flagged: a check failed, RM to look. excluded: outside FY / duplicate / RM said drop.
 BLUE_CG_TXN_STATUSES = ("ok", "flagged", "excluded")
 BLUE_CG_CORRECTION_SOURCES = ("auto", "rm", "revert")
+
+# Delta mail pipeline. NULL pipeline_status means the 10-minute poller still owns the row.
+BLUE_INTAKE_PIPELINE_STATUSES = ("received", "processing", "done", "failed", "unreadable")
+BLUE_DOCUMENT_PIPELINE_STATUSES = ("received", "processing", "done", "unreadable", "failed")
+BLUE_NOTICED_BY = ("webhook", "poll", "pending_check")
+BLUE_JOB_TYPES = (
+    "sync_mailbox",
+    "process_email",
+    "process_document",
+    "finalize_noticed_by",
+    "renew_subscription",
+    "recreate_subscription",
+    "audit_mailbox",
+    "stuck_mail",
+    "archive_jobs",
+)
+BLUE_JOB_STATUSES = ("pending", "running", "done", "dead", "archived")
+BLUE_SUBSCRIPTION_STATUSES = ("active", "expired", "failed")

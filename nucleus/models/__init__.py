@@ -48,6 +48,7 @@ from nucleus.models.advance_tax_models import (
     ATCGUSTransaction,
     ATCGVDATransaction,
     AdvanceTax26asUpload,
+    AdvanceTaxAisEntry,
     BrokerageAccounts,
     CapitalGains,
     Comments,
@@ -125,6 +126,18 @@ from nucleus.models.portal_automation import (
     PortalAutomationJob,
 )
 
+# Account Aggregator (Finvu/Finsense — shared by aa-backend + cronjob-scheduler worker)
+from nucleus.models.account_aggregator import (
+    AAAccountSnapshot,
+    AAConsent,
+    AACustomer,
+    AAFISession,
+    AAHolding,
+    AAInvestmentTransaction,
+    AAJob,
+    AALinkedAccount,
+    AATransaction,
+)
 # BLUE — advance-tax copilot (at-copilot). Import all so autogenerate registers every table.
 from nucleus.models.blue import (
     BlueApproval,
@@ -192,6 +205,7 @@ from nucleus.models.itr_filling import (
     ITROSSchedule,
     ITRPriorYearIncomeHeads,
     ITRFiledYearSummary,
+    ITRFiledYearSchedule,
     ITRClientSummaryDownloadLog,
     ITRSummaryVerification,
     ITRDedSchedule,
@@ -313,6 +327,7 @@ __all__ = [
     "ATCGUSTransaction",
     "ATCGVDATransaction",
     "AdvanceTax26asUpload",
+    "AdvanceTaxAisEntry",
     "BrokerageAccounts",
     "CapitalGains",
     "Comments",
@@ -422,6 +437,7 @@ __all__ = [
     "ITROSSchedule",
     "ITRPriorYearIncomeHeads",
     "ITRFiledYearSummary",
+    "ITRFiledYearSchedule",
     "ITRClientSummaryDownloadLog",
     "ITRSummaryVerification",
     "ITRDedSchedule",
@@ -516,6 +532,16 @@ __all__ = [
     "EProceedingsWatchlist",
     "PortalAutomationBatch",
     "PortalAutomationJob",
+    # Account Aggregator
+    "AAAccountSnapshot",
+    "AAConsent",
+    "AACustomer",
+    "AAFISession",
+    "AAHolding",
+    "AAInvestmentTransaction",
+    "AAJob",
+    "AALinkedAccount",
+    "AATransaction",
     # US tax filing
     "ClientPriorReturn",
     "DocumentUpload",

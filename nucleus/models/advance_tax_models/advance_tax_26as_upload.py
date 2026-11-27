@@ -12,6 +12,19 @@ from nucleus.db.database import Base
 
 
 class AdvanceTax26asUpload(Base):
+    """Quarter-scoped ATS / Form 168 (legacy name: 26AS) raw .txt upload.
+
+    Portal automation (``DOWNLOAD_26AS_TXT``) and advance-tax uploads store or
+    replace the S3 object and this row only. They set ``parse_status`` to
+    ``pending``, persist ``content_hash`` (SHA-256 of the .txt bytes), and clear
+    any prior Part1–10 rows for the quarter.
+
+    Parsed parts are owned by advance-tax via an **explicit Sync** action.
+    There is no stored ``parsed_content_hash`` — advance-tax APIs compute the
+    current file hash on the fly (SHA-256 of S3 bytes is cheap) and compare it
+    to ``content_hash`` / ``parse_status`` for the green-tick sync indicator.
+    """
+
     __tablename__ = "advance_tax_26as_uploads"
     __table_args__ = (
         UniqueConstraint("quarter_id", name="uq_advance_tax_26as_uploads_quarter_id"),
@@ -43,6 +56,8 @@ class AdvanceTax26asUpload(Base):
     original_filename: Mapped[str] = mapped_column(String(255), nullable=False)
     file_size_bytes: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     pan: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
+    # SHA-256 hex digest of the raw .txt currently on S3 (set on every store/replace).
+    content_hash: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
     # pending | parsing | parsed | failed
     parse_status: Mapped[str] = mapped_column(
         String(32), nullable=False, server_default="pending", default="pending", index=True

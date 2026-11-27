@@ -20,9 +20,9 @@ class AdvanceTax26asUpload(Base):
     any prior Part1–10 rows for the quarter.
 
     Parsed parts are owned by advance-tax via an **explicit Sync** action.
-    There is no stored ``parsed_content_hash`` — advance-tax APIs compute the
-    current file hash on the fly (SHA-256 of S3 bytes is cheap) and compare it
-    to ``content_hash`` / ``parse_status`` for the green-tick sync indicator.
+    Read paths treat Synced as **Part1–10 rows exist** (not ``parse_status`` alone);
+    ``parse_status`` is bookkeeping for Sync UI. Green tick may also compare live
+    S3 SHA-256 to ``content_hash`` when a hash is stored. No ``parsed_content_hash``.
     """
 
     __tablename__ = "advance_tax_26as_uploads"

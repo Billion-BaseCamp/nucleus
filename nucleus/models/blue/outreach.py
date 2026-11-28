@@ -16,6 +16,7 @@ from nucleus.db.database import Base
 from nucleus.models.blue.constants import (
     BLUE_APPROVAL_KINDS,
     BLUE_APPROVAL_STATUSES,
+    BLUE_DRAFT_REQUEST_RESULTS,
     BLUE_EMAIL_STATUSES,
     check_in,
 )
@@ -106,3 +107,48 @@ class BlueApproval(Base):
     decision_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     expires_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class BlueDraftRequest(Base):
+    """One Draft email the dashboard asked for. The API inserts it and waits. The worker drafts it.
+
+    Send now can stamp an approval because the draft already exists. A draft request does not, so it has its own row.
+    Generate the table with Alembic autogenerate. Do not hand-write the migration.
+    """
+
+    __tablename__ = "blue_draft_requests"
+    __table_args__ = (
+        CheckConstraint(
+            "result IS NULL OR " + check_in("result", BLUE_DRAFT_REQUEST_RESULTS),
+            name="ck_blue_draft_requests_result",
+        ),
+        Index(
+            "ix_blue_draft_requests_pending",
+            "requested_at",
+            postgresql_where=text("done_at IS NULL"),
+        ),
+    )
+
+    id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
+    client_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    advisor_id: Mapped[UUID] = mapped_column(
+        SQLUUID(as_uuid=True), ForeignKey("advisors.id", ondelete="CASCADE"), nullable=False
+    )
+    kind: Mapped[str] = mapped_column(String(32), nullable=False)
+    question: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    file_name: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    via: Mapped[str] = mapped_column(String(16), nullable=False, default="dashboard")
+    # Filled by the worker. actual_kind can differ from kind (a request may come out as a reminder).
+    result: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
+    reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    actual_kind: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
+    email_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), nullable=True)
+    approval_id: Mapped[Optional[UUID]] = mapped_column(SQLUUID(as_uuid=True), nullable=True)
+    subject: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    why: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    card_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    requested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    claimed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    done_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)

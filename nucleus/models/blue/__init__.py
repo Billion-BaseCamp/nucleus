@@ -21,6 +21,7 @@ from nucleus.models.blue.constants import (
     BLUE_CG_TXN_STATUSES,
     BLUE_DOCUMENT_TYPES,
     BLUE_DOCUMENT_PIPELINE_STATUSES,
+    BLUE_DRAFT_REQUEST_RESULTS,
     BLUE_DOCUMENT_TYPES,
     BLUE_INTAKE_PIPELINE_STATUSES,
     BLUE_JOB_STATUSES,
@@ -35,7 +36,7 @@ from nucleus.models.blue.constants import (
 from nucleus.models.blue.intake import BlueIntakeDocument, BlueIntakeMessage
 from nucleus.models.blue.extraction import BlueExtractedField, BlueExtraction
 from nucleus.models.blue.review import BlueQuarterReview
-from nucleus.models.blue.outreach import BlueApproval, BlueClientEmail
+from nucleus.models.blue.outreach import BlueApproval, BlueClientEmail, BlueDraftRequest
 from nucleus.models.blue.audit import BlueEvent, BlueRmIdentity
 from nucleus.models.blue.capital_gains import BlueCgCorrection, BlueCgStatement, BlueCgTransaction
 from nucleus.models.blue.mail_queue import (
@@ -70,6 +71,8 @@ __all__ = [
     "BlueCgStatement",
     "BlueCgTransaction",
     "BlueClientEmail",
+    "BlueDraftRequest",
+    "BLUE_DRAFT_REQUEST_RESULTS",
     "BlueEvent",
     "BlueGraphSubscription",
     "BlueJob",

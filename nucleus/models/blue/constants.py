@@ -37,6 +37,9 @@ BLUE_EMAIL_STATUSES = ("draft", "pending_approval", "approved", "sent", "discard
 BLUE_APPROVAL_KINDS = ("client_match", "client_email", "write_back", "figure_correction")
 BLUE_APPROVAL_STATUSES = ("pending", "approved", "rejected", "expired")
 
+# Dashboard Draft email. The API inserts a row; the worker fills result. NULL until the worker finishes.
+BLUE_DRAFT_REQUEST_RESULTS = ("drafted", "refused", "failed")
+
 # Capital-gains statements (blue_cg_*). Segments/gain types match tax-engine's ExcelTradeRecord.
 BLUE_CG_STATEMENT_STATUSES = ("read", "verified", "needs_rm", "approved", "pushed", "failed", "superseded")
 BLUE_CG_SEGMENTS = ("Equity", "F&O", "Currency", "Commodity", "Intraday", "MF", "NonEquity", "Buyback")

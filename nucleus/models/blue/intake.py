@@ -94,6 +94,10 @@ class BlueIntakeDocument(Base):
             "pipeline_status IS NULL OR " + check_in("pipeline_status", BLUE_DOCUMENT_PIPELINE_STATUSES),
             name="ck_blue_intake_documents_pipeline_status",
         ),
+        CheckConstraint(
+            "quarter_id IS NULL OR itr_return_id IS NULL",
+            name="ck_blue_intake_documents_one_period",
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(SQLUUID(as_uuid=True), primary_key=True, default=uuid4)
@@ -117,8 +121,16 @@ class BlueIntakeDocument(Base):
     match_confidence: Mapped[Optional[Decimal]] = mapped_column(Numeric(4, 3), nullable=True)
     # [{"signal": "pan_in_document", "value": "ABCDE1234F", "client_id": "...", "weight": 0.9}, ...]
     match_evidence: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
-    # Financial year the document relates to, e.g. "2026-27", when the document states it.
+    # Financial year printed on the file, e.g. "2026-27". Not the period the file is filed under.
     financial_year: Mapped[Optional[str]] = mapped_column(String(9), nullable=True)
+    # Advance-tax quarter open on the day a BLUE-mailbox mail arrived. Empty for ITR mail.
+    quarter_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True), ForeignKey("quarters.id", ondelete="SET NULL"), nullable=True, index=True
+    )
+    # ITR return for mail that arrived in an ITR mailbox. Empty for BLUE mail.
+    itr_return_id: Mapped[Optional[UUID]] = mapped_column(
+        SQLUUID(as_uuid=True), ForeignKey("itr_returns.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     duplicate_of_id: Mapped[Optional[UUID]] = mapped_column(
         SQLUUID(as_uuid=True), ForeignKey("blue_intake_documents.id", ondelete="SET NULL"), nullable=True
     )
